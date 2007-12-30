@@ -1,0 +1,3 @@
+To get the flashbsm connecting to cws, put it under localhost, and access it through localhost :D
+
+cws is explained here http://forum.compiz-fusion.org/showthread.php?t=753

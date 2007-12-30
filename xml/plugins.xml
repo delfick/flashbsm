@@ -1,0 +1,701 @@
+<?xml version="1.0"?>
+<everything>
+	<theGroups>
+		<group>General</group>
+		<group>Accessibility</group>
+		<group>Desktop</group>
+		<group>Effects</group>
+		<group>Extras</group>
+		<group>Image Loading</group>
+		<group>Utility</group>
+		<group>Window Management</group>
+		<group>Uncategorized</group>
+	</theGroups>
+	<thePlugins>
+		<plugin>
+			<name short="3D Windows" icon="3d">3d</name>
+			<group>Effects</group>
+			<description>Elevates windows while rotating the cube</description>
+			<options>
+				<tab name="Corner Bevelling">
+				</tab>
+				<tab name="Misc. Options">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="ADD Helper" icon="addhelper">addhelper</name>
+			<group>Accessibility</group>
+			<description>Make it slightly easier to concentrate by dimming all but the active window.</description>
+			<options>
+				<tab name="Bindings">
+				</tab>
+				<tab name="Misc. options">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Animations" icon="animation">animation</name>
+			<group>Effects</group>
+			<description>Use various animations as window effects</description>
+			<options>
+				<tab name="Close Animation">
+				</tab>
+				<tab name="Effect Settings">
+				</tab>
+				<tab name="Focus Animation">
+				</tab>
+				<tab name="Minimize Animation">
+				</tab>
+				<tab name="Open Animation">
+				</tab>
+				<tab name="Shade Animation">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Annotate" icon="annotate">annotate</name>
+			<group>Extras</group>
+			<description>Annotate plugin</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Cube Atlantis" icon="atlantis">atlantis</name>
+			<group>Effects</group>
+			<description>Render some fish inside of the transparent cube</description>
+			<options>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Benchmark" icon="bench">bench</name>
+			<group>Extras</group>
+			<description>A simple benchmark plugin</description>
+			<options>
+				<tab name="Main">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Blur Windows" icon="blur">blur</name>
+			<group>Effects</group>
+			<description>Blur windows</description>
+			<options>
+				<tab name="display">
+				</tab>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Clone Output" icon="clone">clone</name>
+			<group>Desktop</group>
+			<description>Output clone handler</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="General Options" icon="core">core</name>
+			<group>General</group>
+			<description>General compiz options</description>
+			<options>
+				<tab name="Commands">
+				</tab>
+				<tab name="Desktop Size">
+				</tab>
+				<tab name="display">
+				</tab>
+				<tab name="Display Settings">
+				</tab>
+				<tab name="Focus & Raise Behaviour">
+				</tab>
+				<tab name="Opacity Settings">
+				</tab>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Crash handler" icon="crashhandler">crashhandler</name>
+			<group>Utility</group>
+			<description>Compiz crash handler plugin</description>
+			<options>
+				<tab name="Main">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Desktop Cube" icon="cube">cube</name>
+			<group>Desktop</group>
+			<description>Place windows on cube</description>
+			<options>
+				<tab name="Appearance">
+				</tab>
+				<tab name="Behaviour">
+				</tab>
+				<tab name="display">
+				</tab>
+				<tab name="screen">
+				</tab>
+				<tab name="Transparent Cube">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Cube Reflection" icon="cubereflex">cubereflex</name>
+			<group>Effects</group>
+			<description>Compiz cube reflection</description>
+			<options>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Dbus" icon="dbus">dbus</name>
+			<group>Utility</group>
+			<description>Dbus Control Backend</description>
+			<options>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Window Decoration" icon="decoration">decoration</name>
+			<group>Effects</group>
+			<description>Window decorations</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Expo" icon="expo">expo</name>
+			<group>Desktop</group>
+			<description>Expo Plugin</description>
+			<options>
+				<tab name="Appearance">
+				</tab>
+				<tab name="Behaviour">
+				</tab>
+				<tab name="Bindings">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Extra WM Actions" icon="extrawm">extrawm</name>
+			<group>Window Management</group>
+			<description>Provides less commonly used WM actions</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Fading Windows" icon="fade">fade</name>
+			<group>Effects</group>
+			<description>Fade in windows when mapped and fade out windows when unmapped</description>
+			<options>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Fade to Desktop" icon="fadedesktop">fadedesktop</name>
+			<group>Desktop</group>
+			<description>Easily access your desktop</description>
+			<options>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Color Opacity" icon="fakeargb">fakeargb</name>
+			<group>Extras</group>
+			<description>Alter window opacity based on color.</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Paint fire on the screen" icon="firepaint">firepaint</name>
+			<group>Effects</group>
+			<description>Paint fire or other particles on the screen</description>
+			<options>
+				<tab name="display">
+				</tab>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Userspace File System" icon="fs">fs</name>
+			<group>Utility</group>
+			<description>Userspace file system</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="GConf" icon="gconf">gconf</name>
+			<group>Uncategorized</group>
+			<description>GConf Control Backend</description>
+			<options>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Cube Gears" icon="gears">gears</name>
+			<group>Effects</group>
+			<description>Render gears inside of the transparent cube</description>
+			<options>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="GLib" icon="glib">glib</name>
+			<group>Utility</group>
+			<description>GLib main loop support</description>
+			<options>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Goto Viewport" icon="gotovp">gotovp</name>
+			<group>Utility</group>
+			<description>Goto viewport specified by numbers</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Group and Tab Windows" icon="group">group</name>
+			<group>Window Management</group>
+			<description>With this plugin you can group and tab windows</description>
+			<options>
+				<tab name="General">
+				</tab>
+				<tab name="Glow">
+				</tab>
+				<tab name="Grouping">
+				</tab>
+				<tab name="Selection">
+				</tab>
+				<tab name="Tabbing">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="JPEG" icon="imgjpeg">imgjpeg</name>
+			<group>Image Loading</group>
+			<description>JPEG image format plugin</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Ini" icon="ini">ini</name>
+			<group>Uncategorized</group>
+			<description>Ini Flat File Backend</description>
+			<options>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Inotify" icon="inotify">inotify</name>
+			<group>Utility</group>
+			<description>File change notification plugin</description>
+			<options>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Motion blur" icon="mblur">mblur</name>
+			<group>Effects</group>
+			<description>Motion blur effect</description>
+			<options>
+				<tab name="Main">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Minimize Effect" icon="minimize">minimize</name>
+			<group>Effects</group>
+			<description>Transform windows when they are minimized and unminimized</description>
+			<options>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Move Window" icon="move">move</name>
+			<group>Window Management</group>
+			<description>Move window</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Mouse switch" icon="mswitch">mswitch</name>
+			<group>Desktop</group>
+			<description>Switch viewport in response to mouse gesture</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Negative" icon="neg">neg</name>
+			<group>Accessibility</group>
+			<description>Used to set a window or screen negative</description>
+			<options>
+				<tab name="display">
+				</tab>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Opacify" icon="opacify">opacify</name>
+			<group>Accessibility</group>
+			<description>Make windows easily visible by hovering the mouse over them</description>
+			<options>
+				<tab name="Bindings">
+				</tab>
+				<tab name="Misc. Options">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Place Windows" icon="place">place</name>
+			<group>Window Management</group>
+			<description>Place windows at appropriate positions when mapped</description>
+			<options>
+				<tab name="Fixed Window Placement">
+				</tab>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Desktop Plane" icon="plane">plane</name>
+			<group>Desktop</group>
+			<description>Place windows on a plane</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Png" icon="png">png</name>
+			<group>Image Loading</group>
+			<description>Png image loader</description>
+			<options>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Put" icon="put">put</name>
+			<group>Window Management</group>
+			<description>Put window</description>
+			<options>
+				<tab name="Animation">
+				</tab>
+				<tab name="display">
+				</tab>
+				<tab name="Misc. Options">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Reflection" icon="reflex">reflex</name>
+			<group>Effects</group>
+			<description>Draws reflections</description>
+			<options>
+				<tab name="Main">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Regex Matching" icon="regex">regex</name>
+			<group>Utility</group>
+			<description>Regex window matching</description>
+			<options>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Resize Window" icon="resize">resize</name>
+			<group>Window Management</group>
+			<description>Resize window</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Resize Info" icon="resizeinfo">resizeinfo</name>
+			<group>Utility</group>
+			<description>Display info on resize similar to metacity</description>
+			<options>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Ring Switcher" icon="ring">ring</name>
+			<group>Window Management</group>
+			<description>Ring Switcher</description>
+			<options>
+				<tab name="Key bindings">
+				</tab>
+				<tab name="Misc. options">
+				</tab>
+				<tab name="Ring appearance">
+				</tab>
+				<tab name="Window title display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Rotate Cube" icon="rotate">rotate</name>
+			<group>Desktop</group>
+			<description>Rotate desktop cube</description>
+			<options>
+				<tab name="display">
+				</tab>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Scale" icon="scale">scale</name>
+			<group>Window Management</group>
+			<description>Scale windows</description>
+			<options>
+				<tab name="display">
+				</tab>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Scale Addons" icon="scaleaddon">scaleaddon</name>
+			<group>Utility</group>
+			<description>Some useful additions to the scale plugin</description>
+			<options>
+				<tab name="Appearance">
+				</tab>
+				<tab name="Behaviour">
+				</tab>
+				<tab name="Bindings">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Scale Window Title Filter" icon="scalefilter">scalefilter</name>
+			<group>Utility</group>
+			<description>Window title filter facility for the scale plugin</description>
+			<options>
+				<tab name="Appearance">
+				</tab>
+				<tab name="Behaviour">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Screenshot" icon="screenshot">screenshot</name>
+			<group>Extras</group>
+			<description>Screenshot plugin</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Show desktop" icon="showdesktop">showdesktop</name>
+			<group>Desktop</group>
+			<description>Access your desktop easily</description>
+			<options>
+				<tab name="Appearance">
+				</tab>
+				<tab name="Misc. Options">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Snapping Windows" icon="snap">snap</name>
+			<group>Window Management</group>
+			<description>Enables windows edges resistance</description>
+			<options>
+				<tab name="Behaviour">
+				</tab>
+				<tab name="Bindings">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Snow" icon="snow">snow</name>
+			<group>Extras</group>
+			<description>Snow for Compiz</description>
+			<options>
+				<tab name="Debug">
+				</tab>
+				<tab name="Key Bindings">
+				</tab>
+				<tab name="Settings">
+				</tab>
+				<tab name="Textures">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Splash" icon="splash">splash</name>
+			<group>Extras</group>
+			<description>A simple splash plugin</description>
+			<options>
+				<tab name="Appearance">
+				</tab>
+				<tab name="Images">
+				</tab>
+				<tab name="Main">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Svg" icon="svg">svg</name>
+			<group>Image Loading</group>
+			<description>Svg image loader</description>
+			<options>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Application Switcher" icon="switcher">switcher</name>
+			<group>Window Management</group>
+			<description>Application Switcher</description>
+			<options>
+				<tab name="display">
+				</tab>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Text" icon="text">text</name>
+			<group>Image Loading</group>
+			<description>Render text to texture</description>
+			<options>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Window Previews" icon="thumbnail">thumbnail</name>
+			<group>Extras</group>
+			<description>Window thumbnails at the taskbar</description>
+			<options>
+				<tab name="Settings">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Tile" icon="tile">tile</name>
+			<group>Window Management</group>
+			<description>Tile windows</description>
+			<options>
+				<tab name="Key Bindings">
+				</tab>
+				<tab name="Options">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Trailfocus" icon="trailfocus">trailfocus</name>
+			<group>Effects</group>
+			<description>Adjust the opacity, saturation and brightness of windows based on when they last had focus.</description>
+			<options>
+				<tab name="Appearance">
+				</tab>
+				<tab name="Behaviour">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Video Playback" icon="video">video</name>
+			<group>Utility</group>
+			<description>Video playback</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Viewport mouse switch" icon="vpswitch">vpswitch</name>
+			<group>Desktop</group>
+			<description>Change viewport on mouse events on the Desktop</description>
+			<options>
+				<tab name="Viewport Switching">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Desktop Wall" icon="wall">wall</name>
+			<group>Desktop</group>
+			<description>Desktop Wall Plugin</description>
+			<options>
+				<tab name="Edge Flipping">
+				</tab>
+				<tab name="Viewport Switch Preview">
+				</tab>
+				<tab name="Viewport Switching">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Wallpaper" icon="wallpaper">wallpaper</name>
+			<group>Utility</group>
+			<description>Draw the desktop wallpaper</description>
+			<options>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Water Effect" icon="water">water</name>
+			<group>Effects</group>
+			<description>Adds water effects to different desktop actions</description>
+			<options>
+				<tab name="display">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Window Rules" icon="winrules">winrules</name>
+			<group>Window Management</group>
+			<description>Set windows rules</description>
+			<options>
+				<tab name="Matches">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Wobbly Windows" icon="wobbly">wobbly</name>
+			<group>Effects</group>
+			<description>Use spring model for wobbly window effect</description>
+			<options>
+				<tab name="display">
+				</tab>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+		<plugin>
+			<name short="Zoom Desktop" icon="zoom">zoom</name>
+			<group>Accessibility</group>
+			<description>Zoom and pan desktop cube</description>
+			<options>
+				<tab name="display">
+				</tab>
+				<tab name="screen">
+				</tab>
+			</options>
+		</plugin>
+	</thePlugins>
+<everything>
