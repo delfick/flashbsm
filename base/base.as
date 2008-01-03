@@ -102,7 +102,7 @@ class base.base extends arrays
 	}
 	public static function createTextFormats (__Container:MovieClip)
 	{
-		base.trace("****************************NEW TEST**********************");
+		base.trace('***************NEXT TEST****************');
 		//descriptionFormat
 		//	group -> plugin -> description
 		descriptionFormat = new TextFormat ();
@@ -189,7 +189,8 @@ class base.base extends arrays
 		//
 		//
 		//Finished setting up, now to make the arrays
-		__Container.theArrays = new arrays ();
-		__Container.theArrays.createArrays (__Container);
+		base.trace ("got this far :D");
+		__Container.theArrays = new arrays (__Container);
+		__Container.theArrays.createArrays (0);
 	}
 }

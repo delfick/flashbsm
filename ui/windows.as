@@ -290,6 +290,11 @@ class ui.windows extends base.base
 				container.scroller.base.clear ();
 				delete container.scroller;
 				break;
+			case "text" :
+				var theName:String = theParams[0];
+				var theString:String = theParams[1];
+				container.canvas[theName + "_txt"].text = theString;
+				break;
 		}
 	}
 	//
@@ -297,17 +302,15 @@ class ui.windows extends base.base
 	//
 	public function setEvents (mc:MovieClip, ButtonWidth:Number, ButtonHeight:Number, finalboxWidth:Number, finalboxHeight:Number)
 	{
-		var gap:Number = gap;
-		var black:Number = black;
-		var blue:Number = blue;
-		var white:Number = white
+		var theBlue:Number = blue
+		var theGap:Number = gap
 		mc.onRollOver = function ()
 		{
-			shapes.createShape ("rectangle", this, (finalboxWidth - ButtonWidth) / 2, finalboxHeight + gap, ButtonWidth, ButtonHeight, 5, blue, 20, true, false, 1, black);
+			shapes.createShape ("rectangle", this, (finalboxWidth - ButtonWidth) / 2, finalboxHeight + theGap, ButtonWidth, ButtonHeight, 5, theBlue, 20, true, false, 1, black);
 		};
 		mc.onRollOut = function ()
 		{
-			shapes.createShape ("rectangle", this, (finalboxWidth - ButtonWidth) / 2, finalboxHeight + gap, ButtonWidth, ButtonHeight, 5, white, 100, true, false, 1, black);
+			shapes.createShape ("rectangle", this, (finalboxWidth - ButtonWidth) / 2, finalboxHeight + theGap, ButtonWidth, ButtonHeight, 5, white, 100, true, false, 1, black);
 		};
 	}
 	static function setbaseDepth (__depth:Number):Number
