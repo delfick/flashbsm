@@ -1,4 +1,15 @@
 ***********************
+**PYAMF
+***********************
+
+The flashbsm uses pyamf to communicate with a python server to get information about the plugins, change settings and other such things...
+
+It can be found here http://pyamf.org/
+
+in ubuntu gutsy it also needs:
+python-setuptools
+
+***********************
 **HOW TO COMPILE WITHOUT THE IDE
 ***********************
 
@@ -8,18 +19,28 @@ just extract that to a folder
 
 and then in the terminal, cd to where the flashbsm is and then do this command
 
-wine /location/to/kagswf.exe -out flashbsm.swf -html -w 1240 -h 830 -fps 48
+/locationOfKagswf/kagswf -out flashbsm.swf -html -w 1240 -h 830 -fps 48 -cp classPath
 
-where /localtion/to/kagswf is the location to kagswf, the number after -w is the width of the movie, the number after -h is the height of the move, and the number after -fps is the frame rate of the movie
-(the above numbers are best suited for a screen with a resolution of 1280x1024)
+where /locationOfKagswf is the location to kagswf, the number after -w is the width of the movie, the number after -h is the height of the move, and the number after -fps is the frame rate of the movie
+(the above numbers are best suited for a screen with a resolution of 1280x1024
+
+in my case
+ ~/source/kagswf/kagswf -out flashbsm.swf -html -w 1240 -h 830 -fps 48 -cp classPath
+
+ (as for the classpath part, look at the mxClasses folder)
 
 ***********************
 **HOW TO USE
 ***********************
 
-If you have cws running (see the "connecting to localhost problem.txt") then you need to have this folder under localhost, and run the flashbsm.html through localhost 
+activate the python server with
+$python server.py
 
-if you don't have cws running, then it doesn't have to be under localhost, and you run flashbsm.html
+if you want to read trace messages, then open tracer.html
+
+and after that, open flashbsm.html
+
+enjoy.
 
 
 
@@ -29,21 +50,16 @@ if you don't have cws running, then it doesn't have to be under localhost, and y
 
 
 
-the flashbsm.fla file contains a single frame of code
+the flashbsm.fla file contains a single line of code
 
 -----------------------QUOTE---------------------
-var theArrays = new objects.arrays(this);
-theArrays.createArrays()
+base.base.createTextFormats(_root)
 ------------------------ENDQUOTE-----------------
 
-To see some trace statements (not completely finished yet) then just open the flashbsm/tracer/tracer/html file through localhost before you load flashbsm.html
 
 
-
-I can't be bothered explaining how exactly flashbsm works yet.....
-
-
-To generate the plugins.xml file untill i learn php to make a php script, I used a fla file with a single frame of code (the following)
+To generate the plugins.xml file untill i learn php to make a php script,
+I used a fla file with a single frame of code (the following)
 
 -----------------------QUOTE---------------------
 var groupArray:Array = new Array ();

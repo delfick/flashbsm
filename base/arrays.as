@@ -61,8 +61,9 @@ class base.arrays extends MovieClip
 		switch (theStage)
 		{
 		case 0 :
+			base.trace ("Opening the start window")
 			communicate = new base.communicate ();
-			arrays.theWindow = new ui.windows ();
+			arrays.theWindow = new ui.windows (400);
 			arrays.theWindow.addItem ("text", "testing0", "This has been compiled with kagswf");
 			arrays.theWindow.addItem ("text", "LoadingTitle", "Loading....");
 			arrays.theWindow.addItem ("text", "Loading", "...");
@@ -85,18 +86,19 @@ class base.arrays extends MovieClip
 			interval = setInterval (EventDelegate.create (this, getFromServer), 10, "categorySize", arrays.count);
 			break;
 		case 2 :
-			base.trace ("category " + arrays.groupArray[arrays.count] + " recieving");
+			base.trace ("Recieving plugin list for the " + arrays.groupArray[arrays.count] + "category");
 			communicate.createService ("getCategoryList");
 			communicate.activateService ("getCategoryList", 1, arrays.groupArray[arrays.count]);
 			interval = setInterval (EventDelegate.create (this, getFromServer), 10, "plugins", arrays.count);
 			break;
-		case 4 :
-			for (var i = 0; i < pl_groupArray.length; i++)
+		case 3 :
+			base.trace("######################################################");
+			for (var i:Number = 0; i < pl_groupArray.length; i++)
 			{
-				trace ("\n" + pl_groupArray[i][0]);
-				for (var j = 1; j < pl_groupArray[i].length; j++)
+				base.trace ("\n" + arrays.groupArray[i]);
+				for (var j:Number = 0; j < pl_groupArray[i].length; j++)
 				{
-					trace ("\t" + pl_groupArray[i][j]);
+					base.trace ("\t" + pl_groupArray[i][j]);
 				}
 			}
 			break;
@@ -130,9 +132,8 @@ class base.arrays extends MovieClip
 			if (tempObject != undefined)
 			{
 				clearInterval (interval);
-				for (var i = 0; i < tempObject.length; i++)
+				for (var i:Number = 0; i < tempObject.length; i++)
 				{
-					base.trace (tempObject[i] + "\n");
 					groupArray[i] = tempObject[i];
 					arrays.groupObject[arrays.groupArray[i]] = i;
 					arrays.pl_groupArray[i] = new Array ();
@@ -147,7 +148,8 @@ class base.arrays extends MovieClip
 			{
 				clearInterval (interval);
 				groupLengthArray[arrays.count] = Number (tempObject);
-				trace("\t\t\t" + groupLengthArray[arrays.count]);
+				arrays.tempObject = null;
+				arrays.tempLength = null;
 				if (groupNum + 1 == arrays.groupArray.length)
 				{
 					arrays.count = 0;
@@ -156,7 +158,6 @@ class base.arrays extends MovieClip
 				}
 				else
 				{
-					trace ("\n\n");
 					arrays.count++;
 					createArrays (1);
 				}
@@ -164,19 +165,19 @@ class base.arrays extends MovieClip
 			break;
 		case "plugins" :
 			var groupNum:Number = theParams[0];
-			arrays.theWindow.editItem ("text", "Loading", "Finding Plugins");
+			arrays.theWindow.editItem ("text", "Loading", "Finding Plugins for the " + arrays.groupArray[groupNum] + " category");
 			if (tempObject != undefined)
 			{
-				trace (tempObject.length + "\t" + groupLengthArray[arrays.count]);
 				if (tempObject.length > groupLengthArray[arrays.count]-1)
 				{
 					clearInterval (interval);
-					for (var i = 0; i < tempObject.length; i++)
+					for (var i:Number = 0; i < tempObject.length; i++)
 					{
-						//trace("\t" + tempObject[i]);
 						arrays.pl_groupArray[groupNum].push (tempObject[i]);
-						//arrays.pl_groupArray[groupNum] = arrays.pl_groupArray[groupNum].concat ().sort (_root.theArrays.order);
+						arrays.pl_groupArray[groupNum] = arrays.pl_groupArray[groupNum].concat ().sort (_root.theArrays.order);
 					}
+					arrays.tempObject = null;
+					arrays.tempLength = null;
 					if (groupNum + 1 == arrays.groupArray.length)
 					{
 						createArrays (3);
@@ -184,8 +185,8 @@ class base.arrays extends MovieClip
 					}
 					else
 					{
-						trace (groupNum + " done");
-						trace(arrays.pl_groupArray[groupNum] + "\n\n");
+						// trace (arrays.groupArray[groupNum] + " done\n");
+						//	trace(arrays.pl_groupArray[groupNum] + "\n\n");
 						arrays.count++;
 						createArrays (2);
 					}

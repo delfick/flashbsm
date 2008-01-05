@@ -88,17 +88,10 @@ class base.base extends arrays
 	static var pluginDescriptionImageHeight:Number;
 	//
 	//
-	public static function trace (text:Object, type:String)
+	public static function trace (text:Object, colour:String)
 	{
 		var lc:LocalConnection = new LocalConnection ();
-		switch (type)
-		{
-		case "important" :
-			lc.send ('importantTrace', 'tracer', text);
-			break;
-		default :
-			lc.send ('tracelog', 'tracer', text);
-		}
+		lc.send ('tracelog', 'tracer', text, colour);
 	}
 	public static function createTextFormats (__Container:MovieClip)
 	{

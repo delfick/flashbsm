@@ -1,6 +1,5 @@
 import compizconfig
 context = compizconfig.Context()
-print list([p.ShortDesc for p in context.Categories["Utility"]])
 
 def echo(data):
 	return data
@@ -13,8 +12,6 @@ def getCategories():
 	return list(context.Categories)
 
 def getCategoryList(categ):
-	print categ
-	print list([p.ShortDesc for p in context.Categories[categ]])
 	return list([p.ShortDesc for p in context.Categories[categ]])
 
 def getCategoryListSize(categ):

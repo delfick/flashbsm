@@ -10,8 +10,8 @@ class ui.windows extends base.base
 	private var container:MovieClip;
 	private var interval:Number
 	//variable dimensions/co-ords
-	public var finalboxHeight:Number = 0;
-	public var finalboxWidth:Number = 300;
+	public var finalboxHeight:Number;
+	public var finalboxWidth:Number;
 	private var boxHeight:Number;
 	private var boxWidth:Number;
 	private var boxX:Number;
@@ -34,10 +34,12 @@ class ui.windows extends base.base
 	//
 	////////////////WINDOW BASE
 	//
-	public function windows ()
+	public function windows (theWidth:Number, theHeight:Number)
 	{
 		count++;
 		createClips ();
+		theWidth == undefined? finalboxWidth = 300 : finalboxWidth = theWidth;
+		theHeight == undefined? finalboxHeight = 0 : finalboxHeight = theHeight;
 	}
 	public function createClips ()
 	{
@@ -78,11 +80,11 @@ class ui.windows extends base.base
 		isDone = false;
 		isThere = false;
 		container.theShadow.clear ();
-		if (fixedHeight != 0)
+		if (fixedWidth != 0)
 		{
 			finalboxWidth = fixedWidth;
 		}
-		if (fixedWidth != 0)
+		if (fixedHeight != 0)
 		{
 			finalboxHeight = fixedHeight;
 		}
@@ -302,15 +304,17 @@ class ui.windows extends base.base
 	//
 	public function setEvents (mc:MovieClip, ButtonWidth:Number, ButtonHeight:Number, finalboxWidth:Number, finalboxHeight:Number)
 	{
-		var theBlue:Number = blue
-		var theGap:Number = gap
+		var theBlue:Number = blue;
+		var theGap:Number = gap;
+		var theBlack:Number = black;
+		var theWhite:Number = white;
 		mc.onRollOver = function ()
 		{
-			shapes.createShape ("rectangle", this, (finalboxWidth - ButtonWidth) / 2, finalboxHeight + theGap, ButtonWidth, ButtonHeight, 5, theBlue, 20, true, false, 1, black);
+			shapes.createShape ("rectangle", this, (finalboxWidth - ButtonWidth) / 2, finalboxHeight + theGap, ButtonWidth, ButtonHeight, 5, theBlue, 20, true, false, 1, theBlack);
 		};
 		mc.onRollOut = function ()
 		{
-			shapes.createShape ("rectangle", this, (finalboxWidth - ButtonWidth) / 2, finalboxHeight + theGap, ButtonWidth, ButtonHeight, 5, white, 100, true, false, 1, black);
+			shapes.createShape ("rectangle", this, (finalboxWidth - ButtonWidth) / 2, finalboxHeight + theGap, ButtonWidth, ButtonHeight, 5, theWhite, 100, true, false, 1, theBlack);
 		};
 	}
 	static function setbaseDepth (__depth:Number):Number

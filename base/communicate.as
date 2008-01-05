@@ -16,10 +16,11 @@ class base.communicate extends base.base
 	}
 	function activateService(theService:String, numArguements:Number)
 	{
+		var pc:PendingCall;
 		var theParams:Array = arguments.splice (2, arguments.length - 2);
 		if (numArguements == 0)
 		{
-			var pc:PendingCall = service[theService] ();
+			pc = service[theService] ();
 		}
 		else
 		{
@@ -30,13 +31,13 @@ class base.communicate extends base.base
 				//
 				case "getCategoryList" :
 					var theGroup:String = theParams[0];
-					var pc:PendingCall = service[theService] (theGroup);
+					pc = service[theService] (theGroup);
 					break;
 				case "getCategoryListSize" :
 					var theGroup:String = theParams[0];
-					var pc:PendingCall = service[theService] (theGroup);
+					pc = service[theService] (theGroup);
 					break;
-					
+
 			}
 		}
 		pc.responder = new RelayResponder (this, "onResult", "onFault");
@@ -53,7 +54,7 @@ class base.communicate extends base.base
 	{
 		// Notify the user of the problem
 		base.trace("Remoting error: \n");
-		for (var d in fault.fault)
+		for (var d:String in fault.fault)
 		{
 			base.trace(fault.fault[d] + "\n");
 		}

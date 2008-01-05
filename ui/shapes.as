@@ -96,8 +96,8 @@ class ui.shapes extends base.base
 			var x1:Number = theParams[4];
 			var y1:Number = theParams[5];
 			var doLine:Boolean = theParams[6];
-			var lineWidth:Number 
-			var lineColour:Number 
+			var lineWidth:Number
+			var lineColour:Number
 			if (doLine == true)
 			{
 				lineWidth = theParams[7];
@@ -161,7 +161,7 @@ class ui.shapes extends base.base
 			//
 			//	// RadioBtn
 			//
-		case "RadioBtn" :
+		case "radioBtn" :
 			//mc, diameter, type
 			var mc:MovieClip = theParams[0];
 			var diameter:Number = theParams[1];
@@ -194,7 +194,7 @@ class ui.shapes extends base.base
 			//
 			//	// CheckBox
 			//
-		case "CheckBox" :
+		case "checkBox" :
 			//mc, sideLegnth, theType
 			var mc:MovieClip = theParams[0];
 			var sideLength:Number = theParams[1];
@@ -226,7 +226,7 @@ class ui.shapes extends base.base
 			//
 			//	// Scroller
 			//
-		case "Scroller" :
+		case "scroller" :
 			//scroller, beingMoved, top, right, scrollerHeight, gripHeight, scollerWidth, settingsHeight, settingsAreaHeight, tracer
 			var scroller:MovieClip = theParams[0];
 			var beingMoved:MovieClip = theParams[1];
