@@ -2,17 +2,22 @@ Unfortunately, this project relies on some of Macromedias' mx classes.
 
 Which means you need a copy of the classes that come with a flash 8 install
 
-then apply the remoting components installer found here 
+then apply the remoting components installer found here
 http://www.adobe.com/products/flashremoting/downloads/components/
 
-Once that is done, you either have to compile flashbsm from the flash ide 
+Once that is done, you either have to compile flashbsm from the flash ide
 or apply some more patches before mtasc will compile the mx classes
 
-Then you must apply the core8 and mx patches found here 
+Then you must apply the core8 and mx patches found here
 http://www.osflash.org/mx_v2_components_patch
 
 (which only seems to work in windows with the windows version of patch
 http://gnuwin32.sourceforge.net/packages/patch.htm
 
-And then you must apply the diff I made as found in this folder with this command
+Once that is done, there is still some changes that must be made.
+It took me a few hours to do, but lucky for you I've made a patch file for you to use
+
+find the diff in this folder and you can use this command to apply it :
+$ patch -p0 < fromOriginal.patch
+
 
