@@ -88,14 +88,34 @@ class base.base extends arrays
 	static var pluginDescriptionImageHeight:Number;
 	//
 	//
-	public static function trace (text:Object, colour:String)
+	public static function trace (text:Object, colour:Number)
 	{
 		var lc:LocalConnection = new LocalConnection ();
 		lc.send ('tracelog', 'tracer', text, colour);
 	}
-	public static function createTextFormats (__Container:MovieClip)
+	public static function startPoint(__container:MovieClip, theType:String)
 	{
-		base.trace('***************NEXT TEST****************');
+		//Stuff for the stage
+		Stage.scaleMode = "noScale";
+		Stage.align = "cc";
+		switch (theType)
+		{
+			case "flashbsm" :
+				base.trace('***************NEXT TEST****************');
+				createTextFormats ();
+				//Finished setting up, now to make the arrays
+				__container.theArrays = new arrays (__container);
+				__container.theArrays.createArrays (0);
+				break;
+			case "tracer" :
+				createTextFormats ();
+				//Finished setting up, now to make the tracer
+				__container.theTracer = new tracer (__container);
+				break;
+		}
+	}
+	public static function createTextFormats ()
+	{
 		//descriptionFormat
 		//	group -> plugin -> description
 		descriptionFormat = new TextFormat ();
@@ -181,9 +201,5 @@ class base.base extends arrays
 		traceFormat.bold = true;
 		//
 		//
-		//Finished setting up, now to make the arrays
-		base.trace ("got this far :D");
-		__Container.theArrays = new arrays (__Container);
-		__Container.theArrays.createArrays (0);
 	}
 }

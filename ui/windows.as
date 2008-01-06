@@ -218,7 +218,8 @@ class ui.windows extends base.base
 			case "trace" :
 				//text:Object, initial:Boolean
 				var text:Object = theParams[0];
-				var initial:Boolean = theParams[1];
+				var colour:Number = theParams[1];
+				var initial:Boolean = theParams[2];
 				if (initial)
 				{
 					container.canvas.createEmptyMovieClip ("tracer", canvasDepth);
@@ -228,6 +229,7 @@ class ui.windows extends base.base
 					container.canvas.tracer.tracer_txt.setNewTextFormat (traceFormat);
 					container.canvas.tracer.tracer_txt.autoSize = true;
 					container.canvas.tracer.tracer_txt.wordWrap = true;
+					container.canvas.tracer.tracer_txt.html = true;
 					container.createEmptyMovieClip ("scroller", canvasDepth + 2);
 					container.scroller.createEmptyMovieClip ("base", canvasDepth + 3);
 					container.scroller.createEmptyMovieClip ("grip", canvasDepth + 4);
@@ -236,8 +238,15 @@ class ui.windows extends base.base
 				}
 				else
 				{
-					logger += text + "\n";
-					container.canvas.tracer.tracer_txt.text = logger;
+					if (colour != undefined)
+					{
+						logger += "<font color='#" + colour.toString(16) + "'>" + text + "</font>\n";
+					}
+					else
+					{
+						logger += "<font color='#000000'>" + text + "</font>\n";
+					}
+					container.canvas.tracer.tracer_txt.htmlText = logger;
 					addItem ("scroller");
 				}
 				break;

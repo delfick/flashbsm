@@ -95,10 +95,10 @@ class base.arrays extends MovieClip
 			base.trace("######################################################");
 			for (var i:Number = 0; i < pl_groupArray.length; i++)
 			{
-				arrays.groupArray[i] == "" ?	base.trace("\n UnCategorised"):base.trace ("\n" + arrays.groupArray[i]);
+				arrays.groupArray[i] == "" ?	base.trace("\n UnCategorised", base.red):base.trace ("\n" + arrays.groupArray[i], base.red);
 				for (var j:Number = 0; j < pl_groupArray[i].length; j++)
 				{
-					base.trace ("\t" + pl_groupArray[i][j]);
+					base.trace ("\t" + pl_groupArray[i][j], base.blue);
 				}
 			}
 			break;

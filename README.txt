@@ -29,12 +29,18 @@ in my case
 
  (as for the classpath part, look at the mxClasses folder)
 
+to compile the tracer, use this command
+/locationOfKagswf/kagswf -out tracer.swf -html -w 700 -h 400 -fps 48 -p tracer -cp classPath && cp tracer/tracer.html .
+
+or if you don't have the necessary mx classes, then just use my tracer branch
+http://flashbsm.googlecode.com/svn/testing/tracer/
+
 ***********************
 **HOW TO USE
 ***********************
 
 activate the python server with
-$python server.py
+$ ./server.py
 
 if you want to read trace messages, then open tracer.html
 

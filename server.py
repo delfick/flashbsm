@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import compizconfig
 context = compizconfig.Context()
 

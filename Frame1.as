@@ -14,7 +14,7 @@ class Frame1 extends SceneObject
 		// private variable "mc", which is
 		// a reference to a new empty MovieClip
 		super (mcParent);
-		base.base.createTextFormats(_root);
+		base.base.startPoint(_root, "flashbsm");
 	}
 }
 
