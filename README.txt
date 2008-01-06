@@ -13,6 +13,18 @@ python-setuptools
 **HOW TO COMPILE WITHOUT THE IDE
 ***********************
 
+*****WITH MAKE
+
+I've made a make file, so all you have to do is change the kagswf variable at the top to point to where you have kagswf, and then in the terminal :
+
+$ make flashbsm
+
+or, if you are compiling the tracer, then
+
+$ make tracer
+
+*****WITHOUT MAKE 
+
 to compile without the ide, you'll need kagswf which you can download from here http://kagswf.graf.slask.pl/download.html
 
 just extract that to a folder
