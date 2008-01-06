@@ -1,6 +1,8 @@
 import objects.*;
+import base.*;
+import ui.*;
 import mx.utils.Delegate;
-class objects.plugins extends base.arrays
+class objects.plugins extends base.base
 {
 	//common variables to all classes
 	public var baseDepth:Number;
@@ -61,9 +63,10 @@ class objects.plugins extends base.arrays
 	private var gridPosXEnable:Number = 0;
 	private var gridPosYEnable:Number = 0;
 	//misc
-	static var iconload:loadvars = new loadvars ();
+	static var iconLoad:LoadVars = new LoadVars ();
 	public var optionsTabsArray:Array = new Array ();
 	static var pluginLoader:LoadVars;
+	static var theWindow:Object;
 	//
 	//
 	//
@@ -116,6 +119,14 @@ class objects.plugins extends base.arrays
 	}
 	static function createClips ()
 	{
+		plugins.theWindow = new ui.windows (400);
+		plugins.theWindow.addItem ("text", "info", "...");
+		plugins.theWindow.addItem ("button", "done");
+		plugins.theWindow.container.canvas.done.onRelease = function ()
+		{
+			plugins.theWindow.closeWindow (false);
+			arrays.theWindow.inactivePress ();
+		};
 		pluginWidth = sideWidth;
 		boxHeight = 33;
 		boxWidth = pluginWidth / 1.1;
@@ -133,9 +144,9 @@ class objects.plugins extends base.arrays
 	{
 		if (activePlugins != undefined)
 		{
-			for (var i:Number = 0; i < activePlugins.length; i++)
+			for (var i:Number = 0; i < arrays.activePlugins.length; i++)
 			{
-				if (activePlugins[i] == iconName)
+				if (arrays.activePlugins[i] == iconName)
 				{
 					isEnabled = true;
 				}
@@ -174,7 +185,7 @@ class objects.plugins extends base.arrays
 		container.checkBox.offState.pic.loadMovie ("images/checkbox/off.png");
 		container.checkBox._x = boxX + boxWidth - 18;
 		container.checkBox._y = boxY + boxHeight - 18;
-		createRectangle (container.base, boxX, boxY, boxWidth, boxHeight, 1, radius, black, white, 20);
+		shapes.createShape ("rectangle", container.base, boxX, boxY, boxWidth, boxHeight, radius, white, 20, false, true, 1, black);
 		container.createTextField ("label_txt", 0, boxX + 5, 10, pluginWidth - 30, pluginHeight);
 		container.label_txt.setNewTextFormat (pluginFormat);
 		container.label_txt.multiline = true;
@@ -191,13 +202,13 @@ class objects.plugins extends base.arrays
 		container.checkBox.inactiveState.pic._visible = false;
 		if (isEnabled == true)
 		{
-			switchImage (container.checkBox, "on");
+			shapes.switchImage (container.checkBox, "on");
 			enabledCount++;
 			disabledCount--;
 		}
 		else
 		{
-			switchImage (container.checkBox, "off");
+			shapes.switchImage (container.checkBox, "off");
 			disabledCount++;
 			enabledCount--;
 		}
@@ -224,17 +235,20 @@ class objects.plugins extends base.arrays
 			plugins.pluginLoader = new LoadVars ();
 			plugins.pluginLoader.onLoad = function(success:Boolean)
 			{
-				arrays.editWindow("It was"+(success == true? " ":" not ")+"successful")
+				plugins.theWindow.editItem("text", "info", "It was"+(success == true? " ":" not ")+"successful")
+				plugins.theWindow.openWindow(false);
 			}
 			if (nextPlugin.isEnabled == true)
 			{
 				plugins.pluginLoader.load ("http://localhost:8899/?method=unloadPlugin&plugin=\"" + nextPlugin.Name + "\"");
-				arrays.editWindow ("Unloading " + nextPlugin.Name);
+				plugins.theWindow.editItem("text", "info", "Unloading " + nextPlugin.Name);
+				plugins.theWindow.openWindow(false);
 			}
 			else
 			{
 				plugins.pluginLoader.load ("http://localhost:8899/?method=loadPlugin&plugin=\"" + nextPlugin.Name + "\"");
-				arrays.editWindow ("Loading " + nextPlugin.Name);
+				plugins.theWindow.editItem("text", "info", "Loading " + nextPlugin.Name);
+				plugins.theWindow.openWindow(false);
 			}
 			var thePlugin:Object = arrays.pluginObject[arrays.pl_groupArray[group][plugin]];
 			if (thePlugin.isEnabled == true)
@@ -247,7 +261,7 @@ class objects.plugins extends base.arrays
 			}
 			if (arrays.funcBarObject.ShowAll.active == true)
 			{
-				plugins.doSort (true);
+			//	plugins.doSort (true);
 			}
 		};
 	}
@@ -255,15 +269,15 @@ class objects.plugins extends base.arrays
 	//
 	function createShape (fillColour:Number, fillAlpha:Number, textColour:Number)
 	{
-		createRectangle (container, boxX, boxY, boxWidth, boxHeight, 1, radius, black, fillColour, fillAlpha);
+		shapes.createShape ("rectangle", container, boxX, boxY, boxWidth, boxHeight, radius, fillColour, fillAlpha, false, true, 1, black);
 		container.label_txt.textColor = textColour;
 	}
 	function changeAction (__action:String)
 	{
 		action = __action;
-		clearInterval (Int);
+		clearInterval (interval);
 		isDone = false;
-		Int = setInterval (EventDelegate.create (this, actionCheck), 10);
+		interval = setInterval (EventDelegate.create (this, actionCheck), 10);
 	}
 	//
 	//
@@ -350,7 +364,7 @@ class objects.plugins extends base.arrays
 		}
 		else
 		{
-			clearInterval (Int);
+			clearInterval (interval);
 		}
 	}
 	//
@@ -404,7 +418,7 @@ class objects.plugins extends base.arrays
 				menuObject[groupArray[group]].changeAction ("dissapear");
 				groupObject[groupArray[group]].reColour ("pressed");
 				groups.selectedGroup = group;
-				plugins.groupPressSort (group);
+				//plugins.groupPressSort (group);
 				plugins.chosenTab = 0;
 				stageObject.theStage.createSettingsArea ();
 				stageObject.theStage.clip.pluginDescription.text = groupArray[group] + " --> " + plugins.currentPlugin.pluginName + " --> " + plugins.currentPlugin.descriptionText;
@@ -450,13 +464,13 @@ class objects.plugins extends base.arrays
 			thePlugin.isEnabled = option;
 			if (option == true)
 			{
-				switchImage (thePlugin.container.checkBox, "on");
+				shapes.switchImage (thePlugin.container.checkBox, "on");
 				enabledCount++;
 				disabledCount--;
 			}
 			else
 			{
-				switchImage (thePlugin.container.checkBox, "off");
+				shapes.switchImage (thePlugin.container.checkBox, "off");
 				disabledCount++;
 				enabledCount--;
 			}
@@ -470,13 +484,13 @@ class objects.plugins extends base.arrays
 			thePlugin.isEnabled = option;
 			if (option == true)
 			{
-				switchImage (thePlugin.container.checkBox, "on");
+				shapes.switchImage (thePlugin.container.checkBox, "on");
 				enabledCount++;
 				disabledCount--;
 			}
 			else
 			{
-				switchImage (thePlugin.container.checkBox, "off");
+				shapes.switchImage (thePlugin.container.checkBox, "off");
 				disabledCount++;
 				enabledCount--;
 			}

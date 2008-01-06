@@ -1,6 +1,6 @@
 ﻿import objects.*;
 import mx.utils.Delegate;
-class theMouse extends base.base
+class objects.theMouse extends base.base
 {
 	//common variables to all classes
 	public var baseDepth:Number;
@@ -59,7 +59,7 @@ class theMouse extends base.base
 			{
 				menuObject[groupArray[num]].changeAction ("up");
 				groupObject[groupArray[num]].reColour ("rollOut");
-				plugins.groupRollOutSort (num);
+				//plugins.groupRollOutSort (num);
 			}
 			else
 			{
@@ -80,7 +80,7 @@ class theMouse extends base.base
 			{
 				menuObject[groupArray[num]].changeAction ("up");
 				groupObject[groupArray[num]].reColour ("rollOut");
-				plugins.groupRollOutSort (num);
+			//	plugins.groupRollOutSort (num);
 			}
 			else
 			{
@@ -100,7 +100,7 @@ class theMouse extends base.base
 			{
 				groupObject[groupArray[num]].reColour ("rollOut");
 				menuObject[groupArray[num]].changeAction ("up");
-				plugins.groupRollOutSort (num);
+			//	plugins.groupRollOutSort (num);
 			}
 			else
 			{
@@ -109,7 +109,7 @@ class theMouse extends base.base
 			break;
 		case "overMenu" :
 			menuObject[groupArray[num]].changeAction ("up");
-			plugins.groupRollOutSort (num);
+		//	plugins.groupRollOutSort (num);
 			break;
 		}
 	}
@@ -136,7 +136,7 @@ class theMouse extends base.base
 			break;
 		case "overMenu" :
 			menuObject[groupArray[num]].changeAction ("up");
-			plugins.groupRollOutSort (num);
+		//	plugins.groupRollOutSort (num);
 			break;
 		}
 	}

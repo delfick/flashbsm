@@ -1,6 +1,7 @@
 ﻿import base.*;
 import objects.*;
 import ui.*;
+import ui.funcbar.*
 class base.arrays extends MovieClip
 {
 	//
@@ -61,7 +62,7 @@ class base.arrays extends MovieClip
 		switch (theStage)
 		{
 		case 0 :
-			base.trace ("Opening the start window")
+			base.trace ("Opening the start window and creating arrays", true, true)
 			communicate = new base.communicate ();
 			arrays.theWindow = new ui.windows (400);
 			arrays.theWindow.addItem ("text", "testing0", "This has been compiled with kagswf");
@@ -80,27 +81,92 @@ class base.arrays extends MovieClip
 			arrays.count = 0;
 			break;
 		case 1 :
-			base.trace ("Recieving length for category " + arrays.groupArray[arrays.count]);
 			communicate.createService ("getCategoryListSize");
 			communicate.activateService ("getCategoryListSize", 1, arrays.groupArray[arrays.count]);
 			interval = setInterval (EventDelegate.create (this, getFromServer), 10, "categorySize", arrays.count);
 			break;
 		case 2 :
-			base.trace ("Recieving plugin list for the " + arrays.groupArray[arrays.count] + "category");
 			communicate.createService ("getCategoryList");
 			communicate.activateService ("getCategoryList", 1, arrays.groupArray[arrays.count]);
 			interval = setInterval (EventDelegate.create (this, getFromServer), 10, "plugins", arrays.count);
 			break;
-		case 3 :
-			base.trace("######################################################");
+		case 30 :
+			base.trace("\n\n######################################################");
 			for (var i:Number = 0; i < pl_groupArray.length; i++)
 			{
-				arrays.groupArray[i] == "" ?	base.trace("\n UnCategorised", base.red):base.trace ("\n" + arrays.groupArray[i], base.red);
+				arrays.groupArray[i] == "" ?	base.trace("\n UnCategorised", true, false, 14, base.red):base.trace ("\n" + arrays.groupArray[i], true, false, 14, base.red);
 				for (var j:Number = 0; j < pl_groupArray[i].length; j++)
 				{
 					base.trace ("\t" + pl_groupArray[i][j], base.blue);
 				}
 			}
+			createArrays(3);
+			break;
+		case 3 :
+			arrays.theWindow.editItem ("text", "Loading", "Creating PluginArray and PluginArrayAlpha");
+			var z:Number = 0;
+			for (var i:Number = 0; i < pl_groupArray.length; i++)
+			{
+				for (var j:Number = 0; j < pl_groupArray[i].length; j++)
+				{
+					arrays.pluginArray[z] = arrays.pl_groupArray[i][j];
+					z++
+				}
+			}
+			arrays.pluginArrayAlpha = pluginArray.concat ().sort (order);
+			createArrays(4);
+			break;
+		case 4 :
+			arrays.theWindow.editItem ("text", "Loading", "Filling out arrays with objects");
+			pluginArrayAlpha = pluginArray.concat ().sort (order);
+			for (var i:Number = 0; i < arrays.groupArray.length; i++)
+			{
+				arrays.groupOrderArray[i] = 0;
+				arrays.theWindow.editItem ("text", "Loading", "Adding group objects");
+				arrays.groupObject[arrays.groupArray[i]] = new groups (groupArray[i], i);
+				arrays.theWindow.editItem ("text", "Loading", "Adding menu objects");
+				arrays.menuObject[arrays.groupArray[i]] = new menus (groupArray[i], i);
+				groupNumbers[arrays.groupArray[i]] = i;
+			}
+			for (var i:Number = 0; i < arrays.groupArray.length; i++)
+			{
+				for (var j:Number = 0; j < arrays.pl_groupArray[i].length; j++)
+				{
+					arrays.theWindow.editItem ("text", "Loading", "Adding plugin objects");
+					arrays.pluginObject[arrays.pl_groupArray[i][j]] = new plugins (pl_groupArray[i][j], i, j);
+				}
+			}
+			for (var i:Number = 0; i < arrays.pluginArrayAlpha.length; i++)
+			{
+				arrays.pluginObject[arrays.pluginArrayAlpha[i]].pluginIndex = i;
+				if (arrays.pluginObject[arrays.pluginArrayAlpha[i]].groupNum == 0)
+				{
+					if (arrays.pluginObject[arrays.pluginArrayAlpha[i]].pluginNum == 0)
+					{
+						base.initialIndex = i;
+					}
+				}
+				pluginObject[pluginArrayAlpha[i]].setAttributes ();
+			}
+			arrays.theWindow.editItem ("text", "Loading", "Adding other random objects");
+			arrays.mouseObject.mouse = new theMouse ();
+			arrays.funcBarObject.Preferences = new preferencesBtn ("Preferences", 0);
+			arrays.windowArray.push ("Preferences");
+			arrays.funcBarObject.Profiles = new profilesBtn ("Profiles", 1);
+			arrays.windowArray.push ("Profiles");
+			arrays.funcBarObject.ShowAll = new showAllBtn ("ShowAll", 2);
+			arrays.funcBarObject.Quit = new quitBtn ("Quit", 3);
+			createArrays(5);
+			break;
+		case 5 :
+			arrays.theWindow.editItem ("text", "Loading", "Determining active plugins");
+			communicate.createService ("getActivePluginList");
+			communicate.activateService ("getActivePluginList", 0);
+			interval = setInterval (EventDelegate.create (this, getFromServer), 10, "activePlugins");
+			break;
+		case 6 :
+			base.trace("arrays are made, time for creation class", true, true);
+			creation.createEverything (depth, 1);
 			break;
 		}
 		//load arrays xml data
@@ -180,7 +246,7 @@ class base.arrays extends MovieClip
 					arrays.tempLength = null;
 					if (groupNum + 1 == arrays.groupArray.length)
 					{
-						createArrays (3);
+						createArrays (30);
 						arrays.count = 0;
 					}
 					else
@@ -191,6 +257,20 @@ class base.arrays extends MovieClip
 						createArrays (2);
 					}
 				}
+			}
+			break;
+		case "activePlugins" :
+			arrays.theWindow.editItem("text", "Loading", "Finding which plugins are active");
+			if (tempObject != undefined)
+			{
+				clearInterval(interval);
+				for (var i:Number = 0; i<tempObject.length;i++)
+				{
+					arrays.activePlugins.push (tempObject[i]);
+				}
+				base.trace("\n The active plugins are", true, false, 13);
+				base.trace(arrays.activePlugins + "\n");
+				createArrays (6);
 			}
 			break;
 		}

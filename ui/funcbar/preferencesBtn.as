@@ -1,11 +1,13 @@
 ﻿import mx.utils.Delegate;
 import objects.*;
-class objects.funcBar.preferencesBtn extends objects.functionBar
+import base.*;
+import ui.*;
+class ui.funcbar.preferencesBtn extends objects.functionBar
 {
 	function preferencesBtn (__name:String, __num:Number)
 	{
 		theName = __name;
-		number = __num;
+		theIndex = __num;
 		arrays.funcBarArray.push (theName);
 	}
 	function activePress ()

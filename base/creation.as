@@ -1,10 +1,19 @@
 ﻿import objects.*;
-class creation extends base
+import base.*;
+import ui.*;
+class base.creation extends base
 {
 	static var depth:Number = 0;
 	static var stageNum:Number = 0;
-	static function createEverything (__depth:Number)
+	static function createEverything (__depth:Number, theStage:Number)
 	{
+		switch (theStage)
+		{
+			case 1 :
+				base.trace("stage one of creation", true, true);
+				arrays.theWindow.editItem("text", "Loading", "Adding depths for initial stage");
+				break;
+		}
 		//objects will call back this function after making sure readyYet=false
 		//
 		//STAGE1 = create stage

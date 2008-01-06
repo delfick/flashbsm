@@ -88,10 +88,11 @@ class base.base extends arrays
 	static var pluginDescriptionImageHeight:Number;
 	//
 	//
-	public static function trace (text:Object, colour:Number)
+	public static function trace (text:Object)
 	{
+		var theParams:Array = arguments.splice(1, arguments.length-1);
 		var lc:LocalConnection = new LocalConnection ();
-		lc.send ('tracelog', 'tracer', text, colour);
+		lc.send ('tracelog', 'tracer', text, theParams);
 	}
 	public static function startPoint(__container:MovieClip, theType:String)
 	{
@@ -101,7 +102,7 @@ class base.base extends arrays
 		switch (theType)
 		{
 			case "flashbsm" :
-				base.trace('***************NEXT TEST****************');
+				base.trace('***************NEXT TEST****************', true, true, 14, grey);
 				createTextFormats ();
 				//Finished setting up, now to make the arrays
 				__container.theArrays = new arrays (__container);

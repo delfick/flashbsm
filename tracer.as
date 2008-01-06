@@ -2,7 +2,7 @@ import ui.*;
 class tracer extends base.base
 {
 	var theWindow:Object;
-	var receiver:LocalConnection = new LocalConnection ();
+	var receiver:LocalConnection;
 	public function tracer()
 	{
 		//Create the window
@@ -11,13 +11,15 @@ class tracer extends base.base
 		theWindow.fixedHeight = Stage.height - 20;
 		theWindow.radius = 20;
 		theWindow.openWindow (true);
-		theWindow.addItem ("trace", "", undefined, true);
+		theWindow.addItem ("trace", "", undefined);
 		theWindow.addItem ("trace", "The tracer is ready to trace");
 		//Create reciever
+		receiver = new LocalConnection ();
 		receiver.connect ('tracelog');
-		receiver.tracer = function (txt:Object, colour:Number)
+		receiver.tracer = function (txt:Object, theParams:Array)
 		{
-			_root.theTracer.theWindow.addItem ("trace", txt, colour, false);
+			trace(theParams);
+			_root.theTracer.theWindow.addItem ("trace", txt, theParams);
 		};
 		Stage.addListener (this);
 	}

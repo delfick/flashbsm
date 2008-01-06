@@ -1,11 +1,13 @@
 ﻿import mx.utils.Delegate;
 import objects.*;
-class objects.funcBar.showAllBtn extends objects.functionBar
+import base.*;
+import ui.*;
+class ui.funcbar.showAllBtn extends objects.functionBar
 {
 	function showAllBtn (__name:String, __num:Number)
 	{
 		theName = __name;
-		number = __num;
+		theIndex = __num;
 		arrays.funcBarArray.push (theName);
 	}
 	function activePress ()
@@ -13,7 +15,7 @@ class objects.funcBar.showAllBtn extends objects.functionBar
 		active = true;
 		reColour (base.red, 20, base.black);
 		arrays.stageObject.theStage.createOptionsMask ();
-		plugins.doSort (false);
+	//	plugins.doSort (false);
 		groups.hideGroups ();
 	}
 	function inactivePress ()

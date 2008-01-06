@@ -1,6 +1,8 @@
 ﻿import objects.*;
+import base.*;
+import ui.*;
 import mx.utils.Delegate;
-class iobjects.groups extends base.arrays
+class objects.groups extends base.base
 {
 	//common variables to all classes
 	public var baseDepth:Number;
@@ -50,7 +52,7 @@ class iobjects.groups extends base.arrays
 		container._y = 8;
 		//create text :: "instance name", depth, x position, y position, width, height
 		container.createTextField ("label_txt", baseDepth + 1, 0, (groupHeight / 2) - (22 / 2), groupWidth, 36);
-		container.label_txt.setNewTextFormat (textFormat);
+		container.label_txt.setNewTextFormat (groupFormat);
 		container.label_txt.selectable = false;
 		container.label_txt.multiline = true;
 		container.label_txt.wordWrap = true;
@@ -111,7 +113,7 @@ class iobjects.groups extends base.arrays
 	}
 	function createShape (fillColour:Number, fillAlpha:Number, textColour:Number, type:String)
 	{
-		createRectangle (container, 0, 0, groupWidth, groupHeight, 1, 10, black, fillColour, fillAlpha);
+		shapes.createShape ("rectangle", container, 0, 0, groupWidth, groupHeight, 10, fillColour, fillAlpha, false, true, 1, black);
 		container.label_txt.textColor = textColour;
 	}
 	//
@@ -128,7 +130,7 @@ class iobjects.groups extends base.arrays
 			{
 				groupObject[groupArray[i]].reColour ("roll");
 				menuObject[groupArray[i]].changeAction ("down");
-				plugins.groupRollSort (i);
+		//		plugins.groupRollSort (i);
 				var left:Number = 7.5 + groups.groupGap + groups.groupSections * i;
 				var right:Number = left + groups.groupWidth;
 				var top:Number = topY;

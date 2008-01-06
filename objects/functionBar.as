@@ -1,6 +1,8 @@
 ﻿import objects.*;
+import base.*;
+import ui.*;
 import mx.utils.Delegate;
-class objects.functionBar extends base.arrays
+class objects.functionBar extends base.base
 {
 	//common variables to all classes
 	public var baseDepth:Number;
@@ -12,7 +14,7 @@ class objects.functionBar extends base.arrays
 	static var boxHeight:Number = 40;
 	private static var boxY:Number;
 	private static var startX:Number;
-	private var boxX:Number = 200;	
+	private var boxX:Number = 200;
 	//properties
 	static var gap:Number;
 	private var active:Boolean = false;
@@ -25,6 +27,7 @@ class objects.functionBar extends base.arrays
 	public static var searchIn:String = "plugins";
 	public static var isAlphabetical:Boolean = true;
 	public static var tempType:String;
+	private var theIndex:Number;
 	//
 	//
 	function functionBar (__name:String, __num:Number)
@@ -53,28 +56,28 @@ class objects.functionBar extends base.arrays
 	//
 	function reColour (fillColour:Number, fillAlpha:Number, textColour:Number)
 	{
-		createRectangle (container.base, 0, 0, boxWidth, boxHeight, 1, radius, black, fillColour, fillAlpha);
+		shapes.createShape ("rectangle", container.base, 0, 0, boxWidth, boxHeight, radius, fillColour, fillAlpha, false, true, 1, black);
 		container.label_txt.textColor = textColour;
 	}
 	function createShape ()
 	{
 		container = _root["funcBar_" + theName];
 		container.createEmptyMovieClip ("base", 2);
-		createRectangle (container.base, 0, 0, boxWidth, boxHeight, 1, radius, black, white, 20);
+		shapes.createShape ("rectangle", container.base, 0, 0, boxWidth, boxHeight, radius, white, 20, 1, black);
 		container.createTextField ("label_txt", 0, 0, 10, boxWidth, 36);
-		container.label_txt.setNewTextFormat (textFormat);
+		container.label_txt.setNewTextFormat (buttonFormat);
 		container.label_txt.text = theName;
 		container.label_txt.multiline = true;
 		container.label_txt.autoSize = false;
 		setPosition ();
-		setEvents (number);
+		setEvents (theIndex);
 	}
 	function setPosition ()
 	{
-		container._x = startX + boxWidth * number + gap * number;
+		container._x = startX + boxWidth * theIndex + gap * theIndex;
 		container._y = boxY;
 	}
-	//	
+	//
 	//
 	private function setEvents (num:Number)
 	{
@@ -161,7 +164,7 @@ class objects.functionBar extends base.arrays
 			}
 		}
 	}
-	//	
+	//
 	//
 	function activePress ()
 	{

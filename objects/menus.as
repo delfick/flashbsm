@@ -1,6 +1,8 @@
 ﻿import objects.*;
+import base.*;
+import ui.*;
 import mx.utils.Delegate;
-class objects.menus extends base.arrays
+class objects.menus extends base.base
 {
 	//common variables to all classes
 	public var baseDepth:Number;
@@ -64,9 +66,9 @@ class objects.menus extends base.arrays
 	function changeAction(__action:String)
 	{
 		action = __action;
-		clearInterval(Int);
+		clearInterval(interval);
 		isDone = false;
-		Int = setInterval(EventDelegate.create(this, actionCheck), 10, container);
+		interval = setInterval(EventDelegate.create(this, actionCheck), 10, container);
 	}
 	function actionCheck()
 	{
@@ -82,19 +84,19 @@ class objects.menus extends base.arrays
 						{
 							//Move towards target
 							v += (menuheight-v)*speed;
-							createRectangle(container, menux, menuy, menuwidth, v, 2, v<radius ? v : radius, black, white, 100);
+							shapes.createShape("rectangle", container, menux, menuy, menuwidth, v, v<radius ? v : radius, white, 100, false, true, 2, black);
 						}
 						else
 						{
 							v = menuheight;
-							createRectangle(container, menux, menuy, menuwidth, v, 2, v<radius ? v : radius, black, white, 100);
+							shapes.createShape("rectangle", container, menux, menuy, menuwidth, v, v<radius ? v : radius, white, 100, false, true, 2, black);
 							isDone = true;
 						}
 					}
 					else
 					{
 						v = menuheight;
-						createRectangle(container, menux, menuy, menuwidth, v, 2, v<radius ? v : radius, black, white, 100);
+						shapes.createShape("rectangle", container, menux, menuy, menuwidth, v, v<radius ? v : radius, white, 100, false, true, 2, black);
 						isDone = true;
 					}
 				}
@@ -106,12 +108,12 @@ class objects.menus extends base.arrays
 						{
 							//Move towards target
 							v -= (v-0)*speed*5;
-							createRectangle(container, menux, menuy, menuwidth, v, 2, v<radius ? v : radius, black, white, 100);
+							shapes.createShape("rectangle", container, menux, menuy, menuwidth, v, v<radius ? v : radius, white, 100, false, true, 2, black);
 						}
 						else
 						{
 							v = 0;
-							createRectangle(container, menux, menuy, menuwidth, v, 2, v<radius ? v : radius, black, white, 100);
+							shapes.createShape("rectangle", container, menux, menuy, menuwidth, v, v<radius ? v : radius, white, 100, false, true, 2, black);
 							container.clear();
 							isDone = true;
 						}
@@ -119,7 +121,7 @@ class objects.menus extends base.arrays
 					else
 					{
 						v = 0;
-						createRectangle(container, menux, menuy, menuwidth, v, 2, v<radius ? v : radius, black, white, 100);
+						shapes.createShape("rectangle", container, menux, menuy, menuwidth, v, v<radius ? v : radius, white, 100, false, true, 2, black);
 						container.clear();
 						isDone = true;
 					}
@@ -134,7 +136,7 @@ class objects.menus extends base.arrays
 		}
 		else
 		{
-			clearInterval(Int);
+			clearInterval(interval);
 		}
 	}
 }

@@ -1,11 +1,13 @@
 ﻿import mx.utils.Delegate;
 import objects.*;
-class objects.funcBar.quitBtn extends objects.functionBar
+import base.*;
+import ui.*;
+class ui.funcbar.quitBtn extends objects.functionBar
 {
 	public function quitBtn(__name:String, __num:Number)
 	{
 		theName = __name;
-		number = __num;
+		theIndex = __num;
 		arrays.funcBarArray.push(theName);
 	}
 	function setPosition()

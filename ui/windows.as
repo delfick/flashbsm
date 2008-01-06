@@ -31,6 +31,7 @@ class ui.windows extends base.base
 	static var count:Number = 0;
 	//random
 	public var logger:Object = ""
+	static var initialTrace:Boolean = true
 	//
 	////////////////WINDOW BASE
 	//
@@ -216,12 +217,27 @@ class ui.windows extends base.base
 			//	// trace
 			//
 			case "trace" :
-				//text:Object, initial:Boolean
+				//text, colour | applyFormatting [isCentered, fontSize, colour]
 				var text:Object = theParams[0];
-				var colour:Number = theParams[1];
-				var initial:Boolean = theParams[2];
-				if (initial)
+				var params:Array = theParams[1];
+				var applyFormatting:Boolean;
+				var colour:Number;
+				var isCentered:Boolean;
+				var fontSize:Number;
+				if (typeof params[0] == "number")
 				{
+					colour = params[0];
+				}
+				else
+				{
+					applyFormatting = params[0];
+					isCentered = params[1];
+					fontSize = params[2];
+					colour = params[3];		
+				}
+				if (windows.initialTrace)
+				{
+					windows.initialTrace = false
 					container.canvas.createEmptyMovieClip ("tracer", canvasDepth);
 					container.canvas.tracer._x = 0;
 					container.canvas.tracer._y = 0;
@@ -233,18 +249,38 @@ class ui.windows extends base.base
 					container.createEmptyMovieClip ("scroller", canvasDepth + 2);
 					container.scroller.createEmptyMovieClip ("base", canvasDepth + 3);
 					container.scroller.createEmptyMovieClip ("grip", canvasDepth + 4);
-					container.canvas.tracer.tracer_txt.text = logger;
+					container.canvas.tracer.tracer_txt.htmlText = logger;
 					addItem ("scroller");
 				}
 				else
 				{
-					if (colour != undefined)
+					if (applyFormatting == undefined && colour == undefined)
+					{
+						logger += "<font color='#000000'>" + text + "</font>\n";
+					}
+					else if (applyFormatting == undefined && colour != undefined)
 					{
 						logger += "<font color='#" + colour.toString(16) + "'>" + text + "</font>\n";
 					}
-					else
+					else if (applyFormatting == true)
 					{
-						logger += "<font color='#000000'>" + text + "</font>\n";
+						var style:String = "";
+						var ender:String = "";
+						if (isCentered) { style += "<p align=\"center\">"; ender = "</p>" + ender};
+						if (fontSize != undefined)
+						{
+							style += "<font size='" + fontSize + "' ";
+							if (colour != undefined)
+							{
+								style += "color='" + "#" + colour.toString(16) + "'>";
+							}
+							else
+							{
+								style += ">";
+							}
+							ender = "</font>" + ender;
+						}
+						logger += style + text + ender + "\n";
 					}
 					container.canvas.tracer.tracer_txt.htmlText = logger;
 					addItem ("scroller");
