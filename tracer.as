@@ -11,7 +11,7 @@ class tracer extends base.base
 		theWindow.fixedHeight = Stage.height - 20;
 		theWindow.radius = 20;
 		theWindow.openWindow (true);
-		theWindow.addItem ("trace", "", undefined);
+		theWindow.addItem ("trace");
 		theWindow.addItem ("trace", "The tracer is ready to trace");
 		//Create reciever
 		receiver = new LocalConnection ();
@@ -32,7 +32,8 @@ class tracer extends base.base
 		theWindow.openWindow (true);
 		theWindow.editItem ("takeScroller");
 		theWindow.updateScroller ();
-		theWindow.addItem ("trace", "", undefined, true);
+		windows.initialTrace = true;
+		theWindow.addItem ("trace");
 	}
 }
 
