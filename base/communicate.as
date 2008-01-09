@@ -30,12 +30,17 @@ class base.communicate extends base.base
 				//	// Rectangle
 				//
 				case "getCategoryList" :
-					var theGroup:String = theParams[0];
+					var theGroup:Number = theParams[0];
 					pc = service[theService] (theGroup);
 					break;
 				case "getCategoryListSize" :
 					var theGroup:String = theParams[0];
 					pc = service[theService] (theGroup);
+					break;
+				case "getMoreInfo" :
+					var theGroup:String = theParams[0];
+					var thePlugin:String = theParams[1];
+					pc = service[theService](theGroup, thePlugin);
 					break;
 
 			}
@@ -46,8 +51,8 @@ class base.communicate extends base.base
 	function onResult (re:ResultEvent)
 	{
 		myData = re.result;
-	//	trace("\t"+myData);
-		arrays.tempObject = myData
+		arrays.tempObject = myData;
+		arrays.broadCaster.broadcastMessage("gotData");
 	}
 	// Fault handler method displays error message
 	function onFault (fault:FaultEvent):Void

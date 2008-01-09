@@ -35,7 +35,9 @@ class base.arrays extends MovieClip
 	static var windowObject:Object = new Object ();
 	static var theWindow:Object;
 	static var communicate:Object;
-	static var tempObject:Object;
+	static var listener:Object = {};
+	static var broadCaster:Object = {};
+	static var tempObject:Object = {};
 	//
 	// Xml
 	//
@@ -56,6 +58,8 @@ class base.arrays extends MovieClip
 	public function arrays (__container:MovieClip)
 	{
 		container = __container;
+    	AsBroadcaster.initialize(broadCaster);
+    	broadCaster.addListener(listener);
 	}
 	function createArrays (theStage:Number)
 	{
@@ -75,34 +79,59 @@ class base.arrays extends MovieClip
 				arrays.theWindow.inactivePress ();
 			};
 			arrays.theWindow.openWindow (false);
+			//
+			//
+			base.trace ("Finding Categories", true, true)
+			arrays.theWindow.editItem ("text", "Loading", "Finding Categories");
+			//
 			communicate.createService ("getCategories");
 			communicate.activateService ("getCategories", 0);
-			interval = setInterval (EventDelegate.create (this, getFromServer), 10, "categories");
-			arrays.count = 0;
+			listener.gotData = function()
+			{
+				for (var i:Number = 0;i<arrays.tempObject.length;i++)
+				{
+					arrays.groupArray[i] = arrays.tempObject[i];
+					arrays.groupObject[arrays.groupArray[i]] = i;
+				}
+				arrays.count = 0;
+				_root.theArrays.createArrays (1);
+			}
 			break;
 		case 1 :
-			communicate.createService ("getCategoryListSize");
-			communicate.activateService ("getCategoryListSize", 1, arrays.groupArray[arrays.count]);
-			interval = setInterval (EventDelegate.create (this, getFromServer), 10, "categorySize", arrays.count);
-			break;
-		case 2 :
 			communicate.createService ("getCategoryList");
-			communicate.activateService ("getCategoryList", 1, arrays.groupArray[arrays.count]);
-			interval = setInterval (EventDelegate.create (this, getFromServer), 10, "plugins", arrays.count);
-			break;
-		case 30 :
-			base.trace("\n\n######################################################");
-			for (var i:Number = 0; i < pl_groupArray.length; i++)
+			if (arrays.count != arrays.groupArray.length)
 			{
-				arrays.groupArray[i] == "" ?	base.trace("\n UnCategorised", true, false, 14, base.red):base.trace ("\n" + arrays.groupArray[i], true, false, 14, base.red);
+				arrays.tempObject = null;
+				communicate.activateService ("getCategoryList", 1, arrays.count);
+				listener.gotData = function()
+				{	
+					base.trace ("Finding Plugins for the " + arrays.groupArray[arrays.count] + " category", true, true)
+					arrays.theWindow.editItem ("text", "Loading", "Finding Plugins for the " + arrays.groupArray[arrays.count] + " category");
+					base.trace("\n" + arrays.tempObject + "\n", base.grey);
+					arrays.pl_groupArray.push(arrays.tempObject);
+					arrays.count ++;
+					_root.theArrays.createArrays(1);
+				}
+			}
+			else
+			{
+				base.trace("going forward", true, true)
+				_root.theArrays.createArrays(2);
+			}
+			break;
+		case 20 :
+			base.trace("\n\n######################################################");
+			for (var i:Number = 0; i < groupArray.length; i++)
+			{
+				arrays.groupArray[i] == "" ?	base.trace("\nUnCategorised", true, false, 14, base.red):base.trace ("\n" + arrays.groupArray[i], true, false, 14, base.red);
 				for (var j:Number = 0; j < pl_groupArray[i].length; j++)
 				{
 					base.trace ("\t" + pl_groupArray[i][j], base.blue);
 				}
 			}
-			createArrays(3);
+			createArrays(2);
 			break;
-		case 3 :
+		case 2 :
 			arrays.theWindow.editItem ("text", "Loading", "Creating PluginArray and PluginArrayAlpha");
 			var z:Number = 0;
 			for (var i:Number = 0; i < pl_groupArray.length; i++)
@@ -114,9 +143,9 @@ class base.arrays extends MovieClip
 				}
 			}
 			arrays.pluginArrayAlpha = pluginArray.concat ().sort (order);
-			createArrays(4);
+			createArrays(3);
 			break;
-		case 4 :
+		case 3 :
 			arrays.theWindow.editItem ("text", "Loading", "Filling out arrays with objects");
 			pluginArrayAlpha = pluginArray.concat ().sort (order);
 			for (var i:Number = 0; i < arrays.groupArray.length; i++)
@@ -146,7 +175,6 @@ class base.arrays extends MovieClip
 						base.initialIndex = i;
 					}
 				}
-				pluginObject[pluginArrayAlpha[i]].setAttributes ();
 			}
 			arrays.theWindow.editItem ("text", "Loading", "Adding other random objects");
 			arrays.mouseObject.mouse = new theMouse ();
@@ -156,15 +184,24 @@ class base.arrays extends MovieClip
 			arrays.windowArray.push ("Profiles");
 			arrays.funcBarObject.ShowAll = new showAllBtn ("ShowAll", 2);
 			arrays.funcBarObject.Quit = new quitBtn ("Quit", 3);
-			createArrays(5);
+			createArrays(4);
 			break;
-		case 5 :
+		case 4 :
 			arrays.theWindow.editItem ("text", "Loading", "Determining active plugins");
 			communicate.createService ("getActivePluginList");
 			communicate.activateService ("getActivePluginList", 0);
-			interval = setInterval (EventDelegate.create (this, getFromServer), 10, "activePlugins");
+			listener.gotData = function()
+			{
+				for (var i:Number = 0; i<arrays.tempObject.length;i++)
+				{
+					arrays.activePlugins.push (arrays.tempObject[i]);
+				}
+				base.trace("\n The active plugins are", true, false, 13);
+				base.trace(arrays.activePlugins + "\n");
+				_root.theArrays.createArrays (5);
+			}
 			break;
-		case 6 :
+		case 5 :
 			base.trace("arrays are made, time for creation class", true, true);
 			creation.createEverything (depth, 1);
 			break;
@@ -184,96 +221,6 @@ class base.arrays extends MovieClip
 		//initiate the window
 		//add text and the button
 		//open the window, no animation
-	}
-	function getFromServer (theType:String)
-	{
-		var theParams:Array = arguments.splice (1, arguments.length - 1);
-		switch (theType)
-		{
-			//
-			//	// Rectangle
-			//
-		case "categories" :
-			arrays.theWindow.editItem ("text", "Loading", "Finding Categories");
-			if (tempObject != undefined)
-			{
-				clearInterval (interval);
-				for (var i:Number = 0; i < tempObject.length; i++)
-				{
-					groupArray[i] = tempObject[i];
-					arrays.groupObject[arrays.groupArray[i]] = i;
-					arrays.pl_groupArray[i] = new Array ();
-				}
-				createArrays (1);
-			}
-			break;
-		case "categorySize" :
-			var groupNum:Number = theParams[0];
-			arrays.theWindow.editItem ("text", "Loading", "Finding category length");
-			if (tempObject != undefined)
-			{
-				clearInterval (interval);
-				groupLengthArray[arrays.count] = Number (tempObject);
-				arrays.tempObject = null;
-				arrays.tempLength = null;
-				if (groupNum + 1 == arrays.groupArray.length)
-				{
-					arrays.count = 0;
-					groupLengthArray[0]=1;
-					createArrays (2);
-				}
-				else
-				{
-					arrays.count++;
-					createArrays (1);
-				}
-			}
-			break;
-		case "plugins" :
-			var groupNum:Number = theParams[0];
-			arrays.theWindow.editItem ("text", "Loading", "Finding Plugins for the " + arrays.groupArray[groupNum] + " category");
-			if (tempObject != undefined)
-			{
-				if (tempObject.length > groupLengthArray[arrays.count]-1)
-				{
-					clearInterval (interval);
-					for (var i:Number = 0; i < tempObject.length; i++)
-					{
-						arrays.pl_groupArray[groupNum].push (tempObject[i]);
-						arrays.pl_groupArray[groupNum] = arrays.pl_groupArray[groupNum].concat ().sort (_root.theArrays.order);
-					}
-					arrays.tempObject = null;
-					arrays.tempLength = null;
-					if (groupNum + 1 == arrays.groupArray.length)
-					{
-						createArrays (30);
-						arrays.count = 0;
-					}
-					else
-					{
-						// trace (arrays.groupArray[groupNum] + " done\n");
-						//	trace(arrays.pl_groupArray[groupNum] + "\n\n");
-						arrays.count++;
-						createArrays (2);
-					}
-				}
-			}
-			break;
-		case "activePlugins" :
-			arrays.theWindow.editItem("text", "Loading", "Finding which plugins are active");
-			if (tempObject != undefined)
-			{
-				clearInterval(interval);
-				for (var i:Number = 0; i<tempObject.length;i++)
-				{
-					arrays.activePlugins.push (tempObject[i]);
-				}
-				base.trace("\n The active plugins are", true, false, 13);
-				base.trace(arrays.activePlugins + "\n");
-				createArrays (6);
-			}
-			break;
-		}
 	}
 	//
 	//

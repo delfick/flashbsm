@@ -25,19 +25,19 @@ class objects.groups extends base.base
 	{
 		groupNum = __groupNum;
 		theName = __name;
-		selectedGroup = 0;
-		groupSections = (stageWidth - 15) / (groupArray.length);
-		groupWidth = (0.9 * groupSections);
-		groupHeight = topHeight - gap;
-		groupGap = (groupSections - groupWidth) / 2;
 	}
 	//
 	//
 	static function createClips ()
 	{
+		selectedGroup = 0;
+		groupSections = (stageWidth - 15) / (groupArray.length);
+		groupWidth = (0.9 * groupSections);
+		groupHeight = topHeight - gap;
+		groupGap = (groupSections - groupWidth) / 2;
 		for (var i:Number= 0; i < groupArray.length; i++)
 		{
-			var grName:String = groupObject[groupArray[i]].Name;
+			var grName:String = groupObject[groupArray[i]].theName;
 			var grDepth:Number = groupObject[groupArray[i]].Depth;
 			_root.createEmptyMovieClip ("group_" + grName, grDepth);
 			groupObject[groupArray[i]].createContainer (_root["group_" + grName]);

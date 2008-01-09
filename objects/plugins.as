@@ -32,6 +32,7 @@ class objects.plugins extends base.base
 	private var colourInt:Number;
 	public var isEnabled:Boolean;
 	public var groupNum:Number;
+	public var groupName:String;
 	public var pluginNum:Number;
 	public var iconName:String;
 	public var pluginNumAlpha:Number;
@@ -67,15 +68,21 @@ class objects.plugins extends base.base
 	public var optionsTabsArray:Array = new Array ();
 	static var pluginLoader:LoadVars;
 	static var theWindow:Object;
+	static var groupCount:Number = 0;
 	//
 	//
 	//
 	public function plugins (__name:String, __groupNum:Number, __pluginNum:Number)
 	{
 		pluginNum = __pluginNum;
+		//Need to get the following
+		//iconName
+		//descriptionText
+		//optionsTabsArray
 		createGroupGrid ();
-		pluginName = __name;
+		iconName = __name;
 		groupNum = __groupNum;
+		groupName = groupArray[groupNum];
 		createNormalGrid ();
 	}
 	function createGroupGrid ()
@@ -99,19 +106,6 @@ class objects.plugins extends base.base
 	}
 	//
 	//
-	function setAttributes ()
-	{
-		pluginName = arrays.ArraysXmlData.firstChild.childNodes[1].childNodes[pluginIndex].childNodes[0].attributes.short;
-		iconName = arrays.ArraysXmlData.firstChild.childNodes[1].childNodes[pluginIndex].childNodes[0].attributes.icon;
-		descriptionText = arrays.ArraysXmlData.firstChild.childNodes[1].childNodes[pluginIndex].childNodes[2].firstChild.nodeValue;
-		optionsTabsArray = new Array ();
-		for (var i:Number = 0; i < arrays.ArraysXmlData.firstChild.childNodes[1].childNodes[pluginIndex].childNodes[3].childNodes.length; i++)
-		{
-			optionsTabsArray[i] = arrays.ArraysXmlData.firstChild.childNodes[1].childNodes[pluginIndex].childNodes[3].childNodes[i].attributes.name;
-		}
-	}
-	//
-	//
 	function setbaseDepth (__depth:Number):Number
 	{
 		baseDepth = __depth;
@@ -119,6 +113,7 @@ class objects.plugins extends base.base
 	}
 	static function createClips ()
 	{
+		communicate.createService ("getMoreInfo");
 		plugins.theWindow = new ui.windows (400);
 		plugins.theWindow.addItem ("text", "info", "...");
 		plugins.theWindow.addItem ("button", "done");
@@ -134,10 +129,15 @@ class objects.plugins extends base.base
 		boxY = (pluginHeight - boxHeight) / 2;
 		for (var i:Number = 0; i < pluginArray.length; i++)
 		{
-			var plName:String = pluginObject[pluginArray[i]].Name;
+			communicate.activateService ("getMoreInfo", 2, pluginObject[pluginArray[i]].groupName, pluginObject[pluginArray[i]].iconName);
+			var plName:String = pluginObject[pluginArray[i]].iconName;
 			var plDepth:Number = pluginObject[pluginArray[i]].Depth;
+			pluginObject[pluginArray[i]].pluginName = arrays.tempObject[0];
+			pluginObject[pluginArray[i]].description = arrays.tempObject[1];
+			//base.trace(arrays.tempObject[0] + "<-->" + arrays.tempObject[1] + "<-->" + pluginArray[i] + "<-+->" + pluginObject[pluginArray[i]].groupNum == plugins.groupCount);
+			arrays.tempObject = null
 			_root.createEmptyMovieClip ("plugin_" + plName, plDepth);
-			pluginObject[pluginArray[i]].createContainer ();
+		//	pluginObject[pluginArray[i]].createContainer ();
 		}
 	}
 	function createContainer ()

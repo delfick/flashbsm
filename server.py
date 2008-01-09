@@ -1,34 +1,47 @@
 #!/usr/bin/env python
 import compizconfig
 context = compizconfig.Context()
+information = []
+for categ in context.Categories:
+	for plugin in context.Categories[categ]:
+		information.append([[plugin.Name], [categ], [plugin.ShortDesc], [plugin.LongDesc]])
+	
+categories = list(context.Categories)
+
+plugins = list(context.Plugins)
+
+pl_categories = []
+for categ in context.Categories:
+	pl_categories.append(list([p.ShortDesc for p in context.Categories[categ]]))
+	
+print(pl_categories[1])
 
 def echo(data):
 	return data
 
-def getPluginList():
-	data = list(context.Plugins)
-	return data
+def getNumberOfPlugins():
+	return len(plugins)
+
+def getPluginData(plugin):
+	return information[plugin]
 
 def getCategories():
-	return list(context.Categories)
+	return categories
 
 def getCategoryList(categ):
-	return list([p.ShortDesc for p in context.Categories[categ]])
-
-def getCategoryListSize(categ):
-	return len(list([p.ShortDesc for p in context.Categories[categ]]))
+	return pl_categories[int(categ)]
 
 def getActivePluginList():
 	data = context.Plugins['core'].Display['active_plugins'].Value
 	return data
-
+	
 services = {
     'echo': echo,
-	'getPluginList.getPluginList': getPluginList,
+	'getNumberOfPlugins.getNumberOfPlugins': getNumberOfPlugins,
+	'getPluginData.getPluginData': getPluginData,
 	'getActivePluginList.getActivePluginList': getActivePluginList,
 	'getCategoryList.getCategoryList' : getCategoryList,
 	'getCategories.getCategories' : getCategories,
-	'getCategoryListSize.getCategoryListSize' : getCategoryListSize,
 	'echo.echo': echo
 }
 

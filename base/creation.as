@@ -12,6 +12,7 @@ class base.creation extends base
 			case 1 :
 				base.trace("stage one of creation", true, true);
 				arrays.theWindow.editItem("text", "Loading", "Adding depths for initial stage");
+				//plugins.createClips();
 				break;
 		}
 		//objects will call back this function after making sure readyYet=false
