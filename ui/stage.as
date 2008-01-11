@@ -167,7 +167,6 @@ class ui.stage extends base.base
 		container.settingsArea.theSettings.test.setNewTextFormat (settingsFormat);
 		//
 		//
-		base.trace(plugins.currentPlugin);
 		tabNameArray = plugins.currentPlugin.optionsTabsArray;
 		tabX = settingsX;
 		//

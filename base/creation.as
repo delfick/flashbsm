@@ -12,8 +12,11 @@ class base.creation extends base.base
 	}
 	static function setDepths (__depth:Number)
 	{
+		
 		plugins.currentPlugin = pluginObject[pluginArray[20]];
 		depth = __depth;
+		//
+		//
 		reportProgress("Adding depths for initial stage");
 		depth += stageObject.theStage.createClips ("bottom", depth);
 		//
@@ -21,7 +24,7 @@ class base.creation extends base.base
 		reportProgress("Adding funcbar objects");
 		for (var i:Number = 0;i<funcBarArray.length;i++)
 		{
-			depth += funcBarArray[i].setbaseDepth (depth);
+			depth += funcBarObject[funcBarArray[i]].setbaseDepth (depth);
 		}
 		//
 		//
@@ -87,25 +90,25 @@ class base.creation extends base.base
 	}
 	static function createClips()
 	{
-		
+
 		reportProgress("making stage");
 		stageObject.theStage.createNormalStage ();
 		//
 		//
-	//	reportProgress("adding windows");
+		reportProgress("adding windows");
 		for (var i:Number= 0; i < windowArray.length; i++)
 		{
-	//		windowObject[windowArray[i]] = new windows ();
-	//		funcBarObject[windowArray[i]].createWindow ();
+			windowObject[windowArray[i]] = new windows ();
+			funcBarObject[windowArray[i]].createWindow ();
 		}
 		//
 		//
 		reportProgress("adding groups, menus, plugins, mouse, functionBar");
-	//	groups.createClips ();
-	//	menus.createClips ();
-	//	plugins.createClips ();
-	//	mouseObject.mouse.createClips ();
-	//	functionBar.createClips ()
+		groups.createClips ();
+		menus.createClips ();
+		plugins.createClips ();
+		mouseObject.mouse.createClips ();
+		functionBar.createClips ()
 		//
 		//
 		reportProgress("putting plugins in the right place");

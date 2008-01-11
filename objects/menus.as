@@ -139,4 +139,9 @@ class objects.menus extends base.base
 			clearInterval(interval);
 		}
 	}
+	public function setbaseDepth(__depth:Number):Number
+	{
+		baseDepth = __depth;
+		return neededDepths;
+	}
 }

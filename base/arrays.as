@@ -90,7 +90,14 @@ class base.arrays extends MovieClip
 			{
 				for (var i:Number = 0;i<arrays.tempObject.length;i++)
 				{
-					arrays.groupArray[i] = arrays.tempObject[i];
+					if (arrays.tempObject[i] == "")
+					{
+						arrays.groupArray[i] = "Undefined";
+					}
+					else
+					{
+						arrays.groupArray[i] = arrays.tempObject[i];
+					}
 					arrays.groupObject[arrays.groupArray[i]] = i;
 				}
 				arrays.count = 0;
@@ -123,7 +130,8 @@ class base.arrays extends MovieClip
 			base.trace("\n\n######################################################");
 			for (var i:Number = 0; i < groupArray.length; i++)
 			{
-				arrays.groupArray[i] == "" ?	base.trace("\nUnCategorised", true, false, 14, base.red):base.trace ("\n" + arrays.groupArray[i], true, false, 14, base.red);
+				//arrays.groupArray[i] == "" ?	base.trace("\nUnCategorised", true, false, 14, base.red):
+				base.trace ("\n" + arrays.groupArray[i], true, false, 14, base.red);
 				for (var j:Number = 0; j < pl_groupArray[i].length; j++)
 				{
 					base.trace ("\t" + pl_groupArray[i][j], base.blue);
