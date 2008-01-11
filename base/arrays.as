@@ -195,6 +195,10 @@ class base.arrays extends MovieClip
 			arrays.windowArray.push ("Profiles");
 			arrays.funcBarObject.ShowAll = new showAllBtn ("ShowAll", 2);
 			arrays.funcBarObject.Quit = new quitBtn ("Quit", 3);
+			for (var i:Number= 0; i < windowArray.length; i++)
+			{
+				windowObject[windowArray[i]] = new windows ();
+			}
 			createArrays(4);
 			break;
 		case 4 :

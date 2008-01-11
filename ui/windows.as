@@ -95,7 +95,7 @@ class ui.windows extends base.base
 		shapes.createShape ("rectangle", container.theShadow, -(Stage.width / 2), -(Stage.height / 2), Stage.width + 20, Stage.height + 20,  0, black, 20, false, false);
 		interval = setInterval (EventDelegate.create (this, resizeBox), 10, finalboxWidth, finalboxHeight, doNow);
 	}
-	public function closeWindow(doNow:Boolean)
+	public function closeWindow(doNow:Boolean, theMessage:String)
 	{
 		clearInterval (interval);
 		isDone = false;

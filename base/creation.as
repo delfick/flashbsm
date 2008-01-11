@@ -12,7 +12,7 @@ class base.creation extends base.base
 	}
 	static function setDepths (__depth:Number)
 	{
-		
+
 		plugins.currentPlugin = pluginObject[pluginArray[20]];
 		depth = __depth;
 		//
@@ -77,7 +77,7 @@ class base.creation extends base.base
 		//
 		//
 		reportProgress("adding sort layer")
-		stageObject.theStage.createClips ("sort", depth);
+		stageObject.theStage.createClips ("sorter", depth);
 		//
 		//
 		reportProgress("adding window layer");
@@ -98,7 +98,6 @@ class base.creation extends base.base
 		reportProgress("adding windows");
 		for (var i:Number= 0; i < windowArray.length; i++)
 		{
-			windowObject[windowArray[i]] = new windows ();
 			funcBarObject[windowArray[i]].createWindow ();
 		}
 		//
@@ -111,7 +110,9 @@ class base.creation extends base.base
 		functionBar.createClips ()
 		//
 		//
+	
 		reportProgress("putting plugins in the right place");
-	//	plugins.pluginPress (0, 0, initialIndex);
+		plugins.pluginPress (0, 0, initialIndex);
+			
 	}
 }

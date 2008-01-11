@@ -86,14 +86,10 @@ class ui.stage extends base.base
 				baseDepth = __depth;
 				container.createEmptyMovieClip ("theOverall", baseDepth + 1);
 				container.createEmptyMovieClip ("theSide", baseDepth + 2);
-				container.createEmptyMovieClip ("pluginHeader", baseDepth + 3);
 
-					container.pluginHeader.createTextField("pluginDescription", 1, pluginDescriptionX + gap + descriptionHeight, pluginDescriptionY, pluginDescriptionWidth, pluginDescriptionHeight);
-					container.pluginHeader.createEmptyMovieClip("pluginDescriptionImage", 2);
-
-				container.createEmptyMovieClip ("theFuncBar", baseDepth +4);
-				container.createEmptyMovieClip ("theHelper", baseDepth + 5);
-				container.createEmptyMovieClip ("settingsArea", baseDepth + 6);
+				container.createEmptyMovieClip ("theFuncBar", baseDepth +3);
+				container.createEmptyMovieClip ("theHelper", baseDepth + 4);
+				container.createEmptyMovieClip ("settingsArea", baseDepth + 5);
 
 					container.settingsArea.createEmptyMovieClip("theSettings", 1);
 					container.settingsArea.createEmptyMovieClip("settingsMask", 2);
@@ -103,7 +99,12 @@ class ui.stage extends base.base
 						container.settingsArea.settingsScroller.createEmptyMovieClip("base", 1);
 						container.settingsArea.settingsScroller.createEmptyMovieClip("grip", 2);
 
-							createSettingsArea (container.settingsArea)
+				container.createEmptyMovieClip ("pluginHeader", baseDepth + 6);
+
+					container.pluginHeader.createTextField("pluginDescription", 1, pluginDescriptionX + gap + descriptionHeight, pluginDescriptionY, pluginDescriptionWidth, pluginDescriptionHeight);
+					container.pluginHeader.createEmptyMovieClip("pluginDescriptionImage", 2);
+
+							//createSettingsArea ()
 
 				return neededDepths;
 				break;
@@ -114,32 +115,34 @@ class ui.stage extends base.base
 			case "sorter" :
 				sortDepth = __depth;
 				container.createEmptyMovieClip("sortCanvas", sortDepth + 1);
-				container.createEmptyMovieClip("sorterItems", sortDepth + 2);
+				container.createEmptyMovieClip("sortItems", sortDepth + 2);
 
-					container.sortCanvas.createEmptyMovieClip("base", 1);
-					container.sortCanvas.createEmptyMovieClip("topBar", 2);
+					container.sortItems.createEmptyMovieClip("base", 1);
+					container.sortItems.createEmptyMovieClip("canvas", 2);
+					container.sortItems.createEmptyMovieClip("topBar", 3);
 
 						for (var i:Number= 0; i < groupArray.length; i++)
 						{
-							container.sortCanvas.topBar.createTextField ("groupTitle" + i, i, groups.groupGap + groups.groupSections * i - 1, 8 + (groups.groupHeight / 2) - (22 / 2), stageWidth / groupArray.length, topHeight);
-							container.sortCanvas.topBar["groupTitle" + i].setNewTextFormat (sortHeaderFormat);
-							container.sortCanvas.topBar["groupTitle" + i].wordWrap = true;
-							container.sortCanvas.topBar["groupTitle" + i].text = groupArray[i];
-							if (container.sortCanvas.topBar["groupTitle" + i].textHeight > 20)
+							container.sortItems.topBar.createTextField ("groupTitle" + i, i, groups.groupGap + groups.groupSections * i - 1, 8 + (groups.groupHeight / 2) - (22 / 2), stageWidth / groupArray.length, topHeight);
+							container.sortItems.topBar["groupTitle" + i].setNewTextFormat (sortHeaderFormat);
+							container.sortItems.topBar["groupTitle" + i].wordWrap = true;
+							container.sortItems.topBar["groupTitle" + i].selectable = false;
+							container.sortItems.topBar["groupTitle" + i].text = groupArray[i];
+							if (container.sortItems.topBar["groupTitle" + i].textHeight > 20)
 							{
-								container.sortCanvas.topBar["groupTitle" + i]._y -= 4;
+								container.sortItems.topBar["groupTitle" + i]._y -= 4;
 							}
 						}
 
-					container.sortCanvas.createEmptyMovieClip("vertBars", 3);
-					container.sortCanvas.createEmptyMovieClip ("optionsPane", 4);
+					container.sortItems.createEmptyMovieClip("vertBars", 4);
+					container.sortItems.createEmptyMovieClip ("optionsPane", 5);
+					container.sortItems.createEmptyMovieClip("optionsPaneMask", 6);
+					container.sortItems.optionsPane.setMask (container.sortItems.optionsPaneMask);
 
-						container.sortCanvas.optionsPane.createEmptyMovieClip ("pane", 1);
-						createPane (container.sortCanvas.optionsPane)
+						container.sortItems.optionsPane.createEmptyMovieClip ("pane", 1);
 
-					container.sortCanvas.createEmptyMovieClip ("optionsMask", 5);
-					container.sortCanvas.pane.setMask (container.sortCanvas.optionsMask);
-					createPanel (container.optionsPane.pane, 6);
+							createPanel (container.sortItems.optionsPane.pane, 6);
+							createPane (container.sortItems.optionsPane)
 
 				return neededSortDepths;
 				break;
@@ -149,22 +152,103 @@ class ui.stage extends base.base
 	//
 	function resetStage ()
 	{
-		container.sortCanvas.header.clear ();
-		container.sortCanvas.canvas.clear ();
-		container.sortCanvas._visible = false;
-		container.theTop.clear ();
-		for (var i:Number= 0; i < groupArray.length; i++)
+
+		base.trace("resetting stage");
+	//	container.theOverall.clear();
+		container.theSide.clear();
+		container.pluginHeader.clear();
+		container.pluginHeader.pluginDescription.text = "";
+		container.pluginHeader.pluginDescriptionImage.clear();
+	//	container.theFuncBar.clear();
+		container.theHelper.clear();
+	//	container.settingsArea.clear();
+	//	container.settingsArea.theSettings.clear();
+	//	container.settingsArea.settingsMask.clear();
+	//	container.settingsArea.settingsScroller.clear();
+	//	container.settingsArea.settingsScroller.base.clear();
+	//	container.settingsArea.settingsScroller.grip.clear();
+
+		container.topBar.clear();
+
+		container.sortCanvas.clear();
+		container.sortItems.clear();
+		container.sortItems.base.clear();
+		container.sortItems.canvas.clear();
+		container.sortItems.topBar.clear();
+		for (var i:Number = 0; i< groupArray.length;i++)
 		{
-			container.sortCanvas["groupDivider" + i].clear ();
-			container.sortCanvas["groupTitle" + i].text = "";
+			container.sortItems.topBar["groupTitle" + i].text = "";
 		}
+		container.sortItems.vertBars.clear();
+	//	container.sortItems.optionsPane.clear();
+	//	container.sortItems.optionsPane.pane.clear();
+	//	container.sortItems.optionsPane.mask.clear();
 	}
 	//
 	//
-	function createSettingsArea (theBase:MovieClip)
+	//////////////////////// STAGE CREATION
+	//
+	//
+	function createNormalStage ()
 	{
-		container.settingsArea.theSettings.createTextField ("test", 10, settingsX, settingsY + tabHeight + (2 * gap), settingsWidth, 500);
-		container.settingsArea.theSettings.test.setNewTextFormat (settingsFormat);
+		resetStage ();
+		shapes.createShape ("rectangle", container.sortItems.optionsPaneMask, funcBarX-3, funcBarY-panelHeight-3, panelWidth+6, panelHeight, 0, blue, 100, false, true, 10, black);
+		shapes.createShape ("rectangle", container.theOverall, topX, topY, stageWidth, stageHeight, 0, black, 0, false, true, 5, black);
+		shapes.createShape ("rectangle", container.topBar, topX, topY, stageWidth, topHeight, 0, white, 100, false, true, 5, black);
+		shapes.createShape ("rectangle", container.theSide, sideX, sideY, sideWidth, sideHeight, 0, white, 0, false, true, 1, black);
+		shapes.createShape ("rectangle", container.theFuncBar, funcBarX, funcBarY, funcBarWidth, funcBarHeight, 0, white, 0, false, true, 1, black);
+		shapes.createShape ("rectangle", container.theHelper, helperX, helperY, helperWidth, helperHeight, 0, white, 0, false, true, 1, black);
+		shapes.createShape ("rectangle", container.pluginHeader.pluginDescriptionImage, 0, 0, pluginDescriptionImageWidth, pluginDescriptionImageHeight, 0, black, 0, false, true, 1, black, true);
+		container.pluginHeader.pluginDescriptionImage._x = pluginDescriptionImageX;
+		container.pluginHeader.pluginDescriptionImage._y = pluginDescriptionImageY;
+		container.pluginDescription.textColor = black;
+		container.pluginDescription.setNewTextFormat (descriptionFormat);
+		container.pluginDescription.selectable = false;
+		base.trace("normal stage made", true, true, 14);
+	}
+	//
+	//
+	//////////////////////// SORTING STAGE CREATION
+	//
+	//
+	function createNormalSort ()
+	{
+		resetStage ();
+		container.sortItems._visible = true;
+		shapes.createShape ("rectangle", container.sortItems.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
+		shapes.createShape ("rectangle", container.sortItems.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
+	}
+	function createGroupSort ()
+	{
+		resetStage ();
+		container.sortItems._visible = true;
+		shapes.createShape ("rectangle", container.sortItems.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
+		shapes.createShape ("rectangle", container.sortItems.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
+		shapes.createShape ("line", container.sortItems.topBar, funcBarX, topY + topHeight, funcBarX + funcBarWidth, topY + topHeight, 1, black);
+		for (var i:Number= 0; i < groupArray.length; i++)
+		{
+			shapes.createShape ("line", container.sortItems.vertBars, groups.groupSections * i, topY + gap, groups.groupSections * i, topY + gap + stageHeight - (3 * gap) - funcBarHeight - panelHeight, 1, black);
+			container.sortItems["groupTitle" + i].text = groupArray[i];
+		}
+	}
+	function createEnableSort ()
+	{
+		resetStage ();
+		container.sortItems._visible = true;
+		shapes.createShape ("rectangle", container.sortItems.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
+		shapes.createShape ("rectangle", container.sortItems.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
+		shapes.createShape ("line", container.sortItems.topBar, funcBarX, topY + topHeight, funcBarX + funcBarWidth, topY + topHeight, 1, black);
+	}
+	//
+	//
+	//////////////////////// SETTINGS AREA
+	//
+	//
+	function createSettingsArea ()
+	{
+		var theBase:MovieClip = container.settingsArea
+		theBase.theSettings.createTextField ("test", 10, settingsX, settingsY + tabHeight + (2 * gap), settingsWidth, 500);
+		theBase.theSettings.test.setNewTextFormat (settingsFormat);
 		//
 		//
 		tabNameArray = plugins.currentPlugin.optionsTabsArray;
@@ -252,253 +336,11 @@ class ui.stage extends base.base
 			shapes.createControl ("scroller", container.settingsArea.settingsScroller, container.settingsArea.theSettings, settingsY + gap, settingsX + settingsWidth - gap, settingsHeight - (2 * gap), gripHeight, scrollerWidth, settingsHeight, settingsAreaHeight);
 		}
 	}
-
-
-
-	function createNormalStage ()
-	{
-		resetStage ();
-		shapes.createShape ("rectangle", container.optionsMask, topX, funcBarY - panelHeight - 10, stageWidth, panelHeight + 10, 0, black, 100, false, false);
-		shapes.createShape ("rectangle", container.theOverall, topX, topY, stageWidth, stageHeight, 0, black, 0, false, true, 5, black);
-		shapes.createShape ("rectangle", container.topBar, topX, topY, stageWidth, topHeight, 0, white, 100, false, true, 5, black);
-		shapes.createShape ("rectangle", container.theSide, sideX, sideY, sideWidth, sideHeight, 0, white, 0, false, true, 1, black);
-		shapes.createShape ("rectangle", container.theFuncBar, funcBarX, funcBarY, funcBarWidth, funcBarHeight, 0, white, 0, false, true, 1, black);
-		shapes.createShape ("rectangle", container.theHelper, helperX, helperY, helperWidth, helperHeight, 0, white, 0, false, true, 1, black);
-		shapes.createShape ("rectangle", container.pluginDescriptionImage, pluginDescriptionImageX, pluginDescriptionImageY, pluginDescriptionImageWidth, pluginDescriptionImageHeight, 0, black, 0, false, true, 1, black);
-		container.pluginDescriptionImage._x = pluginDescriptionImageX;
-		container.pluginDescriptionImage._y = pluginDescriptionImageY;
-		container.pluginDescription.textColor = black;
-		container.pluginDescription.setNewTextFormat (descriptionFormat);
-		container.pluginDescription.selectable = false;
-	}
-	/*
-	********************
-	**********OPTIONS PANE TEXT
-	********************
-	*/
-	function setupInputText (txt:TextField)
-	{
-		txt.onChanged = function ()
-		{
-			if (txt.length > 0)
-			{
-				if (functionBar.searchType != "search")
-				{
-					functionBar.tempType = functionBar.searchType;
-				}
-				functionBar.searchType = "search";
-	//			plugins.searchSort (txt.text, txt.length, true);
-			}
-			else if (txt.length == 0)
-			{
-				functionBar.searchType = functionBar.tempType;
-	//			plugins.doSort (true);
-			}
-		};
-	}
-	function createText (mc:MovieClip, labelTxt:String, depth:Number, x1:Number, y1:Number, __width:Number, __height:Number)
-	{
-		mc.createTextField (labelTxt + "_txt", depth, x1, y1, __width, __height);
-		mc[labelTxt + "_txt"].setNewTextFormat (sortOptionsFormat);
-		mc[labelTxt + "_txt"].autoSize = true;
-		mc[labelTxt + "_txt"].selectable = false;
-		mc[labelTxt + "_txt"].text = labelTxt;
-	}
-	/*
-	********************
-	**********SORT OBJECTS
-	********************
-	*/
-	function createNormalSort ()
-	{
-		resetStage ();
-		container.sortCanvas._visible = true;
-		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
-		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
-	}
-	function createGroupSort ()
-	{
-		resetStage ();
-		container.sortCanvas._visible = true;
-		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
-		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
-		shapes.createShape ("line", container.sortCanvas.header, funcBarX, topY + topHeight, funcBarX + funcBarWidth, topY + topHeight, 1, black);
-		for (var i:Number= 0; i < groupArray.length; i++)
-		{
-			shapes.createShape ("line", container.sortCanvas["groupDivider" + i], groups.groupSections * i, topY + gap, groups.groupSections * i, topY + gap + stageHeight - (3 * gap) - funcBarHeight - panelHeight, 1, black);
-			container.sortCanvas["groupTitle" + i].text = groupArray[i];
-		}
-	}
-	function createEnableSort ()
-	{
-		resetStage ();
-		container.sortCanvas._visible = true;
-		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
-		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true);
-	}
-	/*
-	********************
-	**********UI OBJECTS
-	********************
-	*/
 	//
-	// PANEL
 	//
-	public function createPanel (mc:MovieClip, depth:Number)
-	{
-		mc.createEmptyMovieClip ("canvas", depth);
-		createText (mc, "Search Options", depth + 2, 0, (sectionHeight - 20) / 2, 20, 20);
-		createText (mc, "Search Layout", depth + 3, 0, sectionHeight + (sectionHeight - 20) / 2, 20, 20);
-		createText (mc, "Search", depth + 4, 0, sectionHeight * 2 + (sectionHeight - 20) / 2, 20, 20);
-		mc.createTextField ("input_txt", depth + 5, 56.5, 46.4, funcBarWidth - 57, 18.5);
-		mc.createEmptyMovieClip ("searchIn", depth + 6);
-		shapes.createImageHolder (167.3 + 10, (sectionHeight - 14) / 2, depth + 7, mc.searchIn, "searchPlugins", "radio", "on");
-		createText (mc.searchIn, "Plugins", depth + 8, 167.3 + 30, (sectionHeight - 17) / 2, 20, 20);
-		shapes.createImageHolder (167.3 + 110, (sectionHeight - 14) / 2, depth + 14, mc.searchIn, "searchOptionss", "radio", "inactive");
-		createText (mc.searchIn, "Options", depth + 10, 167.3 + 130, (sectionHeight - 17) / 2, 20, 20);
-		mc.createEmptyMovieClip ("searchLayout", depth + 11);
-		shapes.createImageHolder (167.3 + 10, (sectionHeight + (sectionHeight - 14) / 2), depth + 21, mc.searchLayout, "alphaCheck", "checkbox", "on");
-		createText (mc.searchLayout, "Alphabetical", depth + 13, 167.3 + 30, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
-		shapes.createImageHolder (294.8 + 10, (sectionHeight + (sectionHeight - 14) / 2), depth + 28, mc.searchLayout, "normalChoice", "radio", "on");
-		createText (mc.searchLayout, "Normal", depth + 15, 294.8 + 30, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
-		shapes.createImageHolder (294.8 + 110, (sectionHeight + (sectionHeight - 14) / 2), depth + 35, mc.searchLayout, "groupChoice", "radio", "off");
-		createText (mc.searchLayout, "Group", depth + 17, 294.8 + 130, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
-		shapes.createImageHolder (294.8 + 210, (sectionHeight + (sectionHeight - 14) / 2), depth + 42, mc.searchLayout, "enableChoice", "radio", "off");
-		createText (mc.searchLayout, "Enabled/Disabled", depth + 19, 294.8 + 230, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
-		mc.input_txt.setNewTextFormat (sortOptionsFormat);
-		mc.input_txt.type = "input";
-		mc.input_txt.border = true;
-		setupInputText (mc.input_txt);
-		shapes.createShape ("rectangle", mc.canvas, 0, 0, funcBarWidth, sectionHeight * 3, 0, white, 100, true, true, 1, black);
-		shapes.createShape ("rectangle", mc.canvas, 0, 0, funcBarWidth, sectionHeight, 0, white, 100, true, true, 1, black);
-		shapes.createShape ("rectangle", mc.canvas, 0, sectionHeight, funcBarWidth, sectionHeight, 0, white, 100, true, true, 1, black);
-		shapes.createShape ("rectangle", mc.canvas, 0, sectionHeight * 2, funcBarWidth, sectionHeight, 0, white, 100, true, true, 1, black);
-		shapes.createShape ("line", mc.canvas, 167.3, 0, 167.3, sectionHeight * 2, 1, black);
-		shapes.createShape ("line", mc.canvas, 294.8, sectionHeight, 294.8, sectionHeight * 2, 1, black);
-	}
+	//////////////////////// TABS
 	//
-	function createPane (base:MovieClip)
-	{
-		base._x = funcBarX;
-		base._y = funcBarY;
-		base.pane._x = 0;
-		base.pane._y = 0;
-		shapes.createShape ("rectangle", base.pane, 0, 0, funcBarWidth, panelHeight, 0, white, 100, false, true, 1, black);
-		base.pane.searchLayout.normalChoice.onRelease = function ()
-		{
-			if (functionBar.searchType != "search")
-			{
-				functionBar.searchType = "normal";
-			}
-			else
-			{
-				functionBar.tempType = "normal";
-			}
-	//		plugins.doSort (true);
-			shapes.switchImage (this._parent.normalChoice, "on");
-			shapes.switchImage (this._parent.groupChoice, "off");
-			shapes.switchImage (this._parent.enableChoice, "off");
-			//shapes.createRadioBtn(this._parent.normalChoice, 10, "on");
-			//shapes.createRadioBtn(this._parent.groupChoice, 10, "off");
-			//shapes.createRadioBtn(this._parent.enableChoice, 10, "off");
-		};
-		base.pane.searchLayout.groupChoice.onRelease = function ()
-		{
-			if (functionBar.searchType != "search")
-			{
-				functionBar.searchType = "group";
-			}
-			else
-			{
-				functionBar.tempType = "group";
-			}
-	//		plugins.doSort (true);
-			shapes.switchImage (this._parent.normalChoice, "off");
-			shapes.switchImage (this._parent.groupChoice, "on");
-			shapes.switchImage (this._parent.enableChoice, "off");
-			//shapes.createRadioBtn(this._parent.normalChoice, 10, "off");
-			//shapes.createRadioBtn(this._parent.groupChoice, 10, "on");
-			//shapes.createRadioBtn(this._parent.enableChoice, 10, "off");
-		};
-		base.pane.searchLayout.enableChoice.onRelease = function ()
-		{
-			if (functionBar.searchType != "search")
-			{
-				functionBar.searchType = "enable";
-			}
-			else
-			{
-				functionBar.tempType = "enable";
-			}
-	//		plugins.doSort (true);
-			shapes.switchImage (this._parent.normalChoice, "off");
-			shapes.switchImage (this._parent.groupChoice, "off");
-			shapes.switchImage (this._parent.enableChoice, "on");
-			//shapes.createRadioBtn(this._parent.normalChoice, 10, "off");
-			//shapes.createRadioBtn(this._parent.groupChoice, 10, "off");
-			//shapes.createRadioBtn(this._parent.enableChoice, 10, "on");
-		};
-		base.pane.searchLayout.alphaCheck.onRelease = function ()
-		{
-			if (functionBar.isAlphabetical == false)
-			{
-				functionBar.isAlphabetical = true;
-	//			plugins.doSort (true);
-				shapes.switchImage (this, "on");
-				//shapes.createCheckBox(this, 10, "off");
-			}
-			else
-			{
-				functionBar.isAlphabetical = false;
-	//			plugins.doSort (true);
-				shapes.switchImage (this, "off");
-				//shapes.createCheckBox(this, 10, "on");
-			}
-		};
-	}
 	//
-	function createOptionsMask ()
-	{
-		clearInterval (interval);
-		interval = setInterval (EventDelegate.create (this, drawOutPane), 10, container.optionsPane, funcBarY - panelHeight + 1);
-	}
-	function destroyOptionsMask (speed:String)
-	{
-		clearInterval (interval);
-		if (speed == "quick")
-		{
-			shapes.createShape ("rectangle", container.optionsPane, funcBarX, funcBarY - panelHeight, panelWidth, 0, 2, white, 100, false, false);
-		}
-		else if (speed == "normal")
-		{
-			interval = setInterval (EventDelegate.create (this, drawOutPane), 10, container.optionsPane, funcBarY);
-		}
-	}
-	function drawOutPane (mc:MovieClip, finalY:Number)
-	{
-		if (animated == true)
-		{
-			if (Math.abs (finalY - mc._y) > 1)
-			{
-				mc._y += (finalY - mc._y) * speed;
-			}
-			else
-			{
-				mc._y = finalY;
-				clearInterval (interval);
-			}
-		}
-		else
-		{
-			mc._y = finalY;
-			clearInterval (interval);
-		}
-	}
-	/*
-	********************
-	**********THE TABS
-	********************
-	*/
 	function setTabEvents (mc:MovieClip, theClip:MovieClip, num:Number)
 	{
 		mc.onRollOver = function ()
@@ -570,6 +412,201 @@ class ui.stage extends base.base
 				shapes.createShape ("rectangle", theClip.pluginHeader["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 0, white, 0, false, true, 1, black);
 				theClip.pluginHeader.pluginHeader["tab" + i].tabName.color = blue;
 			}
+		}
+	}
+	//
+	//
+	//////////////////////// OPTIONS PANE
+	//
+	//
+	public function createPanel (mc:MovieClip, depth:Number)
+	{
+		//some extra movieclips
+		mc.createEmptyMovieClip ("canvas", depth);
+		mc.createEmptyMovieClip ("searchIn", depth + 6);
+		mc.createEmptyMovieClip ("searchLayout", depth + 11);
+
+		//input text field
+		mc.createTextField ("input_txt", depth + 5, 56.5, 46.4, funcBarWidth - 57, 18.5);
+			mc.input_txt.setNewTextFormat (sortOptionsFormat);
+			mc.input_txt.type = "input";
+			mc.input_txt.border = true;
+			setupInputText (mc.input_txt);
+
+			//text headings
+			createText (mc, "Search Options", depth + 2, 0, (sectionHeight - 20) / 2, 20, 20);
+			createText (mc, "Search Layout", depth + 3, 0, sectionHeight + (sectionHeight - 20) / 2, 20, 20);
+			createText (mc, "Search", depth + 4, 0, sectionHeight * 2 + (sectionHeight - 20) / 2, 20, 20);
+
+		//text and controls
+		shapes.createImageHolder (167.3 + 10, (sectionHeight - 14) / 2, depth + 7, mc.searchIn, "searchPlugins", "radio", "on");
+			createText (mc.searchIn, "Plugins", depth + 8, 167.3 + 30, (sectionHeight - 17) / 2, 20, 20);
+		shapes.createImageHolder (167.3 + 110, (sectionHeight - 14) / 2, depth + 14, mc.searchIn, "searchOptionss", "radio", "inactive");
+			createText (mc.searchIn, "Options", depth + 10, 167.3 + 130, (sectionHeight - 17) / 2, 20, 20);
+		shapes.createImageHolder (167.3 + 10, (sectionHeight + (sectionHeight - 14) / 2), depth + 21, mc.searchLayout, "alphaCheck", "checkbox", "on");
+			createText (mc.searchLayout, "Alphabetical", depth + 13, 167.3 + 30, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
+		shapes.createImageHolder (294.8 + 10, (sectionHeight + (sectionHeight - 14) / 2), depth + 28, mc.searchLayout, "normalChoice", "radio", "on");
+			createText (mc.searchLayout, "Normal", depth + 15, 294.8 + 30, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
+		shapes.createImageHolder (294.8 + 110, (sectionHeight + (sectionHeight - 14) / 2), depth + 35, mc.searchLayout, "groupChoice", "radio", "off");
+			createText (mc.searchLayout, "Group", depth + 17, 294.8 + 130, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
+		shapes.createImageHolder (294.8 + 210, (sectionHeight + (sectionHeight - 14) / 2), depth + 42, mc.searchLayout, "enableChoice", "radio", "off");
+			createText (mc.searchLayout, "Enabled/Disabled", depth + 19, 294.8 + 230, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
+
+		//random shapes
+		shapes.createShape ("rectangle", mc.canvas, 0, 0, funcBarWidth, sectionHeight * 3, 0, white, 100, true, true, 1, black);
+		shapes.createShape ("rectangle", mc.canvas, 0, 0, funcBarWidth, sectionHeight, 0, white, 100, true, true, 1, black);
+		shapes.createShape ("rectangle", mc.canvas, 0, sectionHeight, funcBarWidth, sectionHeight, 0, white, 100, true, true, 1, black);
+		shapes.createShape ("rectangle", mc.canvas, 0, sectionHeight * 2, funcBarWidth, sectionHeight, 0, white, 100, true, true, 1, black);
+		shapes.createShape ("line", mc.canvas, 167.3, 0, 167.3, sectionHeight * 2, 1, black);
+		shapes.createShape ("line", mc.canvas, 294.8, sectionHeight, 294.8, sectionHeight * 2, 1, black);
+	}
+	function createText (mc:MovieClip, labelTxt:String, depth:Number, x1:Number, y1:Number, __width:Number, __height:Number)
+	{
+		mc.createTextField (labelTxt + "_txt", depth, x1, y1, __width, __height);
+		mc[labelTxt + "_txt"].setNewTextFormat (sortOptionsFormat);
+		mc[labelTxt + "_txt"].autoSize = true;
+		mc[labelTxt + "_txt"].selectable = false;
+		mc[labelTxt + "_txt"].text = labelTxt;
+	}
+	function setupInputText (txt:TextField)
+	{
+		txt.onChanged = function ()
+		{
+			if (txt.length > 0)
+			{
+				if (functionBar.searchType != "search")
+				{
+					functionBar.tempType = functionBar.searchType;
+				}
+				functionBar.searchType = "search";
+	//			plugins.searchSort (txt.text, txt.length, true);
+			}
+			else if (txt.length == 0)
+			{
+				functionBar.searchType = functionBar.tempType;
+	//			plugins.doSort (true);
+			}
+		};
+	}
+	function createPane (base:MovieClip)
+	{
+		base._x = funcBarX;
+		base._y = funcBarY;
+		shapes.createShape ("rectangle", base, 0, 0, funcBarWidth, panelHeight, 0, white, 100, false, true, 1, black);
+		base.pane.searchLayout.normalChoice.onRelease = function ()
+		{
+			if (functionBar.searchType != "search")
+			{
+				functionBar.searchType = "normal";
+			}
+			else
+			{
+				functionBar.tempType = "normal";
+			}
+	//		plugins.doSort (true);
+arrays.stageObject.theStage.createNormalSort ();
+			shapes.switchImage (this._parent.normalChoice, "on");
+			shapes.switchImage (this._parent.groupChoice, "off");
+			shapes.switchImage (this._parent.enableChoice, "off");
+			//shapes.createRadioBtn(this._parent.normalChoice, 10, "on");
+			//shapes.createRadioBtn(this._parent.groupChoice, 10, "off");
+			//shapes.createRadioBtn(this._parent.enableChoice, 10, "off");
+		};
+		base.pane.searchLayout.groupChoice.onRelease = function ()
+		{
+			if (functionBar.searchType != "search")
+			{
+				functionBar.searchType = "group";
+			}
+			else
+			{
+				functionBar.tempType = "group";
+			}
+	//		plugins.doSort (true);
+arrays.stageObject.theStage.createGroupSort ();
+			shapes.switchImage (this._parent.normalChoice, "off");
+			shapes.switchImage (this._parent.groupChoice, "on");
+			shapes.switchImage (this._parent.enableChoice, "off");
+			//shapes.createRadioBtn(this._parent.normalChoice, 10, "off");
+			//shapes.createRadioBtn(this._parent.groupChoice, 10, "on");
+			//shapes.createRadioBtn(this._parent.enableChoice, 10, "off");
+		};
+		base.pane.searchLayout.enableChoice.onRelease = function ()
+		{
+			base.trace("you clicked enablechoice");
+			if (functionBar.searchType != "search")
+			{
+				functionBar.searchType = "enable";
+			}
+			else
+			{
+				functionBar.tempType = "enable";
+			}
+	//		plugins.doSort (true);
+arrays.stageObject.theStage.createEnableSort ();
+			shapes.switchImage (this._parent.normalChoice, "off");
+			shapes.switchImage (this._parent.groupChoice, "off");
+			shapes.switchImage (this._parent.enableChoice, "on");
+			//shapes.createRadioBtn(this._parent.normalChoice, 10, "off");
+			//shapes.createRadioBtn(this._parent.groupChoice, 10, "off");
+			//shapes.createRadioBtn(this._parent.enableChoice, 10, "on");
+		};
+		base.pane.searchLayout.alphaCheck.onRelease = function ()
+		{
+			if (functionBar.isAlphabetical == false)
+			{
+				functionBar.isAlphabetical = true;
+	//			plugins.doSort (true);
+				shapes.switchImage (this, "on");
+				//shapes.createCheckBox(this, 10, "off");
+			}
+			else
+			{
+				functionBar.isAlphabetical = false;
+	//			plugins.doSort (true);
+				shapes.switchImage (this, "off");
+				//shapes.createCheckBox(this, 10, "on");
+			}
+		};
+	}
+	//
+	function createOptionsMask ()
+	{
+		clearInterval (interval);
+		interval = setInterval (EventDelegate.create (this, drawOutPane), 10, container.sortItems.optionsPane, funcBarY-panelHeight - 3);
+	}
+	function destroyOptionsMask (speed:String)
+	{
+		clearInterval (interval);
+		if (speed == "quick")
+		{
+			container.sortItems.optionsPane._x = funcBarX;
+			container.sortItems.optionsPane._y = funcBarY;
+			shapes.createShape ("rectangle", container.sortItems.optionsPane, 0, 0, panelWidth, 0, 2, white, 100, false, false);
+		}
+		else if (speed == "normal")
+		{
+			interval = setInterval (EventDelegate.create (this, drawOutPane), 10, container.sortItems.optionsPane, funcBarY);
+		}
+	}
+	function drawOutPane (mc:MovieClip, finalY:Number)
+	{
+		if (animated == true)
+		{
+			if (Math.abs (finalY - mc._y) > 1)
+			{
+				mc._y += (finalY - mc._y) * speed;
+			}
+			else
+			{
+				mc._y = finalY;
+				clearInterval (interval);
+			}
+		}
+		else
+		{
+			mc._y = finalY;
+			clearInterval (interval);
 		}
 	}
 }

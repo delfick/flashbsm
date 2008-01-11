@@ -19,13 +19,13 @@ class ui.funcbar.profilesBtn extends objects.functionBar
 	function inactivePress ()
 	{
 		active = false;
-		windowObject.Profiles.closeWindow ();
 		reColour (base.white, 20, base.black);
 	}
 	function createWindow ()
 	{
 		var theWindow:Object = windowObject[theName];
-		theWindow.addButton ("done");
+		theWindow.addItem ("text", "nothinghere", "Nothing to see here.... yet");
+		theWindow.addItem ("button", "done");
 		theWindow.container.canvas.done.onRelease = function ()
 		{
 			arrays.windowObject.Profiles.closeWindow (false);

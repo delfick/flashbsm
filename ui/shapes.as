@@ -94,10 +94,10 @@ class ui.shapes extends base.base
 			if (doTrace)
 			{
 				base.trace("\t" + mc, orange);
-				base.trace("\t(" + topLeftx + "," + topLefty + ")", orange);
-				base.trace("\t(" + topRightx + "," + topRighty + ")", orange);
-				base.trace("\t(" + bottomLeftx + "," + bottomLefty + ")", orange);
-				base.trace("\t(" + bottomRightx + "," + bottomRighty + ")", orange);
+			//	base.trace("\t(" + topLeftx + "," + topLefty + ")", orange);
+			//	base.trace("\t(" + topRightx + "," + topRighty + ")", orange);
+			//	base.trace("\t(" + bottomLeftx + "," + bottomLefty + ")", orange);
+			//	base.trace("\t(" + bottomRightx + "," + bottomRighty + ")", orange);
 			}
 			break;
 			//

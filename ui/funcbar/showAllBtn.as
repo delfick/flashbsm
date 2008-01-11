@@ -15,6 +15,7 @@ class ui.funcbar.showAllBtn extends objects.functionBar
 		active = true;
 		reColour (base.red, 20, base.black);
 		arrays.stageObject.theStage.createOptionsMask ();
+		stageObject.theStage.createNormalSort ();
 	//	plugins.doSort (false);
 		groups.hideGroups ();
 	}

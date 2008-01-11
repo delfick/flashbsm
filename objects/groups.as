@@ -152,7 +152,7 @@ class objects.groups extends base.base
 		{
 			if (i == num)
 			{
-	//			plugins.pluginPress (i, 0, pluginObject[pl_groupArray[i][0]].pluginIndex);
+				plugins.pluginPress (i, 0, pluginObject[pl_groupArray[i][0]].pluginIndex);
 			}
 		}
 	}

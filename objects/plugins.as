@@ -391,6 +391,7 @@ class objects.plugins extends base.base
 	}
 	static function pluginPress (group:Number, plugin:Number, pluginIndex:Number)
 	{
+		
 		for (var i:Number = 0; i < pluginArray.length; i++)
 		{
 			var nextPlugin:Object = pluginObject[pluginArray[i]];
@@ -400,15 +401,16 @@ class objects.plugins extends base.base
 				currentPlugin = nextPlugin;
 				var theName:String = currentPlugin.Name.toLowerCase ();
 				iconLoad.load ("images/icons/plugin-" + currentPlugin.iconName + ".png");
+				
 				iconLoad.onLoad = function (success:Boolean)
 				{
 					if (success)
 					{
-						arrays.stageObject.theStage.clip.pluginDescriptionImage.loadMovie ("images/icons/plugin-" + plugins.currentPlugin.iconName + ".png");
+						stage.container.pluginHeader.pluginDescriptionImage.loadMovie ("images/icons/plugin-" + plugins.currentPlugin.iconName + ".png");
 					}
 					else
 					{
-						arrays.stageObject.theStage.clip.pluginDescriptionImage.loadMovie ("images/icons/plugin-unknown.png");
+						stage.container.pluginHeader.pluginDescriptionImage.loadMovie ("images/icons/plugin-unknown.png");
 					}
 				};
 				nextPlugin.isSelected = true;
@@ -416,10 +418,11 @@ class objects.plugins extends base.base
 				menuObject[groupArray[group]].changeAction ("dissapear");
 				groupObject[groupArray[group]].reColour ("pressed");
 				groups.selectedGroup = group;
-				//plugins.groupPressSort (group);
+	//			plugins.groupPressSort (group);
 				plugins.chosenTab = 0;
-				stageObject.theStage.createSettingsArea ();
-				stageObject.theStage.clip.pluginDescription.text = groupArray[group] + " --> " + plugins.currentPlugin.pluginName + " --> " + plugins.currentPlugin.descriptionText;
+	//			stageObject.theStage.createSettingsArea ();
+				trace(_root.pluginHeader.pluginDescription);
+				stage.container.pluginHeader.pluginDescription.text = groupArray[group] + " --> " + plugins.currentPlugin.pluginName + " --> " + plugins.currentPlugin.descriptionText;
 				if (funcBarObject.ShowAll.active == true)
 				{
 					funcBarObject.ShowAll.inactivePress ();

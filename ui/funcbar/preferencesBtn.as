@@ -19,7 +19,6 @@ class ui.funcbar.preferencesBtn extends objects.functionBar
 	function inactivePress ()
 	{
 		active = false;
-		windowObject.Preferences.closeWindow ();
 		reColour (base.white, 20, base.black);
 	}
 	function createWindow ()
@@ -42,7 +41,7 @@ class ui.funcbar.preferencesBtn extends objects.functionBar
 		theWindow.addItem ("button", "done");
 		theWindow.container.canvas.done.onRelease = function ()
 		{
-			arrays.windowObject.Preferences.closeWindow (false);
+			arrays.windowObject.Preferences.closeWindow (false, "jjj");
 			arrays.funcBarObject.Preferences.inactivePress ();
 		};
 	}
