@@ -365,7 +365,6 @@ class ui.windows extends base.base
 	}
 	static function setbaseDepth (__depth:Number):Number
 	{
-		base.trace(baseDepth, orange);
 		baseDepth = __depth;
 		return neededDepths;
 	}

@@ -25,7 +25,7 @@ class ui.funcbar.preferencesBtn extends objects.functionBar
 	function createWindow ()
 	{
 		var theWindow:Object = windowObject[theName];
-		theWindow.addCheckBox ("Animated", animated == true ? "on" : "off");
+		theWindow.addItem ("checkbox", "Animated", animated == true ? "on" : "off");
 		theWindow.container.canvas.Animated.onRelease = function ()
 		{
 			if (base.animated == true)
@@ -39,7 +39,7 @@ class ui.funcbar.preferencesBtn extends objects.functionBar
 				shapes.switchImage (this, "on");
 			}
 		};
-		theWindow.addButton ("done");
+		theWindow.addItem ("button", "done");
 		theWindow.container.canvas.done.onRelease = function ()
 		{
 			arrays.windowObject.Preferences.closeWindow (false);

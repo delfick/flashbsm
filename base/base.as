@@ -165,7 +165,7 @@ class base.base extends arrays
 		buttonFormat = new TextFormat ();
 		buttonFormat.font = "Verdana";
 		buttonFormat.size = 10;
-		buttonFormat.align = "left";
+		buttonFormat.align = "center";
 		buttonFormat.bold = true;
 		//
 		//

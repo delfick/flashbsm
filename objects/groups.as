@@ -38,7 +38,7 @@ class objects.groups extends base.base
 		for (var i:Number= 0; i < groupArray.length; i++)
 		{
 			var grName:String = groupObject[groupArray[i]].theName;
-			var grDepth:Number = groupObject[groupArray[i]].Depth;
+			var grDepth:Number = groupObject[groupArray[i]].baseDepth;
 			_root.createEmptyMovieClip ("group_" + grName, grDepth);
 			groupObject[groupArray[i]].createContainer (_root["group_" + grName]);
 		}
@@ -152,7 +152,7 @@ class objects.groups extends base.base
 		{
 			if (i == num)
 			{
-				plugins.pluginPress (i, 0, pluginObject[pl_groupArray[i][0]].pluginIndex);
+	//			plugins.pluginPress (i, 0, pluginObject[pl_groupArray[i][0]].pluginIndex);
 			}
 		}
 	}

@@ -43,8 +43,8 @@ class objects.menus extends base.base
 	{
 		for (var i:Number= 0; i<groupArray.length; i++)
 		{
-			var meName:String = menuObject[groupArray[i]].Name;
-			var meDepth:Number = menuObject[groupArray[i]].Depth;
+			var meName:String = menuObject[groupArray[i]].theName;
+			var meDepth:Number = menuObject[groupArray[i]].baseDepth;
 			_root.createEmptyMovieClip("menu_"+meName, meDepth);
 			menuObject[groupArray[i]].container = _root["menu_"+meName];
 			menuObject[groupArray[i]].setProperties(i);
@@ -63,6 +63,8 @@ class objects.menus extends base.base
 		speed = 0.1;
 		radius = 5;
 	}
+	//
+	//
 	function changeAction(__action:String)
 	{
 		action = __action;
@@ -139,6 +141,8 @@ class objects.menus extends base.base
 			clearInterval(interval);
 		}
 	}
+	//
+	//
 	public function setbaseDepth(__depth:Number):Number
 	{
 		baseDepth = __depth;

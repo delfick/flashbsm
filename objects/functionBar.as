@@ -46,8 +46,8 @@ class objects.functionBar extends base.base
 		startX = funcBarX + gap;
 		for (var i:Number = 0; i < funcBarArray.length; i++)
 		{
-			var fbName:String = funcBarObject[funcBarArray[i]].Name;
-			var fbDepth:Number = funcBarObject[funcBarArray[i]].Depth;
+			var fbName:String = funcBarObject[funcBarArray[i]].theName;
+			var fbDepth:Number = funcBarObject[funcBarArray[i]].baseDepth;
 			_root.createEmptyMovieClip ("funcBar_" + fbName, fbDepth);
 			funcBarObject[funcBarArray[i]].createShape ();
 		}
@@ -63,7 +63,7 @@ class objects.functionBar extends base.base
 	{
 		container = _root["funcBar_" + theName];
 		container.createEmptyMovieClip ("base", 2);
-		shapes.createShape ("rectangle", container.base, 0, 0, boxWidth, boxHeight, radius, white, 20, 1, black);
+		shapes.createShape ("rectangle", container.base, 0, 0, boxWidth, boxHeight, radius, white, 20, false, true, 1, black);
 		container.createTextField ("label_txt", 0, 0, 10, boxWidth, 36);
 		container.label_txt.setNewTextFormat (buttonFormat);
 		container.label_txt.text = theName;
@@ -163,19 +163,5 @@ class objects.functionBar extends base.base
 				funcBarObject[funcBarArray[i]].reColour (white, 20, black);
 			}
 		}
-	}
-	//
-	//
-	function activePress ()
-	{
-		trace (theName);
-	}
-	function inactivePress ()
-	{
-		trace (theName);
-	}
-	function set xCoord (num:Number)
-	{
-		boxX = num;
 	}
 }
