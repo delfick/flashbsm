@@ -1,5 +1,6 @@
 ﻿import objects.*;
 import ui.*;
+import base.*;
 import mx.utils.Delegate;
 class ui.windows extends base.base
 {
@@ -145,16 +146,16 @@ class ui.windows extends base.base
 					boxHeight = finalHeight;
 					isDone = true;
 				}
-				shapes.createShape ("rectangle", container.base, -(boxWidth / 2), -(boxHeight / 2), boxWidth, boxHeight, boxHeight > radius ? radius : boxHeight, white, 100, true, false, 1, black);
-				shapes.createShape ("rectangle", container.mask, -(boxWidth / 2), -(boxHeight / 2), boxWidth, boxHeight, boxHeight > radius ? radius : boxHeight, white, 100, true, false, 1, black);
+				shapes.createShape ("rectangle", container.base, -(boxWidth / 2), -(boxHeight / 2), boxWidth, boxHeight, boxHeight > radius ? radius : boxHeight, white, 100, false, true, 1, black);
+				shapes.createShape ("rectangle", container.mask, -(boxWidth / 2), -(boxHeight / 2), boxWidth, boxHeight, boxHeight > radius ? radius : boxHeight, white, 100, false, true, 1, black);
 			}
 			else
 			{
 				boxWidth = finalWidth;
 				boxHeight = finalHeight;
 				isDone = true;
-				shapes.createShape ("rectangle", container.base, -(boxWidth / 2), -(boxHeight / 2), boxWidth, boxHeight, boxHeight > radius ? radius : boxHeight, white, 100, true, false, 1, black);
-				shapes.createShape ("rectangle", container.mask, -(boxWidth / 2), -(boxHeight / 2), boxWidth, boxHeight, boxHeight > radius ? radius : boxHeight, white, 100, true, false, 1, black);
+				shapes.createShape ("rectangle", container.base, -(boxWidth / 2), -(boxHeight / 2), boxWidth, boxHeight, boxHeight > radius ? radius : boxHeight, white, 100, false, true, 1, black);
+				shapes.createShape ("rectangle", container.mask, -(boxWidth / 2), -(boxHeight / 2), boxWidth, boxHeight, boxHeight > radius ? radius : boxHeight, white, 100, false, true, 1, black);
 			}
 		}
 		if (isDone == true)
@@ -192,7 +193,7 @@ class ui.windows extends base.base
 				container.canvas[theName + "_txt"].selectable = false;
 				container.canvas[theName + "_txt"].text = theName;
 				canvasDepth += 2;
-				shapes.createShape ("rectangle", container.canvas[theName], (finalboxWidth - ButtonWidth) / 2, finalboxHeight + gap, ButtonWidth, ButtonHeight, 5, white, 100, true, false, 1, black);
+				shapes.createShape ("rectangle", container.canvas[theName], (finalboxWidth - ButtonWidth) / 2, finalboxHeight + gap, ButtonWidth, ButtonHeight, 5, white, 100, false, true, 1, black);
 				setEvents (container.canvas[theName], ButtonWidth, ButtonHeight, finalboxWidth, finalboxHeight);
 				finalboxHeight += ButtonHeight + 2 * gap;
 				break;
@@ -233,7 +234,7 @@ class ui.windows extends base.base
 					applyFormatting = params[0];
 					isCentered = params[1];
 					fontSize = params[2];
-					colour = params[3];		
+					colour = params[3];
 				}
 				if (windows.initialTrace)
 				{
@@ -355,11 +356,11 @@ class ui.windows extends base.base
 		var theWhite:Number = white;
 		mc.onRollOver = function ()
 		{
-			shapes.createShape ("rectangle", this, (finalboxWidth - ButtonWidth) / 2, finalboxHeight + theGap, ButtonWidth, ButtonHeight, 5, theBlue, 20, true, false, 1, theBlack);
+			shapes.createShape ("rectangle", this, (finalboxWidth - ButtonWidth) / 2, finalboxHeight + theGap, ButtonWidth, ButtonHeight, 5, theBlue, 20, false, true, 1, theBlack);
 		};
 		mc.onRollOut = function ()
 		{
-			shapes.createShape ("rectangle", this, (finalboxWidth - ButtonWidth) / 2, finalboxHeight + theGap, ButtonWidth, ButtonHeight, 5, theWhite, 100, true, false, 1, theBlack);
+			shapes.createShape ("rectangle", this, (finalboxWidth - ButtonWidth) / 2, finalboxHeight + theGap, ButtonWidth, ButtonHeight, 5, theWhite, 100, false, true, 1, theBlack);
 		};
 	}
 	static function setbaseDepth (__depth:Number):Number

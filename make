@@ -14,8 +14,8 @@ kagswf=~/source/kagswf/kagswf
 
 #lets compile :D
 if [ "$1" == "flashbsm" ]; then
-	#$kagswf -out flashbsm.swf -html -w 1240 -h 830 -fps 48 -cp classPath
-	$kagswf -out flashbsm.swf -html -w 667 -h 412 -fps 48 -cp classPath
+	$kagswf -out flashbsm.swf -html -w 1240 -h 830 -fps 48 -cp classPath
+	#$kagswf -out flashbsm.swf -html -w 667 -h 412 -fps 48 -cp classPath
 	exit 0
 
 elif [ "$1" == "tracer" ]; then

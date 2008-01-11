@@ -66,7 +66,7 @@ class base.arrays extends MovieClip
 		switch (theStage)
 		{
 		case 0 :
-			base.trace ("Opening the start window and creating arrays", true, true)
+			base.trace ("Opening the start window and creating arrays", true, true, 14)
 			communicate = new base.communicate ();
 			arrays.theWindow = new ui.windows (400);
 			arrays.theWindow.addItem ("text", "testing0", "This has been compiled with kagswf");
@@ -81,7 +81,7 @@ class base.arrays extends MovieClip
 			arrays.theWindow.openWindow (false);
 			//
 			//
-			base.trace ("Finding Categories", true, true)
+			base.trace ("Finding Categories", true, true, 14);
 			arrays.theWindow.editItem ("text", "Loading", "Finding Categories");
 			//
 			communicate.createService ("getCategories");
@@ -94,6 +94,7 @@ class base.arrays extends MovieClip
 					arrays.groupObject[arrays.groupArray[i]] = i;
 				}
 				arrays.count = 0;
+				base.trace("getting plugins for the following categories :");
 				_root.theArrays.createArrays (1);
 			}
 			break;
@@ -104,10 +105,10 @@ class base.arrays extends MovieClip
 				arrays.tempObject = null;
 				communicate.activateService ("getCategoryList", 1, arrays.count);
 				listener.gotData = function()
-				{	
-					base.trace ("Finding Plugins for the " + arrays.groupArray[arrays.count] + " category", true, true)
+				{
+					base.trace("\t"+arrays.groupArray[arrays.count], true, false, 8);
 					arrays.theWindow.editItem ("text", "Loading", "Finding Plugins for the " + arrays.groupArray[arrays.count] + " category");
-					base.trace("\n" + arrays.tempObject + "\n", base.grey);
+				//	base.trace("\n" + arrays.tempObject + "\n", base.grey);
 					arrays.pl_groupArray.push(arrays.tempObject);
 					arrays.count ++;
 					_root.theArrays.createArrays(1);
@@ -115,7 +116,6 @@ class base.arrays extends MovieClip
 			}
 			else
 			{
-				base.trace("going forward", true, true)
 				_root.theArrays.createArrays(2);
 			}
 			break;
@@ -132,6 +132,7 @@ class base.arrays extends MovieClip
 			createArrays(2);
 			break;
 		case 2 :
+			base.trace ("Creating PluginArray and PluginArrayAlpha", true, true, 14);
 			arrays.theWindow.editItem ("text", "Loading", "Creating PluginArray and PluginArrayAlpha");
 			var z:Number = 0;
 			for (var i:Number = 0; i < pl_groupArray.length; i++)
@@ -146,6 +147,7 @@ class base.arrays extends MovieClip
 			createArrays(3);
 			break;
 		case 3 :
+			base.trace ("Filling out arrays with objects", true, true, 14);
 			arrays.theWindow.editItem ("text", "Loading", "Filling out arrays with objects");
 			pluginArrayAlpha = pluginArray.concat ().sort (order);
 			for (var i:Number = 0; i < arrays.groupArray.length; i++)
@@ -176,6 +178,7 @@ class base.arrays extends MovieClip
 					}
 				}
 			}
+			arrays.stageObject.theStage = new stage(arrays.container);
 			arrays.theWindow.editItem ("text", "Loading", "Adding other random objects");
 			arrays.mouseObject.mouse = new theMouse ();
 			arrays.funcBarObject.Preferences = new preferencesBtn ("Preferences", 0);
@@ -187,6 +190,7 @@ class base.arrays extends MovieClip
 			createArrays(4);
 			break;
 		case 4 :
+			base.trace ("Determining active plugins", true, true, 14);
 			arrays.theWindow.editItem ("text", "Loading", "Determining active plugins");
 			communicate.createService ("getActivePluginList");
 			communicate.activateService ("getActivePluginList", 0);
@@ -196,48 +200,42 @@ class base.arrays extends MovieClip
 				{
 					arrays.activePlugins.push (arrays.tempObject[i]);
 				}
-				base.trace("\n The active plugins are", true, false, 13);
-				base.trace(arrays.activePlugins + "\n");
+			//	base.trace("\n The active plugins are", true, false, 13);
+			//	base.trace(arrays.activePlugins + "\n");
+				arrays.count = 0;
+				base.trace("Gettings data for the following plugins :");
 				_root.theArrays.createArrays (5);
 			}
 			break;
 		case 5 :
-			base.trace("arrays are made, time for creation class", true, true);
-			creation.createEverything (depth, 1);
+			communicate.createService ("getPluginData");
+			if (arrays.count != 5)//arrays.pluginArray.length)
+			{
+				arrays.tempObject = null;
+				communicate.activateService ("getPluginData", 1, arrays.count);
+				listener.gotData = function()
+				{
+					base.trace ("\t"+arrays.pluginArray[arrays.count], true, false, 8);
+					arrays.theWindow.editItem ("text", "Loading", "Getting data for the " + arrays.pluginArray[arrays.count] + " plugin");
+					var thePlugin:Object = arrays.pluginObject[arrays.pluginArray[arrays.count]];
+					var theData:Object = arrays.tempObject;
+					thePlugin.iconName = theData[0];
+					thePlugin.theName = theData[1];
+					thePlugin.descriptionText = theData[2];
+					arrays.count ++;
+					_root.theArrays.createArrays(5);
+				}
+			}
+			else
+			{
+				_root.theArrays.createArrays(6);
+			}
+			break;
+		case 6:
+			base.trace("arrays are made, time for creation class\n\n", true, true, 14);
+			creation.setDepths (depth);
 			break;
 		}
-		//load arrays xml data
-		//	//	if it loads, create the following arrays
-		//	//	//	groupArray -> group names
-		//	//	//	groupObject -> Associative array for group names
-		//	//	//	pl_groupArray -> plugins by groups
-		//	//	//	|=_>pluginArray
-		//	//	//	|=_>plugin array alpha
-		//	// fill out the arrays with createObjects();
-		//
-		//Discover active plugins
-		//Load stage dimensions xml
-		//	//	 if success, then create stage1 and stage2
-		//initiate the window
-		//add text and the button
-		//open the window, no animation
-	}
-	//
-	//
-	function createObjects ()
-	{
-		//for all group numbers
-		//	//	 group order array = 0
-		//	//	 group object = new groups
-		//	//	 menu object = new menu
-		//	//	 group number = number
-		//for all group and plugin numbers
-		//	//	 pluginobject = new plugin
-		//create plugin index according to alpha order
-		//find the plugin with group and plugin num 0. set as initial index
-		//create mouse object
-		//create funcbar obejcts and push into window array
-		//setdepths function
 	}
 	//
 	//

@@ -37,12 +37,10 @@ class base.communicate extends base.base
 					var theGroup:String = theParams[0];
 					pc = service[theService] (theGroup);
 					break;
-				case "getMoreInfo" :
-					var theGroup:String = theParams[0];
-					var thePlugin:String = theParams[1];
-					pc = service[theService](theGroup, thePlugin);
+				case "getPluginData" :
+					var thePlugin:Number = theParams[0];
+					pc = service[theService](thePlugin);
 					break;
-
 			}
 		}
 		pc.responder = new RelayResponder (this, "onResult", "onFault");

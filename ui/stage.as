@@ -1,41 +1,32 @@
 ﻿import objects.*;
+import base.*;
+import ui.*;
 import mx.utils.Delegate;
 class ui.stage extends base.base
 {
 	//common variables to all classes
-	var baseDepth:Number;
-	var topBarDepth:Number;
-	var sortDepth:Number;
-	var paneDepth:Number;
-	var settingsDepth:Number;
-	var neededSortDepths:Number = 50;
-	var neededDepths:Number = 50;
-	var neededPaneDepths:Number = 100;
-	var neededSettingsDepths:Number = 100;
-	var container:MovieClip;
-	var interval:Number;
-	var interval2:Number;
+	static var baseDepth:Number;
+	static var sortDepth:Number;
+	static var neededDepths:Number = 50;
+	static var neededSortDepths:Number = 50;
+	static var container:MovieClip;
+	static var interval:Number;
+	static var interval2:Number;
+	//
 	static var speed:Number = 0.1;
 	static var panelWidth:Number;
 	static var panelHeight:Number = 67.1;
 	private var sectionHeight:Number = 22;
 	//
 	//
-	public function setStageDimensions ()
+	public function stage (__container:MovieClip)
 	{
+		container = _root;
 		//
 		//stageDimensions
 		//
-		stageHeight = arrays.stageDimensionsData.firstChild.childNodes[1].firstChild.nodeValue - 7.5;
-		stageWidth = arrays.stageDimensionsData.firstChild.childNodes[0].firstChild.nodeValue - 7.5;
-		if (stageHeight > Stage.height)
-		{
-			stageHeight = Stage.height - 7.5;
-		}
-		if (stageWidth > Stage.width)
-		{
-			stageWidth = Stage.width - 7.5;
-		}
+		stageHeight = Stage.height - 7.5;
+		stageWidth = Stage.width - 7.5;
 		//
 		//width
 		//
@@ -85,162 +76,155 @@ class ui.stage extends base.base
 		horizGridSize = (base.stageWidth) / (sideWidth + 2 * gap);
 		vertGridSize = (stageHeight - (3 * gap) - funcBarHeight - panelHeight - topY - gap) / (plugins.pluginHeight + gap);
 	}
-	function createClips ()
+	//
+	//
+	function createClips (part:String, __depth:Number):Number
 	{
-		//
-		//create movieClips
-		//
-		container.createEmptyMovieClip ("theOverall", baseDepth + 1);
-		container.createEmptyMovieClip ("theSide", baseDepth + 2);
-		container.createTextField ("pluginDescription", baseDepth + 4, pluginDescriptionX + gap + descriptionHeight, pluginDescriptionY, pluginDescriptionWidth, pluginDescriptionHeight);
-		container.createEmptyMovieClip ("pluginDescriptionImage", baseDepth + 5);
-		container.createEmptyMovieClip ("theTop", topBarDepth);
-		container.createEmptyMovieClip ("theHelper", baseDepth + 6);
-		container.createEmptyMovieClip ("sortCanvas", sortDepth);
-		container.createEmptyMovieClip ("theFuncBar", sortDepth + 1);
-		container.sortCanvas.createEmptyMovieClip ("base", sortDepth + 2);
-		container.sortCanvas.createEmptyMovieClip ("canvas", sortDepth + 3);
-		container.sortCanvas.createEmptyMovieClip ("header", sortDepth + 4);
-		container.sortCanvas.createEmptyMovieClip ("enableDivider", sortDepth + 5);
-		container.createEmptyMovieClip ("optionsPane", sortDepth + 6);
-		container.optionsPane.createEmptyMovieClip ("canvas", sortDepth + 7);
-		container.optionsPane.createEmptyMovieClip ("pane", sortDepth + 8);
-		createPanel (container.optionsPane.pane, paneDepth);
-		container.createEmptyMovieClip ("optionsMask", sortDepth + 9);
-		container.optionsPane.setMask (container.optionsMask);
-		for (var i:Number= 0; i < groupArray.length; i++)
+		switch (part)
 		{
-			container.sortCanvas.createEmptyMovieClip ("groupDivider" + i, sortDepth + 10 + i);
+			case "bottom":
+				baseDepth = __depth;
+				container.createEmptyMovieClip ("theOverall", baseDepth + 1);
+				container.createEmptyMovieClip ("theSide", baseDepth + 2);
+				container.createEmptyMovieClip ("pluginHeader", baseDepth + 3);
+
+					container.pluginHeader.createTextField("pluginDescription", 1, pluginDescriptionX + gap + descriptionHeight, pluginDescriptionY, pluginDescriptionWidth, pluginDescriptionHeight);
+					container.pluginHeader.createEmptyMovieClip("pluginDescriptionImage", 2);
+
+				container.createEmptyMovieClip ("theFuncBar", baseDepth +4);
+				container.createEmptyMovieClip ("theHelper", baseDepth + 5);
+				container.createEmptyMovieClip ("settingsArea", baseDepth + 6);
+
+					container.settingsArea.createEmptyMovieClip("theSettings", 1);
+					container.settingsArea.createEmptyMovieClip("settingsMask", 2);
+					container.settingsArea.theSettings.setMask (container.settingsArea.settingsMask);
+					container.settingsArea.createEmptyMovieClip("settingsScroller", 3);
+
+						container.settingsArea.settingsScroller.createEmptyMovieClip("base", 1);
+						container.settingsArea.settingsScroller.createEmptyMovieClip("grip", 2);
+
+							createSettingsArea (container.settingsArea)
+
+				return neededDepths;
+				break;
+			case "top" :
+				container.createEmptyMovieClip ("topBar", __depth);
+				return __depth+1;
+				break;
+			case "sorter" :
+				sortDepth = __depth;
+				container.createEmptyMovieClip("sortCanvas", sortDepth + 1);
+				container.createEmptyMovieClip("sorterItems", sortDepth + 2);
+
+					container.sortCanvas.createEmptyMovieClip("base", 1);
+					container.sortCanvas.createEmptyMovieClip("topBar", 2);
+
+						for (var i:Number= 0; i < groupArray.length; i++)
+						{
+							container.sortCanvas.topBar.createTextField ("groupTitle" + i, i, groups.groupGap + groups.groupSections * i - 1, 8 + (groups.groupHeight / 2) - (22 / 2), stageWidth / groupArray.length, topHeight);
+							container.sortCanvas.topBar["groupTitle" + i].setNewTextFormat (sortHeaderFormat);
+							container.sortCanvas.topBar["groupTitle" + i].wordWrap = true;
+							container.sortCanvas.topBar["groupTitle" + i].text = groupArray[i];
+							if (container.sortCanvas.topBar["groupTitle" + i].textHeight > 20)
+							{
+								container.sortCanvas.topBar["groupTitle" + i]._y -= 4;
+							}
+						}
+
+					container.sortCanvas.createEmptyMovieClip("vertBars", 3);
+					container.sortCanvas.createEmptyMovieClip ("optionsPane", 4);
+
+						container.sortCanvas.optionsPane.createEmptyMovieClip ("pane", 1);
+						createPane (container.sortCanvas.optionsPane)
+
+					container.sortCanvas.createEmptyMovieClip ("optionsMask", 5);
+					container.sortCanvas.pane.setMask (container.sortCanvas.optionsMask);
+					createPanel (container.optionsPane.pane, 6);
+
+				return neededSortDepths;
+				break;
 		}
-		for (var i:Number= 0; i < groupArray.length; i++)
-		{
-			container.sortCanvas.createTextField ("groupTitle" + i, sortDepth + 11 + groupArray.length + i, groups.groupGap + groups.groupSections * i - 1, 8 + (groups.groupHeight / 2) - (22 / 2), stageWidth / groupArray.length, topHeight);
-			container.sortCanvas["groupTitle" + i].setNewTextFormat (textFormat);
-			container.sortCanvas["groupTitle" + i].wordWrap = true;
-			container.sortCanvas["groupTitle" + i].text = groupArray[i];
-			if (container.sortCanvas["groupTitle" + i].textHeight > 20)
-			{
-				container.sortCanvas["groupTitle" + i]._y -= 4;
-			}
-		}
-		container.createEmptyMovieClip ("theSettings", settingsDepth);
-		container.createEmptyMovieClip ("settingsArea", settingsDepth + 20);
-		container.createEmptyMovieClip ("settingsMask", settingsDepth + 21);
-		container.settingsArea.setMask (container.settingsMask);
-		container.createEmptyMovieClip ("settingsScroller", settingsDepth + 22);
-		container.settingsScroller.createEmptyMovieClip ("base", settingsDepth + 23);
-		container.settingsScroller.createEmptyMovieClip ("grip", settingsDepth + 24);
-		container.settingsArea.createTextField ("test", settingsDepth + 25, settingsX, settingsY + tabHeight + (2 * gap), settingsWidth, 500);
-		container.settingsArea.test.setNewTextFormat (testFormat);
-		createPane ();
-		createNormalStage ();
 	}
-	function createSettingsArea ()
+	//
+	//
+	function resetStage ()
 	{
+		container.sortCanvas.header.clear ();
+		container.sortCanvas.canvas.clear ();
+		container.sortCanvas._visible = false;
+		container.theTop.clear ();
+		for (var i:Number= 0; i < groupArray.length; i++)
+		{
+			container.sortCanvas["groupDivider" + i].clear ();
+			container.sortCanvas["groupTitle" + i].text = "";
+		}
+	}
+	//
+	//
+	function createSettingsArea (theBase:MovieClip)
+	{
+		container.settingsArea.theSettings.createTextField ("test", 10, settingsX, settingsY + tabHeight + (2 * gap), settingsWidth, 500);
+		container.settingsArea.theSettings.test.setNewTextFormat (settingsFormat);
+		//
+		//
+		base.trace(plugins.currentPlugin);
 		tabNameArray = plugins.currentPlugin.optionsTabsArray;
 		tabX = settingsX;
+		//
+		//set the settings area border as according to whether there are tabs or not
 		if (plugins.currentPlugin.tabNum > 0)
 		{
-			createRectangle (container.theSettings, settingsX, settingsY + tabHeight, settingsWidth, settingsHeight - tabHeight, 1, 0, black, white, 0);
+			shapes.createShape ("rectangle", theBase, 0, 0, settingsWidth - scrollerWidth - gap, settingsHeight - tabHeight, 0, white, 0, false, true, 1, black);
 		}
 		else
 		{
-			createRectangle (container.theSettings, settingsX, settingsY, settingsWidth, settingsHeight, 1, 0, black, white, 0);
+			shapes.createShape ("rectangle", theBase, 0, 0, settingsWidth - scrollerWidth - gap, settingsHeight, 0, white, 0, false, true, 1, black);
 		}
+		//
+		//create the tabs
 		for (var i:Number= 0; i < plugins.numberOfTabs; i++)
 		{
-			container["tab" + i].clear ();
-			container["tab" + i].tabName.text = "";
+			container.pluginHeader["tab" + i].clear ();
+			container.pluginHeader["tab" + i].tabName.text = "";
 		}
 		for (var i:Number= 0; i < plugins.currentPlugin.tabNum; i++)
 		{
-			container.createEmptyMovieClip ("tab" + i, settingsDepth + 1 + i);
-			container["tab" + i].createTextField ("tabName", i, 0, (tabHeight - 17) / 2, tabNameArray[i].length * 10, 20);
-			container["tab" + i].tabName.setNewTextFormat (tabFormat);
-			container["tab" + i].tabName.selectable = false;
-			container["tab" + i].tabName.text = tabNameArray[i];
-			container["tab" + i].tabName.color = blue;
-			container["tab" + i]._x = tabX;
+			container.pluginHeader.createEmptyMovieClip ("tab" + i, i);
+			container.pluginHeader["tab" + i].createTextField ("tabName", plugins.currentPlugin.tabNum.length + i, 0, (tabHeight - 17) / 2, tabNameArray[i].length * 10, 20);
+			container.pluginHeader["tab" + i].tabName.setNewTextFormat (tabFormat);
+			container.pluginHeader["tab" + i].tabName.selectable = false;
+			container.pluginHeader["tab" + i].tabName.text = tabNameArray[i];
+			container.pluginHeader["tab" + i].tabName.color = blue;
+			container.pluginHeader["tab" + i]._x = tabX;
 			tabX += tabNameArray[i].length * 10;
-			container["tab" + i]._y = settingsY;
+			container.pluginHeader["tab" + i]._y = settingsY;
 			if (plugins.chosenTab == i)
 			{
-				createRectangle (container["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 1, 0, black, blue, 50);
+				shapes.createShape ("rectangle", container.pluginHeader["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 0, blue, 50, false, true, 1, black);
 			}
 			else
 			{
-				createRectangle (container["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 1, 0, black, white, 0);
+				shapes.createShape ("rectangle", container.pluginHeader["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 0, white, 0, false, true, 1, black);
 			}
-			plugins.numberOfTabs = plugins.currentPlugin.tabNum;
-			setupSettings (plugins.chosenTab);
-			setTabEvents(container["tab" + i], container, i)
+			plugins.numberOfTabs = plugins.currentPlugin.tabNum;;
+
+			setTabEvents(container.pluginHeader["tab" + i], container, i)
 		}
+		setupSettings (plugins.chosenTab);
 	}
-	function setTabEvents (mc:MovieClip, theClip:MovieClip, num:Number)
-	{
-		mc.onRollOver = function ()
-		{
-			stage.tabRoll (theClip, num);
-		};
-		mc.onPress = function ()
-		{
-			stage.tabPress (theClip, num);
-		};
-		mc.onRollOut = function ()
-		{
-			stage.tabRollOut (theClip, num);
-		};
-	}
-	public static function tabRoll (theClip:MovieClip, num:Number)
-	{
-		tabNameArray = plugins.currentPlugin.optionsTabsArray;
-		for (var i:Number= 0; i < plugins.numberOfTabs; i++)
-		{
-			if (i == plugins.chosenTab)
-			{
-				createRectangle (theClip["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 1, 0, black, blue, 50);
-				theClip["tab" + i].tabName.color = black;
-			}
-			else if (i == num)
-			{
-				createRectangle (theClip["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 1, 0, black, red, 50);
-				theClip["tab" + i].tabName.color = black;
-			}
-			else
-			{
-				createRectangle (theClip["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 1, 0, black, white, 100);
-				theClip["tab" + i].tabName.color = blue;
-			}
-		}
-	}
-	public static function tabPress (theClip:MovieClip, num:Number)
-	{
-		tabNameArray = plugins.currentPlugin.optionsTabsArray;
-		for (var i:Number= 0; i < plugins.numberOfTabs; i++)
-		{
-			if (i == num)
-			{
-				plugins.chosenTab = num;
-				createRectangle (theClip["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 1, 0, black, blue, 50);
-				theClip["tab" + i].tabName.color = black;
-				stageObject.theStage.setupSettings (num);
-			}
-			else
-			{
-				createRectangle (theClip["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 1, 0, black, white, 0);
-				theClip["tab" + i].tabName.color = blue;
-			}
-		}
-	}
+	//
+	//
 	public function setupSettings (num:Number)
 	{
 		settingsAreaHeight = 2400;
 		container.settingsArea._x = settingsX;
-		createLine (container.settingsArea, 0, 0, settingsWidth - (2 * gap) - scrollerWidth, settingsAreaHeight, 2, black);
-		container.settingsArea.test.text = "tab -- " + tabNameArray[num] + "\nplugin -- " + plugins.currentPlugin.Name + "\ngroup -- " + groupArray[groups.selectedGroup];
+		shapes.createShape ("line", container.settingsArea.theSettings, 0, 0, settingsWidth - (2 * gap) - scrollerWidth, settingsAreaHeight, 2, black);
+		container.settingsArea.theSettings.test.text = "tab -- " + tabNameArray[num] + "\nplugin -- " + plugins.currentPlugin.iconName + "\ngroup -- " + plugins.currentPlugin.groupName;
+		//
+		//set the  mask and scroller as according to wehether there are tabs or not.
 		if (plugins.currentPlugin.tabNum > 0)
 		{
-			createRectangle (container.settingsMask, settingsX, settingsY + tabHeight, settingsWidth - (2 * gap) - scrollerWidth, settingsHeight - tabHeight, 1, 0, black, blue, 100);
+			shapes.createShape ("rectangle", container.settingsArea.settingsMask, 0, 0, settingsWidth - (2 * gap) - scrollerWidth, settingsHeight - tabHeight, 0, blue, 100, false, true, 1, black);
 			settingsAreaY = settingsY + tabHeight;
 			if (settingsAreaHeight > settingsHeight)
 			{
@@ -251,11 +235,11 @@ class ui.stage extends base.base
 				gripHeight = (settingsHeight - tabHeight - (2 * gap));
 			}
 			container.settingsArea._y = settingsY + tabHeight;
-			shapes.createScroller (container.settingsScroller, container.settingsArea, settingsY + tabHeight + gap, settingsX + settingsWidth - gap, settingsHeight - tabHeight - (2 * gap), gripHeight, scrollerWidth, settingsHeight);
+			shapes.createControl ("scroller", container.settingsArea.settingsScroller, container.settingsArea.theSettings, 0, settingsWidth, settingsHeight - tabHeight, gripHeight, scrollerWidth, settingsHeight, settingsAreaHeight);
 		}
 		else
 		{
-			createRectangle (container.settingsMask, settingsX, settingsY, settingsWidth - (2 * gap) - scrollerWidth, settingsHeight, 1, 0, black, blue, 100);
+			shapes.createShape ("rectangle", container.settingsArea.settingsMask, settingsX, settingsY, settingsWidth - (2 * gap) - scrollerWidth, settingsHeight, 0, blue, 100, false, true, 1, black);
 			settingsAreaY = settingsY;
 			if (settingsAreaHeight > settingsHeight)
 			{
@@ -266,34 +250,142 @@ class ui.stage extends base.base
 				gripHeight = (settingsHeight - (2 * gap));
 			}
 			container.settingsArea._y = settingsY;
-			shapes.createScroller (container.settingsScroller, container.settingsArea, settingsY + gap, settingsX + settingsWidth - gap, settingsHeight - (2 * gap), gripHeight, scrollerWidth, settingsHeight);
+			shapes.createControl ("scroller", container.settingsArea.settingsScroller, container.settingsArea.theSettings, settingsY + gap, settingsX + settingsWidth - gap, settingsHeight - (2 * gap), gripHeight, scrollerWidth, settingsHeight, settingsAreaHeight);
 		}
 	}
-	public static function tabRollOut (theClip:MovieClip, num:Number)
+
+
+
+	function createNormalStage ()
 	{
-		tabNameArray = plugins.currentPlugin.optionsTabsArray;
-		for (var i:Number= 0; i < plugins.numberOfTabs; i++)
+		resetStage ();
+		shapes.createShape ("rectangle", container.optionsMask, topX, funcBarY - panelHeight - 10, stageWidth, panelHeight + 10, 0, black, 100, false, false);
+		shapes.createShape ("rectangle", container.theOverall, topX, topY, stageWidth, stageHeight, 0, black, 0, false, true, 5, black);
+		shapes.createShape ("rectangle", container.topBar, topX, topY, stageWidth, topHeight, 0, white, 100, false, true, 5, black);
+		shapes.createShape ("rectangle", container.theSide, sideX, sideY, sideWidth, sideHeight, 0, white, 0, false, true, 1, black);
+		shapes.createShape ("rectangle", container.theFuncBar, funcBarX, funcBarY, funcBarWidth, funcBarHeight, 0, white, 0, false, true, 1, black);
+		shapes.createShape ("rectangle", container.theHelper, helperX, helperY, helperWidth, helperHeight, 0, white, 0, false, true, 1, black);
+		shapes.createShape ("rectangle", container.pluginDescriptionImage, pluginDescriptionImageX, pluginDescriptionImageY, pluginDescriptionImageWidth, pluginDescriptionImageHeight, 0, black, 0, false, true, 1, black);
+		container.pluginDescriptionImage._x = pluginDescriptionImageX;
+		container.pluginDescriptionImage._y = pluginDescriptionImageY;
+		container.pluginDescription.textColor = black;
+		container.pluginDescription.setNewTextFormat (descriptionFormat);
+		container.pluginDescription.selectable = false;
+	}
+	/*
+	********************
+	**********OPTIONS PANE TEXT
+	********************
+	*/
+	function setupInputText (txt:TextField)
+	{
+		txt.onChanged = function ()
 		{
-			if (i == plugins.chosenTab)
+			if (txt.length > 0)
 			{
-				createRectangle (theClip["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 1, 0, black, blue, 50);
-				theClip["tab" + i].tabName.color = black;
+				if (functionBar.searchType != "search")
+				{
+					functionBar.tempType = functionBar.searchType;
+				}
+				functionBar.searchType = "search";
+	//			plugins.searchSort (txt.text, txt.length, true);
 			}
-			else
+			else if (txt.length == 0)
 			{
-				createRectangle (theClip["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 1, 0, black, white, 0);
-				theClip["tab" + i].tabName.color = blue;
+				functionBar.searchType = functionBar.tempType;
+	//			plugins.doSort (true);
 			}
+		};
+	}
+	function createText (mc:MovieClip, labelTxt:String, depth:Number, x1:Number, y1:Number, __width:Number, __height:Number)
+	{
+		mc.createTextField (labelTxt + "_txt", depth, x1, y1, __width, __height);
+		mc[labelTxt + "_txt"].setNewTextFormat (sortOptionsFormat);
+		mc[labelTxt + "_txt"].autoSize = true;
+		mc[labelTxt + "_txt"].selectable = false;
+		mc[labelTxt + "_txt"].text = labelTxt;
+	}
+	/*
+	********************
+	**********SORT OBJECTS
+	********************
+	*/
+	function createNormalSort ()
+	{
+		resetStage ();
+		container.sortCanvas._visible = true;
+		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
+		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
+	}
+	function createGroupSort ()
+	{
+		resetStage ();
+		container.sortCanvas._visible = true;
+		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
+		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
+		shapes.createShape ("line", container.sortCanvas.header, funcBarX, topY + topHeight, funcBarX + funcBarWidth, topY + topHeight, 1, black);
+		for (var i:Number= 0; i < groupArray.length; i++)
+		{
+			shapes.createShape ("line", container.sortCanvas["groupDivider" + i], groups.groupSections * i, topY + gap, groups.groupSections * i, topY + gap + stageHeight - (3 * gap) - funcBarHeight - panelHeight, 1, black);
+			container.sortCanvas["groupTitle" + i].text = groupArray[i];
 		}
 	}
-	function createPane ()
+	function createEnableSort ()
 	{
-		container.optionsPane._x = funcBarX;
-		container.optionsPane._y = funcBarY;
-		createRectangle (container.optionsPane.canvas, 0, 0, funcBarWidth, panelHeight, 1, 0, black, white, 100);
-		container.optionsPane.pane._x = 0;
-		container.optionsPane.pane._y = 0;
-		container.optionsPane.pane.searchLayout.normalChoice.onRelease = function ()
+		resetStage ();
+		container.sortCanvas._visible = true;
+		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
+		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true);
+	}
+	/*
+	********************
+	**********UI OBJECTS
+	********************
+	*/
+	//
+	// PANEL
+	//
+	public function createPanel (mc:MovieClip, depth:Number)
+	{
+		mc.createEmptyMovieClip ("canvas", depth);
+		createText (mc, "Search Options", depth + 2, 0, (sectionHeight - 20) / 2, 20, 20);
+		createText (mc, "Search Layout", depth + 3, 0, sectionHeight + (sectionHeight - 20) / 2, 20, 20);
+		createText (mc, "Search", depth + 4, 0, sectionHeight * 2 + (sectionHeight - 20) / 2, 20, 20);
+		mc.createTextField ("input_txt", depth + 5, 56.5, 46.4, funcBarWidth - 57, 18.5);
+		mc.createEmptyMovieClip ("searchIn", depth + 6);
+		shapes.createImageHolder (167.3 + 10, (sectionHeight - 14) / 2, depth + 7, mc.searchIn, "searchPlugins", "radio", "on");
+		createText (mc.searchIn, "Plugins", depth + 8, 167.3 + 30, (sectionHeight - 17) / 2, 20, 20);
+		shapes.createImageHolder (167.3 + 110, (sectionHeight - 14) / 2, depth + 14, mc.searchIn, "searchOptionss", "radio", "inactive");
+		createText (mc.searchIn, "Options", depth + 10, 167.3 + 130, (sectionHeight - 17) / 2, 20, 20);
+		mc.createEmptyMovieClip ("searchLayout", depth + 11);
+		shapes.createImageHolder (167.3 + 10, (sectionHeight + (sectionHeight - 14) / 2), depth + 21, mc.searchLayout, "alphaCheck", "checkbox", "on");
+		createText (mc.searchLayout, "Alphabetical", depth + 13, 167.3 + 30, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
+		shapes.createImageHolder (294.8 + 10, (sectionHeight + (sectionHeight - 14) / 2), depth + 28, mc.searchLayout, "normalChoice", "radio", "on");
+		createText (mc.searchLayout, "Normal", depth + 15, 294.8 + 30, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
+		shapes.createImageHolder (294.8 + 110, (sectionHeight + (sectionHeight - 14) / 2), depth + 35, mc.searchLayout, "groupChoice", "radio", "off");
+		createText (mc.searchLayout, "Group", depth + 17, 294.8 + 130, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
+		shapes.createImageHolder (294.8 + 210, (sectionHeight + (sectionHeight - 14) / 2), depth + 42, mc.searchLayout, "enableChoice", "radio", "off");
+		createText (mc.searchLayout, "Enabled/Disabled", depth + 19, 294.8 + 230, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
+		mc.input_txt.setNewTextFormat (sortOptionsFormat);
+		mc.input_txt.type = "input";
+		mc.input_txt.border = true;
+		setupInputText (mc.input_txt);
+		shapes.createShape ("rectangle", mc.canvas, 0, 0, funcBarWidth, sectionHeight * 3, 0, white, 100, true, true, 1, black);
+		shapes.createShape ("rectangle", mc.canvas, 0, 0, funcBarWidth, sectionHeight, 0, white, 100, true, true, 1, black);
+		shapes.createShape ("rectangle", mc.canvas, 0, sectionHeight, funcBarWidth, sectionHeight, 0, white, 100, true, true, 1, black);
+		shapes.createShape ("rectangle", mc.canvas, 0, sectionHeight * 2, funcBarWidth, sectionHeight, 0, white, 100, true, true, 1, black);
+		shapes.createShape ("line", mc.canvas, 167.3, 0, 167.3, sectionHeight * 2, 1, black);
+		shapes.createShape ("line", mc.canvas, 294.8, sectionHeight, 294.8, sectionHeight * 2, 1, black);
+	}
+	//
+	function createPane (base:MovieClip)
+	{
+		base._x = funcBarX;
+		base._y = funcBarY;
+		base.pane._x = 0;
+		base.pane._y = 0;
+		shapes.createShape ("rectangle", base.pane, 0, 0, funcBarWidth, panelHeight, 0, white, 100, false, true, 1, black);
+		base.pane.searchLayout.normalChoice.onRelease = function ()
 		{
 			if (functionBar.searchType != "search")
 			{
@@ -303,7 +395,7 @@ class ui.stage extends base.base
 			{
 				functionBar.tempType = "normal";
 			}
-			plugins.doSort (true);
+	//		plugins.doSort (true);
 			shapes.switchImage (this._parent.normalChoice, "on");
 			shapes.switchImage (this._parent.groupChoice, "off");
 			shapes.switchImage (this._parent.enableChoice, "off");
@@ -311,7 +403,7 @@ class ui.stage extends base.base
 			//shapes.createRadioBtn(this._parent.groupChoice, 10, "off");
 			//shapes.createRadioBtn(this._parent.enableChoice, 10, "off");
 		};
-		container.optionsPane.pane.searchLayout.groupChoice.onRelease = function ()
+		base.pane.searchLayout.groupChoice.onRelease = function ()
 		{
 			if (functionBar.searchType != "search")
 			{
@@ -321,7 +413,7 @@ class ui.stage extends base.base
 			{
 				functionBar.tempType = "group";
 			}
-			plugins.doSort (true);
+	//		plugins.doSort (true);
 			shapes.switchImage (this._parent.normalChoice, "off");
 			shapes.switchImage (this._parent.groupChoice, "on");
 			shapes.switchImage (this._parent.enableChoice, "off");
@@ -329,7 +421,7 @@ class ui.stage extends base.base
 			//shapes.createRadioBtn(this._parent.groupChoice, 10, "on");
 			//shapes.createRadioBtn(this._parent.enableChoice, 10, "off");
 		};
-		container.optionsPane.pane.searchLayout.enableChoice.onRelease = function ()
+		base.pane.searchLayout.enableChoice.onRelease = function ()
 		{
 			if (functionBar.searchType != "search")
 			{
@@ -339,7 +431,7 @@ class ui.stage extends base.base
 			{
 				functionBar.tempType = "enable";
 			}
-			plugins.doSort (true);
+	//		plugins.doSort (true);
 			shapes.switchImage (this._parent.normalChoice, "off");
 			shapes.switchImage (this._parent.groupChoice, "off");
 			shapes.switchImage (this._parent.enableChoice, "on");
@@ -347,24 +439,25 @@ class ui.stage extends base.base
 			//shapes.createRadioBtn(this._parent.groupChoice, 10, "off");
 			//shapes.createRadioBtn(this._parent.enableChoice, 10, "on");
 		};
-		container.optionsPane.pane.searchLayout.alphaCheck.onRelease = function ()
+		base.pane.searchLayout.alphaCheck.onRelease = function ()
 		{
 			if (functionBar.isAlphabetical == false)
 			{
 				functionBar.isAlphabetical = true;
-				plugins.doSort (true);
+	//			plugins.doSort (true);
 				shapes.switchImage (this, "on");
 				//shapes.createCheckBox(this, 10, "off");
 			}
 			else
 			{
 				functionBar.isAlphabetical = false;
-				plugins.doSort (true);
+	//			plugins.doSort (true);
 				shapes.switchImage (this, "off");
 				//shapes.createCheckBox(this, 10, "on");
 			}
 		};
 	}
+	//
 	function createOptionsMask ()
 	{
 		clearInterval (interval);
@@ -375,7 +468,7 @@ class ui.stage extends base.base
 		clearInterval (interval);
 		if (speed == "quick")
 		{
-			createRectangle (container.optionsPane, funcBarX, funcBarY - panelHeight, panelWidth, 0, 0, 2, black, white, 100);
+			shapes.createShape ("rectangle", container.optionsPane, funcBarX, funcBarY - panelHeight, panelWidth, 0, 2, white, 100, false, false);
 		}
 		else if (speed == "normal")
 		{
@@ -402,124 +495,82 @@ class ui.stage extends base.base
 			clearInterval (interval);
 		}
 	}
-	function createNormalStage ()
+	/*
+	********************
+	**********THE TABS
+	********************
+	*/
+	function setTabEvents (mc:MovieClip, theClip:MovieClip, num:Number)
 	{
-		resetStage ();
-		createRectangle (container.optionsMask, topX, funcBarY - panelHeight - 10, stageWidth, panelHeight + 10, 0, 0, black, black, 100);
-		createRectangle (container.theOverall, topX, topY, stageWidth, stageHeight, 5, 0, black, white, 0);
-		createRectangle (container.theTop, topX, topY, stageWidth, topHeight, 5, 0, black, white, 100);
-		createRectangle (container.theSide, sideX, sideY, sideWidth, sideHeight, 1, 0, black, white, 0);
-		createRectangle (container.theFuncBar, funcBarX, funcBarY, funcBarWidth, funcBarHeight, 1, 0, black, white, 0);
-		createRectangle (container.theHelper, helperX, helperY, helperWidth, helperHeight, 1, 0, black, white, 0);
-		//createRectangle(container.pluginDescriptionImage, pluginDescriptionImageX, pluginDescriptionImageY, pluginDescriptionImageWidth, pluginDescriptionImageHeight, 1, 0, black, black, 0);
-		container.pluginDescriptionImage._x = pluginDescriptionImageX;
-		container.pluginDescriptionImage._y = pluginDescriptionImageY;
-		container.pluginDescription.textColor = black;
-		container.pluginDescription.setNewTextFormat (DescriptionText);
-		container.pluginDescription.selectable = false;
-	}
-	public function createPanel (mc:MovieClip, depth:Number)
-	{
-		mc.createEmptyMovieClip ("canvas", depth);
-		createText (mc, "Search Options", depth + 2, 0, (sectionHeight - 20) / 2, 20, 20);
-		createText (mc, "Search Layout", depth + 3, 0, sectionHeight + (sectionHeight - 20) / 2, 20, 20);
-		createText (mc, "Search", depth + 4, 0, sectionHeight * 2 + (sectionHeight - 20) / 2, 20, 20);
-		mc.createTextField ("input_txt", depth + 5, 56.5, 46.4, funcBarWidth - 57, 18.5);
-		mc.createEmptyMovieClip ("searchIn", depth + 6);
-		createImageHolder (167.3 + 10, (sectionHeight - 14) / 2, depth + 7, mc.searchIn, "searchPlugins", "radio", "on");
-		createText (mc.searchIn, "Plugins", depth + 8, 167.3 + 30, (sectionHeight - 17) / 2, 20, 20);
-		createImageHolder (167.3 + 110, (sectionHeight - 14) / 2, depth + 14, mc.searchIn, "searchOptionss", "radio", "inactive");
-		createText (mc.searchIn, "Options", depth + 10, 167.3 + 130, (sectionHeight - 17) / 2, 20, 20);
-		mc.createEmptyMovieClip ("searchLayout", depth + 11);
-		createImageHolder (167.3 + 10, (sectionHeight + (sectionHeight - 14) / 2), depth + 21, mc.searchLayout, "alphaCheck", "checkbox", "on");
-		createText (mc.searchLayout, "Alphabetical", depth + 13, 167.3 + 30, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
-		createImageHolder (294.8 + 10, (sectionHeight + (sectionHeight - 14) / 2), depth + 28, mc.searchLayout, "normalChoice", "radio", "on");
-		createText (mc.searchLayout, "Normal", depth + 15, 294.8 + 30, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
-		createImageHolder (294.8 + 110, (sectionHeight + (sectionHeight - 14) / 2), depth + 35, mc.searchLayout, "groupChoice", "radio", "off");
-		createText (mc.searchLayout, "Group", depth + 17, 294.8 + 130, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
-		createImageHolder (294.8 + 210, (sectionHeight + (sectionHeight - 14) / 2), depth + 42, mc.searchLayout, "enableChoice", "radio", "off");
-		createText (mc.searchLayout, "Enabled/Disabled", depth + 19, 294.8 + 230, sectionHeight + (sectionHeight - 17) / 2, 20, 20);
-		mc.input_txt.setNewTextFormat (sortText);
-		mc.input_txt.type = "input";
-		mc.input_txt.border = true;
-		setupInputText (mc.input_txt);
-		createStaticRectangle (mc.canvas, 0, 0, funcBarWidth, sectionHeight * 3, 1, 0, black, white, 100);
-		createStaticRectangle (mc.canvas, 0, 0, funcBarWidth, sectionHeight, 1, 0, black, white, 100);
-		createStaticRectangle (mc.canvas, 0, sectionHeight, funcBarWidth, sectionHeight, 1, 0, black, white, 100);
-		createStaticRectangle (mc.canvas, 0, sectionHeight * 2, funcBarWidth, sectionHeight, 1, 0, black, white, 100);
-		createLine (mc.canvas, 167.3, 0, 167.3, sectionHeight * 2, 1, black);
-		createLine (mc.canvas, 294.8, sectionHeight, 294.8, sectionHeight * 2, 1, black);
-	}
-	function setupInputText (txt:TextField)
-	{
-		txt.onChanged = function ()
+		mc.onRollOver = function ()
 		{
-			if (txt.length > 0)
-			{
-				if (functionBar.searchType != "search")
-				{
-					functionBar.tempType = functionBar.searchType;
-				}
-				functionBar.searchType = "search";
-				plugins.searchSort (txt.text, txt.length, true);
-			}
-			else if (txt.length == 0)
-			{
-				functionBar.searchType = functionBar.tempType;
-				plugins.doSort (true);
-			}
+			stage.tabRoll (theClip, num);
+		};
+		mc.onPress = function ()
+		{
+			stage.tabPress (theClip, num);
+		};
+		mc.onRollOut = function ()
+		{
+			stage.tabRollOut (theClip, num);
 		};
 	}
-	function createText (mc:MovieClip, labelTxt:String, depth:Number, x1:Number, y1:Number, __width:Number, __height:Number)
+	public static function tabRoll (theClip:MovieClip, num:Number)
 	{
-		mc.createTextField (labelTxt + "_txt", depth, x1, y1, __width, __height);
-		mc[labelTxt + "_txt"].setNewTextFormat (sortText);
-		mc[labelTxt + "_txt"].autoSize = true;
-		mc[labelTxt + "_txt"].selectable = false;
-		mc[labelTxt + "_txt"].text = labelTxt;
-	}
-	function resetStage ()
-	{
-		container.sortCanvas.header.clear ();
-		container.sortCanvas.canvas.clear ();
-		container.sortCanvas._visible = false;
-		container.theTop.clear ();
-		for (var i:Number= 0; i < groupArray.length; i++)
+		tabNameArray = plugins.currentPlugin.optionsTabsArray;
+		for (var i:Number= 0; i < plugins.numberOfTabs; i++)
 		{
-			container.sortCanvas["groupDivider" + i].clear ();
-			container.sortCanvas["groupTitle" + i].text = "";
+			if (i == plugins.chosenTab)
+			{
+				shapes.createShape ("rectangle", theClip.pluginHeader["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 0, blue, 50, false, true, 1, black);
+				theClip.pluginHeader.pluginHeader["tab" + i].tabName.color = black;
+			}
+			else if (i == num)
+			{
+				shapes.createShape ("rectangle", theClip.pluginHeader["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 0, red, 50, false, true, 1, black);
+				theClip.pluginHeader.pluginHeader["tab" + i].tabName.color = black;
+			}
+			else
+			{
+				shapes.createShape ("rectangle", theClip.pluginHeader["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 0, white, 100, false, true, 1, black);
+				theClip.pluginHeader.pluginHeader["tab" + i].tabName.color = blue;
+			}
 		}
 	}
-	/*********************************
-	//*********************************************
-	//** functions to create stages when sorting is enabled
-	//*********************************************
-	**********************************/
-	function createNormalSort ()
+	public static function tabPress (theClip:MovieClip, num:Number)
 	{
-		resetStage ();
-		container.sortCanvas._visible = true;
-		createRectangle (container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, 0, white, white, 100);
-		createRectangle (container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 1, 0, black, white, 100);
-	}
-	function createGroupSort ()
-	{
-		resetStage ();
-		container.sortCanvas._visible = true;
-		createRectangle (container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, 0, white, white, 100);
-		createRectangle (container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 1, 0, black, white, 100);
-		createLine (container.sortCanvas.header, funcBarX, topY + topHeight, funcBarX + funcBarWidth, topY + topHeight, 1, black);
-		for (var i:Number= 0; i < groupArray.length; i++)
+		tabNameArray = plugins.currentPlugin.optionsTabsArray;
+		for (var i:Number= 0; i < plugins.numberOfTabs; i++)
 		{
-			createLine (container.sortCanvas["groupDivider" + i], groups.groupSections * i, topY + gap, groups.groupSections * i, topY + gap + stageHeight - (3 * gap) - funcBarHeight - panelHeight, 1, black);
-			container.sortCanvas["groupTitle" + i].text = groupArray[i];
+			if (i == num)
+			{
+				plugins.chosenTab = num;
+				shapes.createShape ("rectangle", theClip.pluginHeader["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 0, blue, 50, false, true, 1, black);
+				theClip.pluginHeader.pluginHeader["tab" + i].tabName.color = black;
+				stageObject.theStage.setupSettings (num);
+			}
+			else
+			{
+				shapes.createShape ("rectangle", theClip.pluginHeader["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 0, white, 0, false, true, 1, black);
+				theClip.pluginHeader.pluginHeader["tab" + i].tabName.color = blue;
+			}
 		}
 	}
-	function createEnableSort ()
+	public static function tabRollOut (theClip:MovieClip, num:Number)
 	{
-		resetStage ();
-		container.sortCanvas._visible = true;
-		createRectangle (container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, 0, white, white, 100);
-		createRectangle (container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 1, 0, black, white, 100);
+		tabNameArray = plugins.currentPlugin.optionsTabsArray;
+		for (var i:Number= 0; i < plugins.numberOfTabs; i++)
+		{
+			if (i == plugins.chosenTab)
+			{
+				shapes.createShape ("rectangle", theClip.pluginHeader["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 0, blue, 50, false, true, 1, black);
+				theClip.pluginHeader.pluginHeader["tab" + i].tabName.color = black;
+			}
+			else
+			{
+				shapes.createShape ("rectangle", theClip.pluginHeader["tab" + i], 0, 0, tabNameArray[i].length * 10, tabHeight, 0, white, 0, false, true, 1, black);
+				theClip.pluginHeader.pluginHeader["tab" + i].tabName.color = blue;
+			}
+		}
 	}
 }

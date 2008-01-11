@@ -50,7 +50,7 @@ class objects.plugins extends base.base
 	static var vertGridNumber:Number = 0;
 	static var selectedPlugin:Number = 0;
 	private var groupOrderNum:Number;
-	//random
+	//random`
 	static var initialSort:Boolean = false;
 	static var numberOfTabs:Number = 0;
 	static var chosenTab:Number = 0;
@@ -79,11 +79,17 @@ class objects.plugins extends base.base
 		//iconName
 		//descriptionText
 		//optionsTabsArray
+		optionsTabsArray = ["test", "test2", "test3"];
+		tabNum = 3;
 		createGroupGrid ();
 		iconName = __name;
 		groupNum = __groupNum;
 		groupName = groupArray[groupNum];
 		createNormalGrid ();
+	}
+	public function test()
+	{
+		base.trace("test");
 	}
 	function createGroupGrid ()
 	{
@@ -113,7 +119,6 @@ class objects.plugins extends base.base
 	}
 	static function createClips ()
 	{
-		communicate.createService ("getMoreInfo");
 		plugins.theWindow = new ui.windows (400);
 		plugins.theWindow.addItem ("text", "info", "...");
 		plugins.theWindow.addItem ("button", "done");
@@ -129,14 +134,7 @@ class objects.plugins extends base.base
 		boxY = (pluginHeight - boxHeight) / 2;
 		for (var i:Number = 0; i < pluginArray.length; i++)
 		{
-			communicate.activateService ("getMoreInfo", 2, pluginObject[pluginArray[i]].groupName, pluginObject[pluginArray[i]].iconName);
-			var plName:String = pluginObject[pluginArray[i]].iconName;
-			var plDepth:Number = pluginObject[pluginArray[i]].Depth;
-			pluginObject[pluginArray[i]].pluginName = arrays.tempObject[0];
-			pluginObject[pluginArray[i]].description = arrays.tempObject[1];
-			//base.trace(arrays.tempObject[0] + "<-->" + arrays.tempObject[1] + "<-->" + pluginArray[i] + "<-+->" + pluginObject[pluginArray[i]].groupNum == plugins.groupCount);
-			arrays.tempObject = null
-			_root.createEmptyMovieClip ("plugin_" + plName, plDepth);
+		//	_root.createEmptyMovieClip ("plugin_" + plName, plDepth);
 		//	pluginObject[pluginArray[i]].createContainer ();
 		}
 	}

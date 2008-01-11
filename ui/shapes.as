@@ -1,4 +1,6 @@
 ﻿import objects.*;
+import base.*;
+import ui.*;
 import mx.utils.Delegate;
 class ui.shapes extends base.base
 {
@@ -26,7 +28,7 @@ class ui.shapes extends base.base
 			//	// Rectangle
 			//
 		case "rectangle" :
-			//mc, left, top, recWidth, recHeight, cornerRadius, fillColour, fillAlpha, haveLine, isStatic, lineWidth, lineColour
+			//mc, left, top, recWidth, recHeight, cornerRadius, fillColour, fillAlpha, haveLine, isStatic, lineWidth, lineColour, doTrace
 			var mc:MovieClip = theParams[0];
 			var left:Number = theParams[1];
 			var top:Number = theParams[2];
@@ -35,14 +37,20 @@ class ui.shapes extends base.base
 			var cornerRadius:Number = theParams[5];
 			var fillColour:Number = theParams[6];
 			var fillAlpha:Number = theParams[7];
-			var haveLine:Boolean = theParams[8];
-			var isStatic:Boolean = theParams[9];
+			var isStatic:Boolean = theParams[8];
+			var haveLine:Boolean = theParams[9];
 			var lineWidth:Number
 			var lineColour:Number
+			var doTrace:Boolean
 			if (haveLine == true)
 			{
 				lineWidth = theParams[10];
 				lineColour = theParams[11];
+				doTrace = theParams[12];
+			}
+			else
+			{
+				doTrace = theParams[10];
 			}
 			//
 			//set some stuff
@@ -83,6 +91,14 @@ class ui.shapes extends base.base
 			mc.curveTo (topLeftx, topLefty, topLeftx + cornerRadius, topLefty);
 			mc.lineTo (topLeftx + cornerRadius, topLefty);
 			mc.endFill ();
+			if (doTrace)
+			{
+				base.trace("\t" + mc, orange);
+				base.trace("\t(" + topLeftx + "," + topLefty + ")", orange);
+				base.trace("\t(" + topRightx + "," + topRighty + ")", orange);
+				base.trace("\t(" + bottomLeftx + "," + bottomLefty + ")", orange);
+				base.trace("\t(" + bottomRightx + "," + bottomRighty + ")", orange);
+			}
 			break;
 			//
 			//	// CIRCLE
@@ -244,8 +260,8 @@ class ui.shapes extends base.base
 			scroller.base.clear ();
 			scroller.grip.clear ();
 			scroller.grip._y = 0;
-			createShape ("rectangle", scroller.base, right - scrollerWidth, top, scrollerWidth, scrollerHeight, scrollerWidth / 2, black, 20, false, true);
-			createShape ("rectangle", scroller.grip, right - scrollerWidth, top, scrollerWidth, gripHeight, scrollerWidth / 2, blue, 30, false, true);
+			createShape ("rectangle", scroller.base, right - scrollerWidth, top, scrollerWidth, scrollerHeight, scrollerWidth / 2, black, 20, true, false);
+			createShape ("rectangle", scroller.grip, right - scrollerWidth, top, scrollerWidth, gripHeight, scrollerWidth / 2, blue, 30, true, false);
 			scroller.grip.onMouseDown = function ()
 			{
 				if (this.hitTest (_root._xmouse, _root._ymouse))
@@ -276,7 +292,7 @@ class ui.shapes extends base.base
 	//
 	static function scrollerMove (scroller:MovieClip, beingMoved:MovieClip, scrollerHeight:Number, gripHeight:Number)
 	{
-		beingMoved._y = settingsAreaY - (settingsAreaHeight - settingsHeight) * (scroller._y / (scrollerHeight - gripHeight));
+		beingMoved._y = -(settingsAreaHeight - settingsHeight) * (scroller._y / (scrollerHeight - gripHeight));
 	}
 	static function scrollerMoveTrace (scroller:MovieClip, beingMoved:MovieClip, scrollerHeight:Number, gripHeight:Number, settingsAreaHeight:Number, settingsHeight:Number)
 	{

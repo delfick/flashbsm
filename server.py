@@ -4,7 +4,7 @@ context = compizconfig.Context()
 information = []
 for categ in context.Categories:
 	for plugin in context.Categories[categ]:
-		information.append([[plugin.Name], [categ], [plugin.ShortDesc], [plugin.LongDesc]])
+		information.append([[plugin.Name], [plugin.ShortDesc], [plugin.LongDesc]])
 	
 categories = list(context.Categories)
 
@@ -13,8 +13,6 @@ plugins = list(context.Plugins)
 pl_categories = []
 for categ in context.Categories:
 	pl_categories.append(list([p.ShortDesc for p in context.Categories[categ]]))
-	
-print(pl_categories[1])
 
 def echo(data):
 	return data
@@ -23,7 +21,7 @@ def getNumberOfPlugins():
 	return len(plugins)
 
 def getPluginData(plugin):
-	return information[plugin]
+	return information[int(plugin)]
 
 def getCategories():
 	return categories
