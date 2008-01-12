@@ -391,26 +391,26 @@ class objects.plugins extends base.base
 	}
 	static function pluginPress (group:Number, plugin:Number, pluginIndex:Number)
 	{
-		
+		_root.pluginHeader.pluginDescription.text = groupArray[group] + " --> " + pluginArrayAlpha[pluginIndex] + " --> " + pluginObject[pluginArrayAlpha[pluginIndex]].descriptionText;
 		for (var i:Number = 0; i < pluginArray.length; i++)
 		{
-			var nextPlugin:Object = pluginObject[pluginArray[i]];
+			var nextPlugin:Object = pluginObject[pluginArrayAlpha[i]];
 			if (nextPlugin.pluginIndex == pluginIndex)
 			{
 				selectedPlugin = group;
 				currentPlugin = nextPlugin;
 				var theName:String = currentPlugin.Name.toLowerCase ();
 				iconLoad.load ("images/icons/plugin-" + currentPlugin.iconName + ".png");
-				
+
 				iconLoad.onLoad = function (success:Boolean)
 				{
 					if (success)
 					{
-						stage.container.pluginHeader.pluginDescriptionImage.loadMovie ("images/icons/plugin-" + plugins.currentPlugin.iconName + ".png");
+						_root.pluginHeader.pluginDescriptionImage.loadMovie ("images/icons/plugin-" + plugins.currentPlugin.iconName + ".png");
 					}
 					else
 					{
-						stage.container.pluginHeader.pluginDescriptionImage.loadMovie ("images/icons/plugin-unknown.png");
+						_root.pluginHeader.pluginDescriptionImage.loadMovie ("images/icons/plugin-unknown.png");
 					}
 				};
 				nextPlugin.isSelected = true;
@@ -420,9 +420,8 @@ class objects.plugins extends base.base
 				groups.selectedGroup = group;
 	//			plugins.groupPressSort (group);
 				plugins.chosenTab = 0;
-	//			stageObject.theStage.createSettingsArea ();
-				trace(_root.pluginHeader.pluginDescription);
-				stage.container.pluginHeader.pluginDescription.text = groupArray[group] + " --> " + plugins.currentPlugin.pluginName + " --> " + plugins.currentPlugin.descriptionText;
+				stageObject.theStage.createSettingsArea ();
+
 				if (funcBarObject.ShowAll.active == true)
 				{
 					funcBarObject.ShowAll.inactivePress ();

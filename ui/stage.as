@@ -86,10 +86,14 @@ class ui.stage extends base.base
 				baseDepth = __depth;
 				container.createEmptyMovieClip ("theOverall", baseDepth + 1);
 				container.createEmptyMovieClip ("theSide", baseDepth + 2);
+				container.createEmptyMovieClip ("pluginHeader", baseDepth + 3);
 
-				container.createEmptyMovieClip ("theFuncBar", baseDepth +3);
-				container.createEmptyMovieClip ("theHelper", baseDepth + 4);
-				container.createEmptyMovieClip ("settingsArea", baseDepth + 5);
+					container.pluginHeader.createTextField("pluginDescription", 1, pluginDescriptionX + gap + descriptionHeight, pluginDescriptionY, pluginDescriptionWidth, pluginDescriptionHeight);
+					container.pluginHeader.createEmptyMovieClip("pluginDescriptionImage", 2);
+
+				container.createEmptyMovieClip ("theFuncBar", baseDepth +4);
+				container.createEmptyMovieClip ("theHelper", baseDepth + 5);
+				container.createEmptyMovieClip ("settingsArea", baseDepth + 6);
 
 					container.settingsArea.createEmptyMovieClip("theSettings", 1);
 					container.settingsArea.createEmptyMovieClip("settingsMask", 2);
@@ -98,13 +102,6 @@ class ui.stage extends base.base
 
 						container.settingsArea.settingsScroller.createEmptyMovieClip("base", 1);
 						container.settingsArea.settingsScroller.createEmptyMovieClip("grip", 2);
-
-				container.createEmptyMovieClip ("pluginHeader", baseDepth + 6);
-
-					container.pluginHeader.createTextField("pluginDescription", 1, pluginDescriptionX + gap + descriptionHeight, pluginDescriptionY, pluginDescriptionWidth, pluginDescriptionHeight);
-					container.pluginHeader.createEmptyMovieClip("pluginDescriptionImage", 2);
-
-							//createSettingsArea ()
 
 				return neededDepths;
 				break;
@@ -157,8 +154,8 @@ class ui.stage extends base.base
 	//	container.theOverall.clear();
 		container.theSide.clear();
 		container.pluginHeader.clear();
-		container.pluginHeader.pluginDescription.text = "";
-		container.pluginHeader.pluginDescriptionImage.clear();
+	//	container.pluginHeader.pluginDescription.text = "";
+	//	container.pluginHeader.pluginDescriptionImage.clear();
 	//	container.theFuncBar.clear();
 		container.theHelper.clear();
 	//	container.settingsArea.clear();
@@ -198,12 +195,12 @@ class ui.stage extends base.base
 		shapes.createShape ("rectangle", container.theSide, sideX, sideY, sideWidth, sideHeight, 0, white, 0, false, true, 1, black);
 		shapes.createShape ("rectangle", container.theFuncBar, funcBarX, funcBarY, funcBarWidth, funcBarHeight, 0, white, 0, false, true, 1, black);
 		shapes.createShape ("rectangle", container.theHelper, helperX, helperY, helperWidth, helperHeight, 0, white, 0, false, true, 1, black);
-		shapes.createShape ("rectangle", container.pluginHeader.pluginDescriptionImage, 0, 0, pluginDescriptionImageWidth, pluginDescriptionImageHeight, 0, black, 0, false, true, 1, black, true);
+		shapes.createShape ("rectangle", container.pluginHeader.pluginDescriptionImage, 0, 0, pluginDescriptionImageWidth, pluginDescriptionImageHeight, 0, black, 0, false, true, 1, black);
 		container.pluginHeader.pluginDescriptionImage._x = pluginDescriptionImageX;
 		container.pluginHeader.pluginDescriptionImage._y = pluginDescriptionImageY;
-		container.pluginDescription.textColor = black;
-		container.pluginDescription.setNewTextFormat (descriptionFormat);
-		container.pluginDescription.selectable = false;
+		container.pluginHeader.pluginDescription.textColor = black;
+		container.pluginHeader.pluginDescription.setNewTextFormat (descriptionFormat);
+		container.pluginHeader.pluginDescription.selectable = false;
 		base.trace("normal stage made", true, true, 14);
 	}
 	//
@@ -272,7 +269,7 @@ class ui.stage extends base.base
 		}
 		for (var i:Number= 0; i < plugins.currentPlugin.tabNum; i++)
 		{
-			container.pluginHeader.createEmptyMovieClip ("tab" + i, i);
+			container.pluginHeader.createEmptyMovieClip ("tab" + i,3 + i);
 			container.pluginHeader["tab" + i].createTextField ("tabName", plugins.currentPlugin.tabNum.length + i, 0, (tabHeight - 17) / 2, tabNameArray[i].length * 10, 20);
 			container.pluginHeader["tab" + i].tabName.setNewTextFormat (tabFormat);
 			container.pluginHeader["tab" + i].tabName.selectable = false;

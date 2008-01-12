@@ -232,7 +232,7 @@ class base.arrays extends MovieClip
 					var thePlugin:Object = arrays.pluginObject[arrays.pluginArray[arrays.count]];
 					var theData:Object = arrays.tempObject;
 					thePlugin.iconName = theData[0];
-					thePlugin.theName = theData[1];
+					thePlugin.pluginName = theData[1];
 					thePlugin.descriptionText = theData[2];
 					arrays.count ++;
 					_root.theArrays.createArrays(5);
