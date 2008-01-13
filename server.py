@@ -14,7 +14,6 @@ def CatSortCompare(v1, v2):
     
 information = []
 for categ in sorted(context.Categories, CatSortCompare):
-#for categ in context.Categories:
 	for plugin in context.Categories[categ]:
 		information.append([[plugin.Name], [plugin.ShortDesc], [plugin.LongDesc]])
 		
@@ -27,10 +26,7 @@ plugins = list(context.Plugins)
 pl_categories = []
 for categ in sorted(context.Categories, CatSortCompare):
 	pl_categories.append(list([p.ShortDesc for p in context.Categories[categ]]))
-
-def echo(data):
-	return data
-
+	
 def getNumberOfPlugins():
 	return len(plugins)
 
@@ -47,14 +43,26 @@ def getActivePluginList():
 	data = context.Plugins['core'].Display['active_plugins'].Value
 	return data
 	
+def enableDisablePlugin(plugin, status) :
+	print context.Plugins[plugin]
+	'''
+	if (status == "true"):
+		context.Plugins[plugin].Enabled = False
+		return context.Plugins[plugin].Enabled
+	else:
+		context.Plugins[plugin].Enabled = True
+		return context.Plugins[plugin].Enabled
+	'''
+		
+
+	
 services = {
-    'echo': echo,
-	'getNumberOfPlugins.getNumberOfPlugins': getNumberOfPlugins,
-	'getPluginData.getPluginData': getPluginData,
-	'getActivePluginList.getActivePluginList': getActivePluginList,
-	'getCategoryList.getCategoryList' : getCategoryList,
-	'getCategories.getCategories' : getCategories,
-	'echo.echo': echo
+	'getInfo.getNumberOfPlugins': getNumberOfPlugins,
+	'getInfo.getPluginData': getPluginData,
+	'getInfo.getActivePluginList': getActivePluginList,
+	'getInfo.getCategoryList' : getCategoryList,
+	'getInfo.getCategories' : getCategories,
+	'getInfo.enableDisablePlugin' : enableDisablePlugin
 }
     
 if __name__ == '__main__':

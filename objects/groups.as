@@ -130,7 +130,7 @@ class objects.groups extends base.base
 			{
 				groupObject[groupArray[i]].reColour ("roll");
 				menuObject[groupArray[i]].changeAction ("down");
-		//		plugins.groupRollSort (i);
+				sorter.groupRollSort (i);
 				var left:Number = 7.5 + groups.groupGap + groups.groupSections * i;
 				var right:Number = left + groups.groupWidth;
 				var top:Number = topY;
@@ -141,6 +141,7 @@ class objects.groups extends base.base
 			{
 				menuObject[groupArray[i]].changeAction ("up");
 				groupObject[groupArray[i]].reColour ("rollOut");
+				sorter.groupRollOutSort(i);
 			}
 		}
 	}

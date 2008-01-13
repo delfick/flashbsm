@@ -1,25 +1,96 @@
 import objects.*;
+import ui.*;
+import base.*;
 import mx.utils.Delegate;
-class sorter extends base.base
+class base.sorter extends base.base
 {
 	//common variables to all classes
 	var baseDepth:Number;
 	var neededDepths:Number = 1;
 	var container:MovieClip;
 	var interval:Number
+	//speed
+	static var slowSpeed:Number = 0.1;
+	static var fastSpeed:Number = 0.5;
+	static var sortSpeed:Number = 0.4;
 	//
 	//
-	==============doSort==============
-	==============enableSort==============
-	==============groupPressSort==============
-	==============groupRollOutSort==============
-	==============groupRollSort==============
-	==============groupSort==============
-	==============hideSort==============
-	==============normalSort==============
-	==============searchSort==============
+	/*==============doSort==============*/
+	/*==============enableSort==============*/
+	/*==============groupPressSort==============*/
+	public static function groupPressSort (group:Number):Void
+	{
+		for (var j:Number = 0; j < pl_groupArray.length; j++)
+		{
+			for (var i:Number = 0; i < pl_groupArray[j].length; i++)
+			{
+				if (j == group)
+				{
+					pluginObject[pl_groupArray[j][i]].changeAction ("pressed");
+				}
+				else
+				{
+					pluginObject[pl_groupArray[j][i]].changeAction ("dissapear");
+				}
+			}
+		}
+	}
+	/*==============groupRollOutSort==============*/
+	public static function groupRollOutSort (group:Number):Void
+	{
+		plugins.speed = fastSpeed;
+		for (var j:Number = 0; j < pl_groupArray.length; j++)
+		{
+			for (var i:Number = 0; i < pl_groupArray[j].length; i++)
+			{
+				if (pluginObject[pl_groupArray[j][i]].action != "pressed")
+				{
+					if (j == group)
+					{
+						pluginObject[pl_groupArray[j][i]].changeAction ("rollOut");
+					}
+					else
+					{
+						pluginObject[pl_groupArray[j][i]].changeAction ("dissapear");
+					}
+				}
+			}
+		}
+	}
+	/*==============groupRollSort==============*/
+	public static function groupRollSort (group:Number):Void
+	{
+		plugins.speed = slowSpeed;
+		for (var j:Number = 0; j < pl_groupArray.length; j++)
+		{
+			for (var i:Number = 0; i < pl_groupArray[j].length; i++)
+			{
+				if (pluginObject[pl_groupArray[j][i]].action != "pressed")
+				{
+					if (j == group)
+					{
+						if (pluginObject[pl_groupArray[group][i]].action != "roll")
+						{
+							pluginObject[pl_groupArray[j][i]].container._x = menuObject[groupArray[j]].menux;
+							pluginObject[pl_groupArray[j][i]].container._y = topY;
+							pluginObject[pl_groupArray[j][i]].changeAction ("roll");
+						}
+					}
+					else
+					{
+						pluginObject[pl_groupArray[j][i]].changeAction ("dissapear");
+					}
+				}
+			}
+		}
+	}
+	/*==============groupSort==============*/
+	/*==============hideSort==============*/
+	/*==============normalSort==============*/
+	/*==============searchSort==============*/
 
 }
+/*
 
 /////////////////////////////////////////////MOVED FROM ARRAYS
 	static function createEnabledSort ()
@@ -87,3 +158,4 @@ class sorter extends base.base
 			}
 		}
 	}
+	*/

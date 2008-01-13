@@ -1,5 +1,6 @@
 ﻿import base.*;
 import ui.*;
+import objects.*;
 class base.base extends arrays
 {
 	//

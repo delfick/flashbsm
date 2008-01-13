@@ -38,6 +38,7 @@ class base.arrays extends MovieClip
 	static var listener:Object = {};
 	static var broadCaster:Object = {};
 	static var tempObject:Object = {};
+	static var iconToPluginName:Object = new Object();
 	//
 	// Xml
 	//
@@ -84,7 +85,7 @@ class base.arrays extends MovieClip
 			base.trace ("Finding Categories", true, true, 14);
 			arrays.theWindow.editItem ("text", "Loading", "Finding Categories");
 			//
-			communicate.createService ("getCategories");
+			communicate.createService ("getInfo");
 			communicate.activateService ("getCategories", 0);
 			listener.gotData = function()
 			{
@@ -106,7 +107,6 @@ class base.arrays extends MovieClip
 			}
 			break;
 		case 1 :
-			communicate.createService ("getCategoryList");
 			if (arrays.count != arrays.groupArray.length)
 			{
 				arrays.tempObject = null;
@@ -204,7 +204,6 @@ class base.arrays extends MovieClip
 		case 4 :
 			base.trace ("Determining active plugins", true, true, 14);
 			arrays.theWindow.editItem ("text", "Loading", "Determining active plugins");
-			communicate.createService ("getActivePluginList");
 			communicate.activateService ("getActivePluginList", 0);
 			listener.gotData = function()
 			{
@@ -220,20 +219,21 @@ class base.arrays extends MovieClip
 			}
 			break;
 		case 5 :
-			communicate.createService ("getPluginData");
-			if (arrays.count != 5)//arrays.pluginArray.length)
+			if (arrays.count != arrays.pluginArray.length)
 			{
 				arrays.tempObject = null;
 				communicate.activateService ("getPluginData", 1, arrays.count);
 				listener.gotData = function()
 				{
-					base.trace ("\t"+arrays.pluginArray[arrays.count], true, false, 8);
+				//	base.trace ("\t"+arrays.pluginArray[arrays.count], true, false, 8);
 					arrays.theWindow.editItem ("text", "Loading", "Getting data for the " + arrays.pluginArray[arrays.count] + " plugin");
 					var thePlugin:Object = arrays.pluginObject[arrays.pluginArray[arrays.count]];
 					var theData:Object = arrays.tempObject;
 					thePlugin.iconName = theData[0];
+					base.trace(thePlugin.iconName, true, false, 8);
 					thePlugin.pluginName = theData[1];
 					thePlugin.descriptionText = theData[2];
+					arrays.iconToPluginName[thePlugin.iconName] = thePlugin.pluginName;
 					arrays.count ++;
 					_root.theArrays.createArrays(5);
 				}

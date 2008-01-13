@@ -17,6 +17,7 @@ class ui.stage extends base.base
 	static var panelWidth:Number;
 	static var panelHeight:Number = 67.1;
 	private var sectionHeight:Number = 22;
+	static var iconLoad:LoadVars = new LoadVars ();
 	//
 	//
 	public function stage (__container:MovieClip)
@@ -202,6 +203,24 @@ class ui.stage extends base.base
 		container.pluginHeader.pluginDescription.setNewTextFormat (descriptionFormat);
 		container.pluginHeader.pluginDescription.selectable = false;
 		base.trace("normal stage made", true, true, 14);
+	}
+	//
+	//
+	public static function fillOutPluginDescription()
+	{
+		iconLoad.load ("images/icons/plugin-" + plugins.currentPlugin.iconName + ".png");
+		iconLoad.onLoad = function (success:Boolean)
+		{
+			if (success)
+			{
+				_root.pluginHeader.pluginDescriptionImage.loadMovie ("images/icons/plugin-" + plugins.currentPlugin.iconName + ".png");
+			}
+			else
+			{
+				_root.pluginHeader.pluginDescriptionImage.loadMovie ("images/icons/plugin-unknown.png");
+			}
+		};
+		_root.pluginHeader.pluginDescription.text = plugins.currentPlugin.groupName + " --> " + plugins.currentPlugin.pluginName + " --> " + plugins.currentPlugin.descriptionText;
 	}
 	//
 	//

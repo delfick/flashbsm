@@ -5,8 +5,8 @@ import mx.utils.Delegate;
 class objects.plugins extends base.base
 {
 	//common variables to all classes
-	public var baseDepth:Number;
-	public var neededDepths:Number = 2;
+	static public var baseDepth:Number;
+	public var neededDepths:Number = 100;
 	private var container:MovieClip;
 	private var interval:Number;
 	//Dimensions/co-ords
@@ -64,7 +64,6 @@ class objects.plugins extends base.base
 	private var gridPosXEnable:Number = 0;
 	private var gridPosYEnable:Number = 0;
 	//misc
-	static var iconLoad:LoadVars = new LoadVars ();
 	public var optionsTabsArray:Array = new Array ();
 	static var pluginLoader:LoadVars;
 	static var theWindow:Object;
@@ -86,10 +85,6 @@ class objects.plugins extends base.base
 		groupNum = __groupNum;
 		groupName = groupArray[groupNum];
 		createNormalGrid ();
-	}
-	public function test()
-	{
-		base.trace("test");
 	}
 	function createGroupGrid ()
 	{
@@ -132,40 +127,44 @@ class objects.plugins extends base.base
 		boxWidth = pluginWidth / 1.1;
 		boxX = (pluginWidth - boxWidth) / 2;
 		boxY = (pluginHeight - boxHeight) / 2;
-		for (var i:Number = 0; i < pluginArray.length; i++)
-		{
-		//	_root.createEmptyMovieClip ("plugin_" + plName, plDepth);
-		//	pluginObject[pluginArray[i]].createContainer ();
-		}
-	}
-	function createContainer ()
-	{
 		if (activePlugins != undefined)
 		{
-			for (var i:Number = 0; i < arrays.activePlugins.length; i++)
+			for (var i:Number = 0; i < activePlugins.length; i++)
 			{
-				if (arrays.activePlugins[i] == iconName)
+				var nextPlugin:Object = pluginObject[iconToPluginName[activePlugins[i]]];
+				if (nextPlugin.iconName.toString()==activePlugins[i].toString())
 				{
-					isEnabled = true;
+					nextPlugin.isEnabled = true;
 				}
-			}
-			if (isEnabled == undefined)
-			{
-				isEnabled = false;
 			}
 		}
 		else
 		{
-			if (Math.round (Math.random (100)) == 1)
+			for (var i:Number = 0;i < pluginArray.length;i++)
 			{
-				isEnabled = true;
-			}
-			else
-			{
-				isEnabled = false;
+				var nextPlugin:Object = pluginObject[pluginArray[i]];
+				if (Math.round (Math.random(100)) == 1)
+				{
+					nextPlugin.isEnabled = true;
+				}
 			}
 		}
-		if (iconName == "core")
+		for (var i:Number = 0; i < pluginArray.length; i++)
+		{
+			var nextPlugin:Object = pluginObject[pluginArray[i]];
+			if (nextPlugin.isEnabled == undefined)
+			{
+				nextPlugin.isEnabled = false;
+			}
+			var plName:String = nextPlugin.pluginName;
+			var plDepth:Number = baseDepth + i;
+			_root.createEmptyMovieClip ("plugin_" + plName, plDepth);
+			pluginObject[pluginArray[i]].createContainer ();
+		}
+	}
+	function createContainer ()
+	{
+		if (iconName.toString() == "core")
 		{
 			isEnabled = true;
 		}
@@ -212,6 +211,8 @@ class objects.plugins extends base.base
 		}
 		setEvents (groupNum, pluginNum, pluginIndex);
 	}
+	//
+	//
 	private function setEvents (group:Number, plugin:Number, pluginIndex:Number)
 	{
 		container.base.onRollOver = function ()
@@ -230,36 +231,44 @@ class objects.plugins extends base.base
 		{
 
 			var nextPlugin:Object = arrays.pluginObject[arrays.pluginArrayAlpha[pluginIndex]];
-			plugins.pluginLoader = new LoadVars ();
-			plugins.pluginLoader.onLoad = function(success:Boolean)
+			arrays.communicate.activateService("enableDisablePlugin",2, nextPlugin.iconName, nextPlugin.isEnabled);
+			arrays.listener.gotData = function()
 			{
-				plugins.theWindow.editItem("text", "info", "It was"+(success == true? " ":" not ")+"successful")
+				plugins.theWindow.editItem("text", "info", "It was"+(arrays.tempObject.toString() == true? " ":" not ")+"successful")
 				plugins.theWindow.openWindow(false);
 			}
 			if (nextPlugin.isEnabled == true)
 			{
-				plugins.pluginLoader.load ("http://localhost:8899/?method=unloadPlugin&plugin=\"" + nextPlugin.Name + "\"");
-				plugins.theWindow.editItem("text", "info", "Unloading " + nextPlugin.Name);
+				if (nextPlugin.iconName.toString() == "core")
+				{
+					plugins.theWindow.editItem("text", "info", "You don't want to disable this plugin :p");
+				}
+				else
+				{
+					plugins.theWindow.editItem("text", "info", "Unloading " + nextPlugin.pluginName);
+				}
 				plugins.theWindow.openWindow(false);
 			}
 			else
 			{
-				plugins.pluginLoader.load ("http://localhost:8899/?method=loadPlugin&plugin=\"" + nextPlugin.Name + "\"");
-				plugins.theWindow.editItem("text", "info", "Loading " + nextPlugin.Name);
+				plugins.theWindow.editItem("text", "info", "Loading " + nextPlugin.pluginName);
 				plugins.theWindow.openWindow(false);
 			}
-			var thePlugin:Object = arrays.pluginObject[arrays.pl_groupArray[group][plugin]];
-			if (thePlugin.isEnabled == true)
+			if (nextPlugin.iconName.toString() != "core")
 			{
-				plugins.determineAbled (false, group, plugin);
-			}
-			else
-			{
-				plugins.determineAbled (true, group, plugin);
-			}
-			if (arrays.funcBarObject.ShowAll.active == true)
-			{
-			//	plugins.doSort (true);
+				var thePlugin:Object = arrays.pluginObject[arrays.pl_groupArray[group][plugin]];
+				if (thePlugin.isEnabled == true)
+				{
+					plugins.determineAbled (false, group, plugin);
+				}
+				else
+				{
+					plugins.determineAbled (true, group, plugin);
+				}
+				if (arrays.funcBarObject.ShowAll.active == true)
+				{
+				//	plugins.doSort (true);
+				}
 			}
 		};
 	}
@@ -391,7 +400,7 @@ class objects.plugins extends base.base
 	}
 	static function pluginPress (group:Number, plugin:Number, pluginIndex:Number)
 	{
-		_root.pluginHeader.pluginDescription.text = groupArray[group] + " --> " + pluginArrayAlpha[pluginIndex] + " --> " + pluginObject[pluginArrayAlpha[pluginIndex]].descriptionText;
+
 		for (var i:Number = 0; i < pluginArray.length; i++)
 		{
 			var nextPlugin:Object = pluginObject[pluginArrayAlpha[i]];
@@ -399,26 +408,14 @@ class objects.plugins extends base.base
 			{
 				selectedPlugin = group;
 				currentPlugin = nextPlugin;
+				stage.fillOutPluginDescription();
 				var theName:String = currentPlugin.Name.toLowerCase ();
-				iconLoad.load ("images/icons/plugin-" + currentPlugin.iconName + ".png");
-
-				iconLoad.onLoad = function (success:Boolean)
-				{
-					if (success)
-					{
-						_root.pluginHeader.pluginDescriptionImage.loadMovie ("images/icons/plugin-" + plugins.currentPlugin.iconName + ".png");
-					}
-					else
-					{
-						_root.pluginHeader.pluginDescriptionImage.loadMovie ("images/icons/plugin-unknown.png");
-					}
-				};
 				nextPlugin.isSelected = true;
 				nextPlugin.reColour ("selected");
 				menuObject[groupArray[group]].changeAction ("dissapear");
 				groupObject[groupArray[group]].reColour ("pressed");
 				groups.selectedGroup = group;
-	//			plugins.groupPressSort (group);
+				sorter.groupPressSort (group);
 				plugins.chosenTab = 0;
 				stageObject.theStage.createSettingsArea ();
 

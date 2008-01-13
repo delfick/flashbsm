@@ -12,8 +12,6 @@ class base.creation extends base.base
 	}
 	static function setDepths (__depth:Number)
 	{
-
-		plugins.currentPlugin = pluginObject[pluginArray[20]];
 		depth = __depth;
 		//
 		//
@@ -90,9 +88,6 @@ class base.creation extends base.base
 	}
 	static function createClips()
 	{
-
-		reportProgress("making stage");
-		stageObject.theStage.createNormalStage ();
 		//
 		//
 		reportProgress("adding windows");
@@ -110,9 +105,11 @@ class base.creation extends base.base
 		functionBar.createClips ()
 		//
 		//
-	
+		reportProgress("making stage");
+		stageObject.theStage.createNormalStage ();
+		//
+		//
 		reportProgress("putting plugins in the right place");
 		plugins.pluginPress (0, 0, initialIndex);
-			
 	}
 }

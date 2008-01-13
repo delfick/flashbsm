@@ -41,6 +41,12 @@ class base.communicate extends base.base
 					var thePlugin:Number = theParams[0];
 					pc = service[theService](thePlugin);
 					break;
+				case "enableDisablePlugin" :
+					var thePlugin:String = theParams[0];
+					var theStatus:Boolean = theParams[1];
+					base.trace(thePlugin);
+					pc = service[theService](thePlugin, theStatus);
+					break;
 			}
 		}
 		pc.responder = new RelayResponder (this, "onResult", "onFault");
