@@ -12,15 +12,23 @@ class ui.funcbar.showAllBtn extends objects.functionBar
 	}
 	function activePress ()
 	{
+		for (var i:Number = 0;i<groupArray.length;i++)
+		{
+			pluginObject[pl_groupArray[i][0]].switchContainer("sorter");
+		}
 		active = true;
 		reColour (base.red, 20, base.black);
 		arrays.stageObject.theStage.createOptionsMask ();
-		stageObject.theStage.createNormalSort ();
 	//	plugins.doSort (false);
+		sorter.normalSort(false);
 		groups.hideGroups ();
 	}
 	function inactivePress ()
 	{
+		for (var i:Number = 0;i<groupArray.length;i++)
+		{
+			pluginObject[pl_groupArray[i][0]].switchContainer("normal");
+		}
 		active = false;
 		arrays.stageObject.theStage.destroyOptionsMask ("normal");
 		reColour (base.white, 20, base.black);

@@ -71,6 +71,7 @@ class base.sorter extends base.base
 					{
 						if (pluginObject[pl_groupArray[group][i]].action != "roll")
 						{
+							pluginObject[pl_groupArray[j][i]].switchContainer("groupRoll");
 							pluginObject[pl_groupArray[j][i]].container._x = menuObject[groupArray[j]].menux;
 							pluginObject[pl_groupArray[j][i]].container._y = topY;
 							pluginObject[pl_groupArray[j][i]].changeAction ("roll");
@@ -87,6 +88,24 @@ class base.sorter extends base.base
 	/*==============groupSort==============*/
 	/*==============hideSort==============*/
 	/*==============normalSort==============*/
+	public static function normalSort (doAnimate:Boolean):Void
+	{
+		var thePlugins:Array = new Array ();
+		plugins.horizGridNumber = 0;
+		plugins.vertGridNumber = 0;
+		stageObject.theStage.createNormalSort ();
+		plugins.speed = sortSpeed;
+		for (var i:Number = 0; i < pluginArray.length; i++)
+		{
+			pluginObject[pluginArray[i]].isDone = false;
+			if (doAnimate == false)
+			{
+				pluginObject[pluginArray[i]].doItNow = true;
+			}
+			pluginObject[pluginArray[i]].createNormalGrid ();
+			pluginObject[pluginArray[i]].changeAction ("normalSort");
+		}
+	}
 	/*==============searchSort==============*/
 
 }

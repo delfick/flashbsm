@@ -172,12 +172,12 @@ class base.arrays extends MovieClip
 				for (var j:Number = 0; j < arrays.pl_groupArray[i].length; j++)
 				{
 					arrays.theWindow.editItem ("text", "Loading", "Adding plugin objects");
-					arrays.pluginObject[arrays.pl_groupArray[i][j]] = new plugins (pl_groupArray[i][j], i, j);
+					arrays.pluginObject[arrays.pl_groupArray[i][j]] = new plugins (i, j);
 				}
 			}
 			for (var i:Number = 0; i < arrays.pluginArrayAlpha.length; i++)
 			{
-				arrays.pluginObject[arrays.pluginArrayAlpha[i]].pluginIndex = i;
+				arrays.pluginObject[arrays.pluginArray[i]].pluginIndex = i;
 				if (arrays.pluginObject[arrays.pluginArrayAlpha[i]].groupNum == 0)
 				{
 					if (arrays.pluginObject[arrays.pluginArrayAlpha[i]].pluginNum == 0)
@@ -219,31 +219,47 @@ class base.arrays extends MovieClip
 			}
 			break;
 		case 5 :
-			if (arrays.count != arrays.pluginArray.length)
+			arrays.tempObject = null;
+			communicate.activateService ("getPluginNames", 0);
+			listener.gotData = function()
 			{
-				arrays.tempObject = null;
-				communicate.activateService ("getPluginData", 1, arrays.count);
-				listener.gotData = function()
+				arrays.theWindow.editItem ("text", "Loading", "Getting the plugin names");
+				for (var i:Number = 0; i< arrays.pluginArray.length;i++)
 				{
-				//	base.trace ("\t"+arrays.pluginArray[arrays.count], true, false, 8);
-					arrays.theWindow.editItem ("text", "Loading", "Getting data for the " + arrays.pluginArray[arrays.count] + " plugin");
-					var thePlugin:Object = arrays.pluginObject[arrays.pluginArray[arrays.count]];
-					var theData:Object = arrays.tempObject;
-					thePlugin.iconName = theData[0];
-					base.trace(thePlugin.iconName, true, false, 8);
-					thePlugin.pluginName = theData[1];
-					thePlugin.descriptionText = theData[2];
-					arrays.iconToPluginName[thePlugin.iconName] = thePlugin.pluginName;
-					arrays.count ++;
-					_root.theArrays.createArrays(5);
+					arrays.pluginObject[arrays.pluginArray[i]].pluginName = arrays.tempObject[i];
 				}
-			}
-			else
-			{
 				_root.theArrays.createArrays(6);
 			}
 			break;
-		case 6:
+		case 6 :
+			arrays.tempObject = null;
+			communicate.activateService ("getPluginIconNames", 0);
+			listener.gotData = function()
+			{
+				arrays.theWindow.editItem ("text", "Loading", "Getting the plugin icon names");
+				for (var i:Number = 0; i< arrays.pluginArray.length;i++)
+				{
+					arrays.pluginObject[arrays.pluginArray[i]].iconName = arrays.tempObject[i];
+				}
+				_root.theArrays.createArrays(7);
+			}
+			break;
+		case 7 :
+			arrays.tempObject = null;
+			communicate.activateService ("getPluginDescs", 0);
+			listener.gotData = function()
+			{
+				arrays.theWindow.editItem ("text", "Loading", "Getting the plugin descriptions");
+				for (var i:Number = 0; i< arrays.pluginArray.length;i++)
+				{
+					var thePlugin:Object = arrays.pluginObject[arrays.pluginArray[i]];
+					thePlugin.descriptionText = arrays.tempObject[i];
+					arrays.iconToPluginName[thePlugin.iconName] = thePlugin.pluginName;
+				}
+				_root.theArrays.createArrays(8);
+			}
+			break;
+		case 8:
 			base.trace("arrays are made, time for creation class\n\n", true, true, 14);
 			creation.setDepths (depth);
 			break;

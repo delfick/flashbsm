@@ -5,7 +5,7 @@ import mx.utils.Delegate;
 class objects.plugins extends base.base
 {
 	//common variables to all classes
-	static public var baseDepth:Number;
+	public var baseDepth:Number;
 	public var neededDepths:Number = 100;
 	private var container:MovieClip;
 	private var interval:Number;
@@ -50,13 +50,14 @@ class objects.plugins extends base.base
 	static var vertGridNumber:Number = 0;
 	static var selectedPlugin:Number = 0;
 	private var groupOrderNum:Number;
-	//random`
+	//random
 	static var initialSort:Boolean = false;
 	static var numberOfTabs:Number = 0;
 	static var chosenTab:Number = 0;
 	private var action:String;
 	private var isDone:Boolean = true;
 	static var currentPlugin:Object;
+	static var hoveredPlugin:Object;
 	static var horizGridNumberYesEnable:Number = 0;
 	static var vertGridNumberYesEnable:Number = 0;
 	static var horizGridNumberNoEnable:Number = 0;
@@ -68,20 +69,17 @@ class objects.plugins extends base.base
 	static var pluginLoader:LoadVars;
 	static var theWindow:Object;
 	static var groupCount:Number = 0;
+	static var gotInformation:Array = new Array();
 	//
 	//
 	//
-	public function plugins (__name:String, __groupNum:Number, __pluginNum:Number)
+
+	public function plugins (__groupNum:Number, __pluginNum:Number)
 	{
 		pluginNum = __pluginNum;
-		//Need to get the following
-		//iconName
-		//descriptionText
-		//optionsTabsArray
 		optionsTabsArray = ["test", "test2", "test3"];
 		tabNum = 3;
 		createGroupGrid ();
-		iconName = __name;
 		groupNum = __groupNum;
 		groupName = groupArray[groupNum];
 		createNormalGrid ();
@@ -157,18 +155,33 @@ class objects.plugins extends base.base
 				nextPlugin.isEnabled = false;
 			}
 			var plName:String = nextPlugin.pluginName;
-			var plDepth:Number = baseDepth + i;
-			_root.createEmptyMovieClip ("plugin_" + plName, plDepth);
+			var plDepth:Number = nextPlugin.baseDepth + i;
+			_root["normal_" + nextPlugin.groupName].createEmptyMovieClip ("plugin_" + plName, plDepth);
 			pluginObject[pluginArray[i]].createContainer ();
 		}
 	}
-	function createContainer ()
+	public function switchPluginContainer(theType:String)
+	{
+		switch (theType)
+		{
+			case "normal" :
+				container._parent.swapDepths(_root["normal_"+groupName]);
+				break;
+			case "sorter" :
+				container._parent.swapDepths(_root["sorter_"+groupName]);
+				break;
+			case "groupRoll" :
+				container._parent.swapDepths(_root["menu_"+groupName]);
+				break;
+		}
+	}
+	function createContainer (theType:String)
 	{
 		if (iconName.toString() == "core")
 		{
 			isEnabled = true;
 		}
-		container = _root["plugin_" + pluginName];
+		container = _root["normal_"+groupName]["plugin_" + pluginName];
 		container.createEmptyMovieClip ("base", 2);
 		container.createEmptyMovieClip ("checkBox", 3);
 		container.checkBox.createEmptyMovieClip ("inactiveState", 4);
@@ -217,7 +230,8 @@ class objects.plugins extends base.base
 	{
 		container.base.onRollOver = function ()
 		{
-			plugins.pluginRoll (group, plugin, pluginIndex);
+			arrays.pluginObject[arrays.pl_groupArray[group][plugin]].reColour("hover");
+			plugins.currentPlugin.reColour("selected");
 		};
 		container.base.onRelease = function ()
 		{
@@ -225,7 +239,8 @@ class objects.plugins extends base.base
 		};
 		container.base.onRollOut = function ()
 		{
-			plugins.pluginRollOut (group, plugin, pluginIndex);
+			arrays.pluginObject[arrays.pl_groupArray[group][plugin]].reColour("normal");
+			plugins.currentPlugin.reColour("selected");
 		};
 		container.checkBox.onRelease = function ()
 		{
@@ -285,6 +300,21 @@ class objects.plugins extends base.base
 		clearInterval (interval);
 		isDone = false;
 		interval = setInterval (EventDelegate.create (this, actionCheck), 10);
+	}
+	function reColour (__action:String)
+	{
+		if (__action == "normal")
+		{
+			createShape (white, 26, black);
+		}
+		else if (__action == "selected")
+		{
+			createShape (red, 26, black);
+		}
+		else if (__action == "hover")
+		{
+			createShape (blue, 26, black);
+		}
 	}
 	//
 	//
@@ -376,28 +406,6 @@ class objects.plugins extends base.base
 	}
 	//
 	//
-	static function pluginRoll (group:Number, plugin:Number, pluginIndex:Number)
-	{
-		for (var i:Number = 0; i < pluginArray.length; i++)
-		{
-			var nextPlugin:Object = pluginObject[pluginArray[i]];
-			if (nextPlugin.isSelected == true)
-			{
-				nextPlugin.colourCheck ("selected");
-			}
-			else
-			{
-				if (nextPlugin.pluginIndex == pluginIndex)
-				{
-					nextPlugin.reColour ("hover");
-				}
-				else
-				{
-					nextPlugin.reColour ("normal");
-				}
-			}
-		}
-	}
 	static function pluginPress (group:Number, plugin:Number, pluginIndex:Number)
 	{
 
@@ -407,7 +415,7 @@ class objects.plugins extends base.base
 			if (nextPlugin.pluginIndex == pluginIndex)
 			{
 				selectedPlugin = group;
-				currentPlugin = nextPlugin;
+				currentPlugin = nextPlugin;;
 				stage.fillOutPluginDescription();
 				var theName:String = currentPlugin.Name.toLowerCase ();
 				nextPlugin.isSelected = true;
@@ -433,21 +441,6 @@ class objects.plugins extends base.base
 			{
 				groupObject[groupArray[i]].reColour ("rollOut");
 				menuObject[groupArray[i]].changeAction ("dissapear");
-			}
-		}
-	}
-	static function pluginRollOut (group:Number, plugin:Number, pluginIndex:Number)
-	{
-		for (var i:Number = 0; i < pluginArray.length; i++)
-		{
-			var nextPlugin:Object = pluginObject[pluginArray[i]];
-			if (nextPlugin.isSelected == true)
-			{
-				nextPlugin.colourCheck ("selected");
-			}
-			else
-			{
-				nextPlugin.reColour ("normal");
 			}
 		}
 	}

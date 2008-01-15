@@ -11,11 +11,14 @@ def CatSortCompare(v1, v2):
         return cmp(v1 or 'zzzzzzz', '')
     return cmp(v1 or 'zzzzzzzz', v2 or 'zzzzzzzz')
     
-    
-information = []
+pluginNames = []
+pluginIcons = []
+pluginDescs = []
 for categ in sorted(context.Categories, CatSortCompare):
 	for plugin in context.Categories[categ]:
-		information.append([[plugin.Name], [plugin.ShortDesc], [plugin.LongDesc]])
+		pluginNames.append([plugin.ShortDesc])
+		pluginIcons.append([plugin.Name])
+		pluginDescs.append([plugin.LongDesc])
 		
 
 	
@@ -27,11 +30,17 @@ pl_categories = []
 for categ in sorted(context.Categories, CatSortCompare):
 	pl_categories.append(list([p.ShortDesc for p in context.Categories[categ]]))
 	
+def getPluginNames():
+	return pluginNames
+	
+def getPluginIconNames():
+	return pluginIcons
+	
+def getPluginDescs():
+	return pluginDescs
+	
 def getNumberOfPlugins():
 	return len(plugins)
-
-def getPluginData(plugin):
-	return information[int(plugin)]
 
 def getCategories():
 	return categories
@@ -57,7 +66,9 @@ def enableDisablePlugin(plugin, status) :
 	
 services = {
 	'getInfo.getNumberOfPlugins': getNumberOfPlugins,
-	'getInfo.getPluginData': getPluginData,
+	'getInfo.getPluginNames' : getPluginNames,
+	'getInfo.getPluginIconNames' : getPluginIconNames,
+	'getInfo.getPluginDescs' : getPluginDescs,
 	'getInfo.getActivePluginList': getActivePluginList,
 	'getInfo.getCategoryList' : getCategoryList,
 	'getInfo.getCategories' : getCategories,

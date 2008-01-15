@@ -26,15 +26,16 @@ class base.creation extends base.base
 		}
 		//
 		//
-		reportProgress("adding all menus but first two");
-		for (var i:Number= 2; i < groupArray.length; i++)
+		reportProgress("adding plugin holders with a normal depth");
+		for (var i:Number=0;i<groupArray.length;i++)
 		{
-			depth += menuObject[groupArray[i]].setbaseDepth (depth);
+			_root.createEmptyMovieClip ("normal_" + groupArray[i], depth + i);
 		}
+		depth += groupArray.length
 		//
 		//
-		reportProgress("adding all plugins but those in first two groups");
-		for (var i:Number= 2; i < pl_groupArray.length; i++)
+		reportProgress("adding all plugin");
+		for (var i:Number= 0; i < pl_groupArray.length; i++)
 		{
 			for (var j:Number= 0; j < pl_groupArray[i].length; j++)
 			{
@@ -43,20 +44,19 @@ class base.creation extends base.base
 		}
 		//
 		//
-		reportProgress("adding second group : menu and plugins");
-		depth += menuObject[groupArray[1]].setbaseDepth (depth);
-		for (var j:Number= 0; j < pl_groupArray[1].length; j++)
+		reportProgress("adding all menus");
+		for (var i:Number= 0; i < groupArray.length; i++)
 		{
-			depth += pluginObject[pl_groupArray[1][j]].setbaseDepth (depth);
+			depth += menuObject[groupArray[i]].setbaseDepth (depth);
 		}
 		//
 		//
-		reportProgress("adding first group : menu and plugins");
-		depth += menuObject[groupArray[0]].setbaseDepth (depth);
-		for (var j:Number= 0; j < pl_groupArray[0].length; j++)
+		reportProgress("adding plugin holders with a depth higher than the menus");
+		for (var i:Number=0;i<groupArray.length;i++)
 		{
-			depth += pluginObject[pl_groupArray[0][j]].setbaseDepth (depth);
+			_root.createEmptyMovieClip ("menu_" + groupArray[i], depth + i);
 		}
+		depth += groupArray.length;
 		//
 		//
 		reportProgress("adding top bar");
@@ -68,7 +68,7 @@ class base.creation extends base.base
 		{
 			depth += groupObject[groupArray[i]].setbaseDepth (depth);
 		}
-		//
+		//pluginName
 		//
 		reportProgress("adding mouse");
 		depth += mouseObject.mouse.setbaseDepth (depth);
@@ -110,6 +110,6 @@ class base.creation extends base.base
 		//
 		//
 		reportProgress("putting plugins in the right place");
-		plugins.pluginPress (0, 0, initialIndex);
+		plugins.pluginPress (0, 0, 0);
 	}
 }

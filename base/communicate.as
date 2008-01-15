@@ -37,15 +37,19 @@ class base.communicate extends base.base
 					var theGroup:String = theParams[0];
 					pc = service[theService] (theGroup);
 					break;
-				case "getPluginData" :
-					var thePlugin:Number = theParams[0];
-					pc = service[theService](thePlugin);
-					break;
 				case "enableDisablePlugin" :
 					var thePlugin:String = theParams[0];
 					var theStatus:Boolean = theParams[1];
-					base.trace(thePlugin);
 					pc = service[theService](thePlugin, theStatus);
+					break;
+				case "getPluginNames" :
+					pc = service[theService]();
+					break;
+				case "getPluginIconNames" :
+					pc = service[theService]();
+					break;
+				case "getPluginDescs" :
+					pc = service[theService]();
 					break;
 			}
 		}

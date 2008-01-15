@@ -5,11 +5,12 @@
 
 #location of kagswf
 kagswf=~/source/kagswf/kagswf
+ccsmImages=/usr/local/share/ccsm/images
 
 #Help Function
   helpme() 
   {
-  	echo -e "\tUsage: flashbsm | tracer"
+  	echo -e "\tUsage: flashbsm | tracer | images"
   }
 
 #lets compile :D
@@ -21,6 +22,14 @@ if [ "$1" == "flashbsm" ]; then
 elif [ "$1" == "tracer" ]; then
 	$kagswf -out tracer.swf -html -w 700 -h 400 -fps 48 -p tracer -cp classPath 
 	cp html/tracer.html .
+	exit 0
+	
+elif [ "$1" == "images" ]; then
+	ls $ccsmImages
+	cp $ccsmImages/* images/icons/
+	cd images/icons
+	for i in *.svg; do inkscape -f "$i" -e "${i%%.svg*}.png" -w 50; done
+	cd ../..
 	exit 0
 	
 else

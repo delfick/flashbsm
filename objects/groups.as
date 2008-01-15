@@ -149,13 +149,7 @@ class objects.groups extends base.base
 	//
 	static function groupPress (num:Number)
 	{
-		for (var i:Number= 0; i < groupArray.length; i++)
-		{
-			if (i == num)
-			{
-				plugins.pluginPress (i, 0, pluginObject[pl_groupArray[i][0]].pluginIndex);
-			}
-		}
+		plugins.pluginPress (num, 0, pluginObject[pl_groupArray[num][0]].pluginIndex);
 	}
 	//
 	//

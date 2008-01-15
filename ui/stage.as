@@ -8,7 +8,7 @@ class ui.stage extends base.base
 	static var baseDepth:Number;
 	static var sortDepth:Number;
 	static var neededDepths:Number = 50;
-	static var neededSortDepths:Number = 50;
+	static var neededSortDepths:Number = 170;
 	static var container:MovieClip;
 	static var interval:Number;
 	static var interval2:Number;
@@ -87,14 +87,22 @@ class ui.stage extends base.base
 				baseDepth = __depth;
 				container.createEmptyMovieClip ("theOverall", baseDepth + 1);
 				container.createEmptyMovieClip ("theSide", baseDepth + 2);
-				container.createEmptyMovieClip ("pluginHeader", baseDepth + 3);
+				container.createEmptyMovieClip ("sidePluginHolder", baseDepth + 3);
+
+					for (var i:Number=0;i<pluginArray.length;i++)
+					{
+						var plName:String = pluginObject[pluginArray[i]].pluginName;
+						container.sidePluginHolder.createEmptyMovieClip ("plugin_" + plName, i);
+					}
+
+				container.createEmptyMovieClip ("pluginHeader", baseDepth + 4);
 
 					container.pluginHeader.createTextField("pluginDescription", 1, pluginDescriptionX + gap + descriptionHeight, pluginDescriptionY, pluginDescriptionWidth, pluginDescriptionHeight);
 					container.pluginHeader.createEmptyMovieClip("pluginDescriptionImage", 2);
 
-				container.createEmptyMovieClip ("theFuncBar", baseDepth +4);
-				container.createEmptyMovieClip ("theHelper", baseDepth + 5);
-				container.createEmptyMovieClip ("settingsArea", baseDepth + 6);
+				container.createEmptyMovieClip ("theFuncBar", baseDepth +5);
+				container.createEmptyMovieClip ("theHelper", baseDepth + 6);
+				container.createEmptyMovieClip ("settingsArea", baseDepth + 7);
 
 					container.settingsArea.createEmptyMovieClip("theSettings", 1);
 					container.settingsArea.createEmptyMovieClip("settingsMask", 2);
@@ -113,10 +121,18 @@ class ui.stage extends base.base
 			case "sorter" :
 				sortDepth = __depth;
 				container.createEmptyMovieClip("sortCanvas", sortDepth + 1);
-				container.createEmptyMovieClip("sortItems", sortDepth + 2);
+				
+					container.sortCanvas.createEmptyMovieClip("base", 1);
+					container.sortCanvas.createEmptyMovieClip("canvas", 2);
 
-					container.sortItems.createEmptyMovieClip("base", 1);
-					container.sortItems.createEmptyMovieClip("canvas", 2);
+				for (var i:Number=0;i<groupArray.length;i++)
+				{
+					base.trace("sorter_"+groupArray[i], green);
+					container.createEmptyMovieClip ("sorter_" + groupArray[i], sortDepth + 2 + i);
+				}
+
+				container.createEmptyMovieClip("sortItems", sortDepth + groupArray.length + 3);
+
 					container.sortItems.createEmptyMovieClip("topBar", 3);
 
 						for (var i:Number= 0; i < groupArray.length; i++)
@@ -170,8 +186,8 @@ class ui.stage extends base.base
 
 		container.sortCanvas.clear();
 		container.sortItems.clear();
-		container.sortItems.base.clear();
-		container.sortItems.canvas.clear();
+		container.sortCanvas.base.clear();
+		container.sortCanvas.canvas.clear();
 		container.sortItems.topBar.clear();
 		for (var i:Number = 0; i< groupArray.length;i++)
 		{
@@ -231,15 +247,15 @@ class ui.stage extends base.base
 	{
 		resetStage ();
 		container.sortItems._visible = true;
-		shapes.createShape ("rectangle", container.sortItems.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
-		shapes.createShape ("rectangle", container.sortItems.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
+		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
+		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
 	}
 	function createGroupSort ()
 	{
 		resetStage ();
 		container.sortItems._visible = true;
-		shapes.createShape ("rectangle", container.sortItems.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
-		shapes.createShape ("rectangle", container.sortItems.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
+		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
+		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
 		shapes.createShape ("line", container.sortItems.topBar, funcBarX, topY + topHeight, funcBarX + funcBarWidth, topY + topHeight, 1, black);
 		for (var i:Number= 0; i < groupArray.length; i++)
 		{
@@ -251,8 +267,8 @@ class ui.stage extends base.base
 	{
 		resetStage ();
 		container.sortItems._visible = true;
-		shapes.createShape ("rectangle", container.sortItems.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
-		shapes.createShape ("rectangle", container.sortItems.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
+		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
+		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
 		shapes.createShape ("line", container.sortItems.topBar, funcBarX, topY + topHeight, funcBarX + funcBarWidth, topY + topHeight, 1, black);
 	}
 	//
