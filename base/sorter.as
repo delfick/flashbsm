@@ -71,7 +71,6 @@ class base.sorter extends base.base
 					{
 						if (pluginObject[pl_groupArray[group][i]].action != "roll")
 						{
-							pluginObject[pl_groupArray[j][i]].switchContainer("groupRoll");
 							pluginObject[pl_groupArray[j][i]].container._x = menuObject[groupArray[j]].menux;
 							pluginObject[pl_groupArray[j][i]].container._y = topY;
 							pluginObject[pl_groupArray[j][i]].changeAction ("roll");

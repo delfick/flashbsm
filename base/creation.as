@@ -75,7 +75,7 @@ class base.creation extends base.base
 		//
 		//
 		reportProgress("adding sort layer")
-		stageObject.theStage.createClips ("sorter", depth);
+		depth += stageObject.theStage.createClips ("sorter", depth);
 		//
 		//
 		reportProgress("adding window layer");
@@ -88,6 +88,7 @@ class base.creation extends base.base
 	}
 	static function createClips()
 	{
+		
 		//
 		//
 		reportProgress("adding windows");
@@ -102,7 +103,8 @@ class base.creation extends base.base
 		menus.createClips ();
 		plugins.createClips ();
 		mouseObject.mouse.createClips ();
-		functionBar.createClips ()
+		functionBar.createClips ();
+		
 		//
 		//
 		reportProgress("making stage");

@@ -70,6 +70,8 @@ class objects.plugins extends base.base
 	static var theWindow:Object;
 	static var groupCount:Number = 0;
 	static var gotInformation:Array = new Array();
+	public var swappedContainer:String;
+	public var firstContainerSwitch:Boolean = true;
 	//
 	//
 	//
@@ -156,12 +158,17 @@ class objects.plugins extends base.base
 			}
 			var plName:String = nextPlugin.pluginName;
 			var plDepth:Number = nextPlugin.baseDepth + i;
-			_root["normal_" + nextPlugin.groupName].createEmptyMovieClip ("plugin_" + plName, plDepth);
+			_root["normal_"+nextPlugin.groupName].createEmptyMovieClip ("plugin_" + plName, plDepth);
 			pluginObject[pluginArray[i]].createContainer ();
 		}
 	}
-	public function switchPluginContainer(theType:String)
+	public function switchContainer(theType:String)
 	{
+		if (!firstContainerSwitch)
+		{
+			container._parent.swapDepths(_root[theType+"_"+groupName]);
+		}
+		swappedContainer = theType
 		switch (theType)
 		{
 			case "normal" :
@@ -174,6 +181,7 @@ class objects.plugins extends base.base
 				container._parent.swapDepths(_root["menu_"+groupName]);
 				break;
 		}
+		firstContainerSwitch = false;
 	}
 	function createContainer (theType:String)
 	{

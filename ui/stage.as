@@ -127,8 +127,8 @@ class ui.stage extends base.base
 
 				for (var i:Number=0;i<groupArray.length;i++)
 				{
-					base.trace("sorter_"+groupArray[i], green);
 					container.createEmptyMovieClip ("sorter_" + groupArray[i], sortDepth + 2 + i);
+					
 				}
 
 				container.createEmptyMovieClip("sortItems", sortDepth + groupArray.length + 3);
@@ -157,7 +157,7 @@ class ui.stage extends base.base
 
 							createPanel (container.sortItems.optionsPane.pane, 6);
 							createPane (container.sortItems.optionsPane)
-
+	
 				return neededSortDepths;
 				break;
 		}
@@ -167,7 +167,6 @@ class ui.stage extends base.base
 	function resetStage ()
 	{
 
-		base.trace("resetting stage");
 	//	container.theOverall.clear();
 		container.theSide.clear();
 		container.pluginHeader.clear();
