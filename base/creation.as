@@ -88,7 +88,7 @@ class base.creation extends base.base
 	}
 	static function createClips()
 	{
-		
+
 		//
 		//
 		reportProgress("adding windows");
@@ -104,7 +104,7 @@ class base.creation extends base.base
 		plugins.createClips ();
 		mouseObject.mouse.createClips ();
 		functionBar.createClips ();
-		
+
 		//
 		//
 		reportProgress("making stage");

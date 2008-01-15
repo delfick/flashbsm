@@ -166,7 +166,7 @@ class objects.plugins extends base.base
 	{
 		if (!firstContainerSwitch)
 		{
-			container._parent.swapDepths(_root[theType+"_"+groupName]);
+			container._parent.swapDepths(_root[swappedContainer+"_"+groupName]);
 		}
 		swappedContainer = theType
 		switch (theType)
@@ -177,7 +177,7 @@ class objects.plugins extends base.base
 			case "sorter" :
 				container._parent.swapDepths(_root["sorter_"+groupName]);
 				break;
-			case "groupRoll" :
+			case "menu" :
 				container._parent.swapDepths(_root["menu_"+groupName]);
 				break;
 		}

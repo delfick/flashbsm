@@ -38,7 +38,7 @@ class base.sorter extends base.base
 	/*==============groupRollOutSort==============*/
 	public static function groupRollOutSort (group:Number):Void
 	{
-		plugins.speed = fastSpeed;
+		plugins.speed = fastSpeed;		
 		for (var j:Number = 0; j < pl_groupArray.length; j++)
 		{
 			for (var i:Number = 0; i < pl_groupArray[j].length; i++)
