@@ -290,7 +290,7 @@ class objects.plugins extends base.base
 				}
 				if (arrays.funcBarObject.ShowAll.active == true)
 				{
-				//	plugins.doSort (true);
+					sorter.doSort (true);
 				}
 			}
 		};
@@ -352,7 +352,11 @@ class objects.plugins extends base.base
 					finaly = pluginHeight + gridPosY * pluginHeight;
 					break;
 				case "groupSort" :
-					finalx = groups.groupGap * 2 + groups.groupSections * groupNum;
+					finalx = funcBarX + groups.groupSections * groupNum + (groups.groupSections - pluginWidth)/2;
+					finaly = topY + topHeight / 2 + pluginHeight + groupOrderNum * pluginHeight;
+					break;
+				case "groupSortWithSrollBar" :
+					finalx = funcBarX + groups.groupSections * groupNum + 2;
 					finaly = topY + topHeight / 2 + pluginHeight + groupOrderNum * pluginHeight;
 					break;
 				case "enableYesSort" :
@@ -437,7 +441,7 @@ class objects.plugins extends base.base
 				stageObject.theStage.createSettingsArea ();
 				stage.fillOutPluginDescription();
 				nextPlugin.isSelected = true;
-				nextPlugin.reColour ("selected");				
+				nextPlugin.reColour ("selected");
 			}
 			else
 			{

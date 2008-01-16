@@ -121,30 +121,31 @@ class ui.stage extends base.base
 			case "sorter" :
 				sortDepth = __depth;
 				container.createEmptyMovieClip("sortCanvas", sortDepth + 1);
-				
+
 					container.sortCanvas.createEmptyMovieClip("base", 1);
 					container.sortCanvas.createEmptyMovieClip("canvas", 2);
 
 				for (var i:Number=0;i<groupArray.length;i++)
 				{
-					container.createEmptyMovieClip ("sorter_" + groupArray[i], sortDepth + 2 + i);
-					
+					container.createEmptyMovieClip ("sorterGroupsMask"+i, sortDepth + 2+i);
+					container.createEmptyMovieClip ("sorter_" + groupArray[i], sortDepth + 3 + i+groupArray.length);
+					container["normal_"+groupArray[i]].setMask(container["sorterGroupsMask"+i]);
 				}
+				container.createEmptyMovieClip("sortItems", sortDepth + groupArray.length*2 + 4);
 
-				container.createEmptyMovieClip("sortItems", sortDepth + groupArray.length + 3);
-
-					container.sortItems.createEmptyMovieClip("topBar", 3);
+					container.sortItems.createEmptyMovieClip("topBar", 1);
 
 						for (var i:Number= 0; i < groupArray.length; i++)
 						{
-							container.sortItems.topBar.createTextField ("groupTitle" + i, i, groups.groupGap + groups.groupSections * i - 1, 8 + (groups.groupHeight / 2) - (22 / 2), stageWidth / groupArray.length, topHeight);
+							container.sortItems.topBar.createTextField ("groupTitle" + i, i, 0, groups.gap+(topHeight-22)/2, stageWidth / groupArray.length, topHeight);
 							container.sortItems.topBar["groupTitle" + i].setNewTextFormat (sortHeaderFormat);
 							container.sortItems.topBar["groupTitle" + i].wordWrap = true;
 							container.sortItems.topBar["groupTitle" + i].selectable = false;
 							container.sortItems.topBar["groupTitle" + i].text = groupArray[i];
-							if (container.sortItems.topBar["groupTitle" + i].textHeight > 20)
+							container.sortItems.topBar["groupTitle" + i].autoSize = "center";
+							if (container.sortItems.topBar["groupTitle" + i].textHeight > 22)
 							{
-								container.sortItems.topBar["groupTitle" + i]._y -= 4;
+								container.sortItems.topBar["groupTitle" + i]._y += (22-container.sortItems.topBar["groupTitle" + i].textHeight);
 							}
 						}
 
@@ -157,7 +158,7 @@ class ui.stage extends base.base
 
 							createPanel (container.sortItems.optionsPane.pane, 6);
 							createPane (container.sortItems.optionsPane)
-	
+
 				return neededSortDepths;
 				break;
 		}
@@ -197,6 +198,36 @@ class ui.stage extends base.base
 	//	container.sortItems.optionsPane.pane.clear();
 	//	container.sortItems.optionsPane.mask.clear();
 	}
+	function setPluginMask(theType:String)
+	{
+		switch (theType)
+		{
+			case "normal" :
+				for (var i:Number = 0;i<groupArray.length;i++)
+				{
+					shapes.createShape ("rectangle", container["sorterGroupsMask"+i], 0, 0, Stage.width, Stage.height, 0, orange, 50, false, false);
+				}
+				break;
+			case "groupSort" :
+				for (var i:Number = 0;i<groupArray.length;i++)
+				{
+					shapes.createShape ("rectangle", container["sorterGroupsMask"+i], funcBarX, topY +topHeight, funcBarWidth, stageHeight - (2 * gap) - funcBarHeight - panelHeight - topHeight, 0, orange, 100, false, true, 1, black);
+				}
+				break;
+			case "normalSort" :
+				for (var i:Number = 0;i<groupArray.length;i++)
+				{
+					shapes.createShape ("rectangle", container["sorterGroupsMask"+i], funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, blue, 100, false, true, 1, black);
+				}
+				break;
+			case "enableSort" :
+				for (var i:Number = 0;i<groupArray.length;i++)
+				{
+					shapes.createShape ("rectangle", container["sorterGroupsMask"+i], funcBarX, topY + topHeight, funcBarWidth, stageHeight - (2 * gap) - funcBarHeight - panelHeight - topHeight, 0, green, 100, false, true, 1, black);
+				}
+				break;
+		}
+	}
 	//
 	//
 	//////////////////////// STAGE CREATION
@@ -205,6 +236,7 @@ class ui.stage extends base.base
 	function createNormalStage ()
 	{
 		resetStage ();
+		setPluginMask("normal");
 		shapes.createShape ("rectangle", container.sortItems.optionsPaneMask, funcBarX-3, funcBarY-panelHeight-3, panelWidth+6, panelHeight, 0, blue, 100, false, true, 10, black);
 		shapes.createShape ("rectangle", container.theOverall, topX, topY, stageWidth, stageHeight, 0, black, 0, false, true, 5, black);
 		shapes.createShape ("rectangle", container.topBar, topX, topY, stageWidth, topHeight, 0, white, 100, false, true, 5, black);
@@ -246,6 +278,7 @@ class ui.stage extends base.base
 	{
 		resetStage ();
 		container.sortItems._visible = true;
+		setPluginMask("normalSort");
 		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
 		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
 	}
@@ -253,19 +286,22 @@ class ui.stage extends base.base
 	{
 		resetStage ();
 		container.sortItems._visible = true;
+		setPluginMask("groupSort");
 		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
 		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
 		shapes.createShape ("line", container.sortItems.topBar, funcBarX, topY + topHeight, funcBarX + funcBarWidth, topY + topHeight, 1, black);
 		for (var i:Number= 0; i < groupArray.length; i++)
 		{
-			shapes.createShape ("line", container.sortItems.vertBars, groups.groupSections * i, topY + gap, groups.groupSections * i, topY + gap + stageHeight - (3 * gap) - funcBarHeight - panelHeight, 1, black);
-			container.sortItems["groupTitle" + i].text = groupArray[i];
+			shapes.createShape ("line", container.sortItems.vertBars, funcBarX + groups.groupSections * i, topY + gap, funcBarX + groups.groupSections * i, topY + gap + stageHeight - (3 * gap) - funcBarHeight - panelHeight, 1, black);
+			container.sortItems.topBar["groupTitle" + i].text = groupArray[i];
+			container.sortItems.topBar["groupTitle" + i]._x = funcBarX + groups.groupSections * i;
 		}
 	}
 	function createEnableSort ()
 	{
 		resetStage ();
 		container.sortItems._visible = true;
+		setPluginMask("enableSort");
 		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
 		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
 		shapes.createShape ("line", container.sortItems.topBar, funcBarX, topY + topHeight, funcBarX + funcBarWidth, topY + topHeight, 1, black);
@@ -510,12 +546,12 @@ class ui.stage extends base.base
 					functionBar.tempType = functionBar.searchType;
 				}
 				functionBar.searchType = "search";
-	//			plugins.searchSort (txt.text, txt.length, true);
+				sorter.searchSort (txt.text, txt.length, true);
 			}
 			else if (txt.length == 0)
 			{
 				functionBar.searchType = functionBar.tempType;
-	//			plugins.doSort (true);
+				sorter.doSort (true);
 			}
 		};
 	}
@@ -534,8 +570,7 @@ class ui.stage extends base.base
 			{
 				functionBar.tempType = "normal";
 			}
-	//		plugins.doSort (true);
-arrays.stageObject.theStage.createNormalSort ();
+			sorter.doSort (true);
 			shapes.switchImage (this._parent.normalChoice, "on");
 			shapes.switchImage (this._parent.groupChoice, "off");
 			shapes.switchImage (this._parent.enableChoice, "off");
@@ -553,8 +588,7 @@ arrays.stageObject.theStage.createNormalSort ();
 			{
 				functionBar.tempType = "group";
 			}
-	//		plugins.doSort (true);
-arrays.stageObject.theStage.createGroupSort ();
+			sorter.doSort (true);
 			shapes.switchImage (this._parent.normalChoice, "off");
 			shapes.switchImage (this._parent.groupChoice, "on");
 			shapes.switchImage (this._parent.enableChoice, "off");
@@ -573,8 +607,7 @@ arrays.stageObject.theStage.createGroupSort ();
 			{
 				functionBar.tempType = "enable";
 			}
-	//		plugins.doSort (true);
-arrays.stageObject.theStage.createEnableSort ();
+			sorter.doSort (true);
 			shapes.switchImage (this._parent.normalChoice, "off");
 			shapes.switchImage (this._parent.groupChoice, "off");
 			shapes.switchImage (this._parent.enableChoice, "on");
@@ -587,14 +620,14 @@ arrays.stageObject.theStage.createEnableSort ();
 			if (functionBar.isAlphabetical == false)
 			{
 				functionBar.isAlphabetical = true;
-	//			plugins.doSort (true);
+				sorter.doSort (true);
 				shapes.switchImage (this, "on");
 				//shapes.createCheckBox(this, 10, "off");
 			}
 			else
 			{
 				functionBar.isAlphabetical = false;
-	//			plugins.doSort (true);
+				sorter.doSort (true);
 				shapes.switchImage (this, "off");
 				//shapes.createCheckBox(this, 10, "on");
 			}

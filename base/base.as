@@ -174,8 +174,9 @@ class base.base extends arrays
 		//	headings in showall layout
 		sortHeaderFormat = new TextFormat ();
 		sortHeaderFormat.font = "Verdana";
-		sortHeaderFormat.size = 20;
+		sortHeaderFormat.size = 12;
 		sortHeaderFormat.bold = true;
+		sortHeaderFormat.align = "center";
 		//
 		//
 		//sortOptionsFormat

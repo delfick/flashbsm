@@ -103,7 +103,6 @@ class base.creation extends base.base
 		plugins.createClips ();
 		mouseObject.mouse.createClips ();
 		functionBar.createClips ();
-
 		//
 		//
 		reportProgress("making stage");
@@ -111,6 +110,8 @@ class base.creation extends base.base
 		//
 		//
 		reportProgress("putting plugins in the right place");
+		functionBar.searchType = "group"
 		plugins.pluginPress (0, 0, 0);
+		
 	}
 }

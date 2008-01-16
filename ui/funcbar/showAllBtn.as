@@ -19,8 +19,7 @@ class ui.funcbar.showAllBtn extends objects.functionBar
 		active = true;
 		reColour (base.red, 20, base.black);
 		arrays.stageObject.theStage.createOptionsMask ();
-	//	plugins.doSort (false);
-		sorter.normalSort(false);
+		sorter.doSort (false);
 		groups.hideGroups ();
 	}
 	function inactivePress ()
@@ -29,7 +28,6 @@ class ui.funcbar.showAllBtn extends objects.functionBar
 		{
 			pluginObject[pl_groupArray[i][0]].switchContainer("normal");
 		}
-		
 		arrays.stageObject.theStage.destroyOptionsMask ("normal");
 		reColour (base.white, 20, base.black);
 		if (active)

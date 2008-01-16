@@ -2,7 +2,7 @@ import objects.*;
 import ui.*;
 import base.*;
 import mx.utils.Delegate;
-class base.sorter extends base.base
+class base.sorter extends objects.plugins
 {
 	//common variables to all classes
 	var baseDepth:Number;
@@ -15,8 +15,268 @@ class base.sorter extends base.base
 	static var sortSpeed:Number = 0.4;
 	//
 	//
+	//////////////////////// SHOWALL
+	//
+	//
 	/*==============doSort==============*/
+	public static function doSort (doAnimate:Boolean)
+	{
+		if (functionBar.searchIn == "plugins")
+		{
+			switch (functionBar.searchType)
+			{
+			case "normal" :
+				stageObject.theStage.createNormalSort ();
+				normalSort (doAnimate);
+				break;
+			case "group" :
+				stageObject.theStage.createGroupSort ();
+				groupSort (doAnimate);
+				break;
+			case "enable" :
+				stageObject.theStage.createEnableSort ();
+				enableSort (doAnimate);
+				break;
+			case "search" :
+				searchSort (_level0.optionsPane.pane.input_txt.text, _level0.optionsPane.pane.input_txt.length, doAnimate);
+				break;
+			}
+		}
+		else
+		{
+		}
+	}
 	/*==============enableSort==============*/
+	public static function enableSort (doAnimate:Boolean):Void
+	{
+		arrays.createEnabledSort ();
+		stageObject.theStage.createEnableSort ();
+		horizGridNumberYesEnable = 0;
+		vertGridNumberYesEnable = 0;
+		horizGridNumberNoEnable = 0;
+		vertGridNumberNoEnable = 0;
+		if (functionBar.isAlphabetical == false)
+		{
+			for (var i:Number = 0; i < pluginArray.length; i++)
+			{
+				pluginObject[pluginArray[i]].createEnableGrid ();
+			}
+		}
+		else
+		{
+			for (var i:Number = 0; i < pluginArrayAlpha.length; i++)
+			{
+				pluginObject[pluginArrayAlpha[i]].createEnableGrid ();
+			}
+		}
+		speed = sortSpeed;
+		for (var i:Number = 0; i < pluginArray.length; i++)
+		{
+			pluginObject[pluginArray[i]].isDone = false;
+			if (doAnimate == false)
+			{
+				pluginObject[pluginArray[i]].doItNow = true;
+			}
+			if (pluginObject[pluginArray[i]].isEnabled == true)
+			{
+				pluginObject[pluginArray[i]].changeAction ("enableYesSort");
+			}
+			else
+			{
+				pluginObject[pluginArray[i]].changeAction ("enableNoSort");
+			}
+		}
+	}
+	/*==============groupSort==============*/
+	public static function groupSort (doAnimate:Boolean):Void
+	{
+		var thePlugins:Array = new Array ();
+		for (var i:Number = 0; i < groupArray.length; i++)
+		{
+			groupOrderArray[i] = 0;
+		}
+		stageObject.theStage.createGroupSort ();
+		speed = sortSpeed;
+		if (functionBar.isAlphabetical == false)
+		{
+			arrays.createEnabledSort ();
+			thePlugins = pluginArrayAlphaEnabled;
+		}
+		else
+		{
+			thePlugins = pluginArrayAlpha;
+		}
+		for (var i:Number = 0; i < thePlugins.length; i++)
+		{
+			pluginObject[thePlugins[i]].isDone = false;
+			if (doAnimate == false)
+			{
+				pluginObject[thePlugins[i]].doItNow = true;
+			}
+			pluginObject[thePlugins[i]].createGroupGrid ();
+			pluginObject[thePlugins[i]].changeAction ("groupSort");
+		}
+	}
+	/*==============hideSort==============*/
+	public static function hideSort (group:Number):Void
+	{
+		for (var i:Number = 0; i < pluginArray.length; i++)
+		{
+			pluginObject[pluginArray[i]].changeAction ("dissapear");
+		}
+	}
+	/*==============searchSort==============*/
+	public static function searchSort (txt:String, num:Number, doAnimate:Boolean):Void
+	{
+		var thePlugins:Array = new Array ();
+		horizGridNumberYesEnable = 0;
+		vertGridNumberYesEnable = 0;
+		horizGridNumberNoEnable = 0;
+		vertGridNumberNoEnable = 0;
+		horizGridNumber = 0;
+		vertGridNumber = 0;
+		for (var i:Number = 0; i < groupArray.length; i++)
+		{
+			groupOrderArray[i] = 0;
+		}
+		speed = sortSpeed;
+		if (functionBar.isAlphabetical == false)
+		{
+			arrays.createEnabledSort ();
+			thePlugins = pluginArrayAlphaEnabled;
+		}
+		else
+		{
+			thePlugins = pluginArrayAlpha;
+		}
+		switch (functionBar.tempType)
+		{
+		case "normal" :
+			stageObject.theStage.createNormalSort ();
+			for (var i:Number = 0; i < thePlugins.length; i++)
+			{
+				var subs:String = thePlugins[i].substr (0, num);
+				if (subs.toLowerCase () == txt.toLowerCase ())
+				{
+					pluginObject[thePlugins[i]].isDone = false;
+					pluginObject[thePlugins[i]].createNormalGrid ();
+					if (doAnimate == false)
+					{
+						pluginObject[thePlugins[i]].doItNow = true;
+					}
+					pluginObject[thePlugins[i]].changeAction ("normalSort");
+				}
+				else
+				{
+					pluginObject[thePlugins[i]].changeAction ("dissapear");
+				}
+			}
+			break;
+		case "group" :
+			stageObject.theStage.createGroupSort ();
+			for (var i:Number = 0; i < thePlugins.length; i++)
+			{
+				var subs:String = thePlugins[i].substr (0, num);
+				if (subs.toLowerCase () == txt.toLowerCase ())
+				{
+					pluginObject[thePlugins[i]].isDone = false;
+					pluginObject[thePlugins[i]].createGroupGrid ();
+					if (doAnimate == false)
+					{
+						pluginObject[thePlugins[i]].doItNow = true;
+					}
+					pluginObject[thePlugins[i]].changeAction ("groupSort");
+				}
+				else
+				{
+					pluginObject[thePlugins[i]].changeAction ("dissapear");
+				}
+			}
+			break;
+		case "enable" :
+			stageObject.theStage.createEnableSort ();
+			for (var i:Number = 0; i < thePlugins.length; i++)
+			{
+				var subs:String = thePlugins[i].substr (0, num);
+				if (subs.toLowerCase () == txt.toLowerCase ())
+				{
+					pluginObject[thePlugins[i]].isDone = false;
+					pluginObject[thePlugins[i]].createEnableGrid ();
+					if (doAnimate == false)
+					{
+						pluginObject[thePlugins[i]].doItNow = true;
+					}
+					if (pluginObject[thePlugins[i]].isEnabled == true)
+					{
+						pluginObject[thePlugins[i]].changeAction ("enableYesSort");
+					}
+					else
+					{
+						pluginObject[thePlugins[i]].changeAction ("enableNoSort");
+					}
+				}
+				else
+				{
+					pluginObject[thePlugins[i]].changeAction ("dissapear");
+				}
+			}
+			break;
+		}
+	}
+	//
+	//
+	//////////////////////// GROUPS
+	//
+	//
+	/*==============normalSort==============*/
+	public static function normalSort (doAnimate:Boolean):Void
+	{
+		var thePlugins:Array = new Array ();
+		plugins.horizGridNumber = 0;
+		plugins.vertGridNumber = 0;
+		stageObject.theStage.createNormalSort ();
+		plugins.speed = sortSpeed;
+		for (var i:Number = 0; i < pluginArray.length; i++)
+		{
+			pluginObject[pluginArray[i]].isDone = false;
+			if (doAnimate == false)
+			{
+				pluginObject[pluginArray[i]].doItNow = true;
+			}
+			pluginObject[pluginArray[i]].createNormalGrid ();
+			pluginObject[pluginArray[i]].changeAction ("normalSort");
+		}
+	}
+	/*==============groupRollSort==============*/
+	public static function groupRollSort (group:Number):Void
+	{
+		plugins.speed = slowSpeed;
+		for (var j:Number = 0; j < pl_groupArray.length; j++)
+		{
+			if (groups.selectedGroup != j)
+			{
+				if (j == group)
+				{
+					for (var i:Number = 0;i<pl_groupArray[j].length;i++)
+					{
+						if (pluginObject[pl_groupArray[group][i]].action != "roll")
+						{
+							pluginObject[pl_groupArray[j][i]].container._x = menuObject[groupArray[j]].menux;
+							pluginObject[pl_groupArray[j][i]].container._y = topY;
+							pluginObject[pl_groupArray[j][i]].changeAction ("roll");
+						}
+					}
+				}
+				else
+				{
+					for (var i:Number = 0;i<pl_groupArray[j].length;i++)
+					{
+						pluginObject[pl_groupArray[j][i]].changeAction("dissapear");
+					}
+				}
+			}
+		}
+	}
 	/*==============groupPressSort==============*/
 	public static function groupPressSort (group:Number):Void
 	{
@@ -57,126 +317,4 @@ class base.sorter extends base.base
 			}
 		}
 	}
-	/*==============groupRollSort==============*/
-	public static function groupRollSort (group:Number):Void
-	{
-		plugins.speed = slowSpeed;
-		for (var j:Number = 0; j < pl_groupArray.length; j++)
-		{
-			if (groups.selectedGroup != j)
-			{
-				if (j == group)
-				{
-					for (var i:Number = 0;i<pl_groupArray[j].length;i++)
-					{
-						if (pluginObject[pl_groupArray[group][i]].action != "roll")
-						{
-							pluginObject[pl_groupArray[j][i]].container._x = menuObject[groupArray[j]].menux;
-							pluginObject[pl_groupArray[j][i]].container._y = topY;
-							pluginObject[pl_groupArray[j][i]].changeAction ("roll");
-						}
-					}
-				}
-				else
-				{
-					for (var i:Number = 0;i<pl_groupArray[j].length;i++)
-					{
-						pluginObject[pl_groupArray[j][i]].changeAction("dissapear");
-					}
-				}
-			}
-		}
-	}
-	/*==============groupSort==============*/
-	/*==============hideSort==============*/
-	/*==============normalSort==============*/
-	public static function normalSort (doAnimate:Boolean):Void
-	{
-		var thePlugins:Array = new Array ();
-		plugins.horizGridNumber = 0;
-		plugins.vertGridNumber = 0;
-		stageObject.theStage.createNormalSort ();
-		plugins.speed = sortSpeed;
-		for (var i:Number = 0; i < pluginArray.length; i++)
-		{
-			pluginObject[pluginArray[i]].isDone = false;
-			if (doAnimate == false)
-			{
-				pluginObject[pluginArray[i]].doItNow = true;
-			}
-			pluginObject[pluginArray[i]].createNormalGrid ();
-			pluginObject[pluginArray[i]].changeAction ("normalSort");
-		}
-	}
-	/*==============searchSort==============*/
-
 }
-/*
-
-/////////////////////////////////////////////MOVED FROM ARRAYS
-	static function createEnabledSort ()
-	{
-		pluginArrayAlphaEnabled = new Array ();
-		for (var i:Number = 0; i < groupArray.length; i++)
-		{
-			for (var j:Number = 0; j < pl_groupArray[i].length; j++)
-			{
-				pluginArrayAlphaEnabled.push (pl_groupArray[i][j]);
-			}
-		}
-		var array:Array = pluginArrayAlphaEnabled;
-		var enabledIndex:Number = 0;
-		var disabledIndex:Number = 0;
-		for (var i:Number = 0; i < array.length; i++)
-		{
-			var thePlugin:Object = arrays.pluginObject[array[i]];
-			var pluginName:String = array[i];
-			var pluginState:Boolean = arrays.pluginObject[array.splice (i, 1)].isEnabled;
-			if (pluginState == true)
-			{
-				array.splice (enabledIndex, 0, pluginName);
-				enabledIndex++;
-			}
-			else
-			{
-				array.splice (enabledIndex + disabledIndex, 0, pluginName);
-				disabledIndex++;
-			}
-		}
-	}
-	static function createGroupEnabledSort ()
-	{
-		pluginNormalArray = new Array ();
-		for (var j:Number = 0; j < groupArray.length; j++)
-		{
-			var pluginGroupArray:Array = new Array ();
-			for (var i:Number = 0; i < pl_groupArray[j].length; i++)
-			{
-				pluginGroupArray.push (pl_groupArray[j][i]);
-			}
-			var array:Array = pluginGroupArray;
-			var enabledIndex:Number = 0;
-			var disabledIndex:Number = 0;
-			for (var i:Number = 0; i < array.length; i++)
-			{
-				var thePlugin:Object = arrays.pluginObject[array[i]];
-				var pluginName:String = array[i];
-				var pluginState:Boolean = arrays.pluginObject[array.splice (i, 1)].isEnabled;
-				if (pluginState == true)
-				{
-					array.splice (enabledIndex, 0, pluginName);
-					enabledIndex++;
-				}
-				else
-				{
-					array.splice (enabledIndex + disabledIndex, 0, pluginName);
-					disabledIndex++;
-				}
-			}
-			for (var z:Number = 0; z < array.length; z++)
-			{
-				pluginNormalArray.push (array[z]);
-			}
-		}
-	}
-	*/
