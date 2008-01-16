@@ -72,6 +72,7 @@ class objects.plugins extends base.base
 	static var gotInformation:Array = new Array();
 	public var swappedContainer:String;
 	public var firstContainerSwitch:Boolean = true;
+	public var groupSortScrollbar:Boolean = false;
 	//
 	//
 	//
@@ -84,6 +85,12 @@ class objects.plugins extends base.base
 		createGroupGrid ();
 		groupNum = __groupNum;
 		groupName = groupArray[groupNum];
+		var requiredHeight:Number = stageHeight - (3 * gap) - funcBarHeight - stage.panelHeight;
+		var actualHeight:Number = (pl_groupArray[groupNum].length+1)*pluginHeight;
+		if (requiredHeight < actualHeight)
+		{
+			groupSortScrollbar = true;
+		}
 		createNormalGrid ();
 	}
 	function createGroupGrid ()
@@ -262,7 +269,7 @@ class objects.plugins extends base.base
 			}
 			else
 			{
-				
+
 				arrays.communicate.activateService("enableDisablePlugin", 2, nextPlugin.iconName, nextPlugin.isEnabled);
 				if (nextPlugin.isEnabled == true)
 				{

@@ -243,7 +243,7 @@ class ui.shapes extends base.base
 			//	// Scroller
 			//
 		case "scroller" :
-			//scroller, beingMoved, top, right, scrollerHeight, gripHeight, scollerWidth, settingsHeight, settingsAreaHeight, tracer
+			//scroller, beingMoved, top, right, scrollerHeight, gripHeight, scollerWidth, actualHeight, maskHeight, doReverse
 			var scroller:MovieClip = theParams[0];
 			var beingMoved:MovieClip = theParams[1];
 			var top:Number = theParams[2];
@@ -251,9 +251,9 @@ class ui.shapes extends base.base
 			var scrollerHeight:Number = theParams[4];
 			var gripHeight:Number = theParams[5];
 			var scrollerWidth:Number = theParams[6];
-			var settingsHeight:Number = theParams[7];
-			var settingsAreaHeight:Number = theParams[8];
-			var tracer:Boolean = theParams[9];
+			var actualHeight:Number = theParams[7];
+			var maskHeight:Number = theParams[8];
+			var doReverse:Boolean = theParams[9];
 			//
 			//begin the drawing
 			//
@@ -267,13 +267,13 @@ class ui.shapes extends base.base
 				if (this.hitTest (_root._xmouse, _root._ymouse))
 				{
 					this.startDrag (false, 0, 0, 0, scrollerHeight - gripHeight);
-					if (tracer)
+					if (doReverse)
 					{
-						shapes.interval = setInterval (shapes.scrollerMoveTrace, 10, this, beingMoved, scrollerHeight, gripHeight, settingsAreaHeight, settingsHeight);
+						shapes.interval = setInterval (shapes.scrollerMoveReverse, 10, this, beingMoved, scrollerHeight, gripHeight, maskHeight, actualHeight);
 					}
 					else
 					{
-						shapes.interval = setInterval (shapes.scrollerMove, 10, this, beingMoved, scrollerHeight, gripHeight);
+						shapes.interval = setInterval (shapes.scrollerMove, 10, this, beingMoved, scrollerHeight, gripHeight, maskHeight, actualHeight);
 					}
 				}
 			};
@@ -290,13 +290,13 @@ class ui.shapes extends base.base
 	//////////////////////// SCROLLER
 	//
 	//
-	static function scrollerMove (scroller:MovieClip, beingMoved:MovieClip, scrollerHeight:Number, gripHeight:Number)
+	static function scrollerMove (scroller:MovieClip, beingMoved:MovieClip, scrollerHeight:Number, gripHeight:Number, maskHeight:Number, actualHeight:Number)
 	{
-		beingMoved._y = -(settingsAreaHeight - settingsHeight) * (scroller._y / (scrollerHeight - gripHeight));
+		beingMoved._y = -(maskHeight - actualHeight) * (scroller._y / (scrollerHeight - gripHeight));
 	}
-	static function scrollerMoveTrace (scroller:MovieClip, beingMoved:MovieClip, scrollerHeight:Number, gripHeight:Number, settingsAreaHeight:Number, settingsHeight:Number)
+	static function scrollerMoveReverse (scroller:MovieClip, beingMoved:MovieClip, scrollerHeight:Number, gripHeight:Number, settingsAreaHeight:Number, settingsHeight:Number)
 	{
-		beingMoved._y = 5 + (settingsAreaHeight - settingsHeight) * (scroller._y / (scrollerHeight - gripHeight));
+		beingMoved._y = (settingsAreaHeight - settingsHeight) * (scroller._y / (scrollerHeight - gripHeight));
 	}
 	//
 	//

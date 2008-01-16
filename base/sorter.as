@@ -108,13 +108,21 @@ class base.sorter extends objects.plugins
 		}
 		for (var i:Number = 0; i < thePlugins.length; i++)
 		{
-			pluginObject[thePlugins[i]].isDone = false;
+			var nextPlugin:Object = pluginObject[thePlugins[i]]
+			nextPlugin.isDone = false;
 			if (doAnimate == false)
 			{
-				pluginObject[thePlugins[i]].doItNow = true;
+				nextPlugin.doItNow = true;
 			}
-			pluginObject[thePlugins[i]].createGroupGrid ();
-			pluginObject[thePlugins[i]].changeAction ("groupSort");
+			nextPlugin.createGroupGrid ();
+			if (nextPlugin.groupSortScrollbar)
+			{
+				nextPlugin.changeAction ("groupSortWithSrollBar");
+			}
+			else
+			{
+				nextPlugin.changeAction ("groupSort");
+			}
 		}
 	}
 	/*==============hideSort==============*/

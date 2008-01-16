@@ -129,9 +129,14 @@ class ui.stage extends base.base
 				{
 					container.createEmptyMovieClip ("sorterGroupsMask"+i, sortDepth + 2+i);
 					container.createEmptyMovieClip ("sorter_" + groupArray[i], sortDepth + 3 + i+groupArray.length);
+					container.createEmptyMovieClip ("groupSortScroller_"+groupArray[i], sortDepth + 4 + i + groupArray.length*2);
+						
+						container["groupSortScroller_"+groupArray[i]].createEmptyMovieClip("base", 1);
+						container["groupSortScroller_"+groupArray[i]].createEmptyMovieClip("grip", 2);
+
 					container["normal_"+groupArray[i]].setMask(container["sorterGroupsMask"+i]);
 				}
-				container.createEmptyMovieClip("sortItems", sortDepth + groupArray.length*2 + 4);
+				container.createEmptyMovieClip("sortItems", sortDepth + groupArray.length*3 + 5);
 
 					container.sortItems.createEmptyMovieClip("topBar", 1);
 
@@ -192,6 +197,9 @@ class ui.stage extends base.base
 		for (var i:Number = 0; i< groupArray.length;i++)
 		{
 			container.sortItems.topBar["groupTitle" + i].text = "";
+			container["groupSortScroller_"+groupArray[i]].base.clear();
+			container["groupSortScroller_"+groupArray[i]].grip.clear();
+			container["normal_"+groupArray[i]]._y = 0;
 		}
 		container.sortItems.vertBars.clear();
 	//	container.sortItems.optionsPane.clear();
@@ -292,6 +300,21 @@ class ui.stage extends base.base
 		shapes.createShape ("line", container.sortItems.topBar, funcBarX, topY + topHeight, funcBarX + funcBarWidth, topY + topHeight, 1, black);
 		for (var i:Number= 0; i < groupArray.length; i++)
 		{
+			var requiredHeight:Number = stageHeight - (3 * gap) - funcBarHeight - panelHeight - topHeight;
+			var actualHeight:Number = menuObject[groupArray[i]].menuheight;;
+			if (requiredHeight < actualHeight)
+			{
+				//create a scroller
+				var scroller:MovieClip = container["groupSortScroller_"+groupArray[i]];
+				var beingMoved:MovieClip = container["normal_"+groupArray[i]];
+				var scrollerWidth:Number = 10;
+				var theTop:Number = topY + topHeight + groups.gap
+				var theRight:Number = funcBarX+groups.groupSections*(i+1)-groups.gap;
+				var scrollerHeight:Number = requiredHeight-groups.gap;
+				var gripHeight:Number = (requiredHeight/actualHeight)*scrollerHeight;
+				
+				shapes.createControl("scroller", scroller, beingMoved, theTop, theRight, scrollerHeight, gripHeight, scrollerWidth, actualHeight, requiredHeight, true);
+			}
 			shapes.createShape ("line", container.sortItems.vertBars, funcBarX + groups.groupSections * i, topY + gap, funcBarX + groups.groupSections * i, topY + gap + stageHeight - (3 * gap) - funcBarHeight - panelHeight, 1, black);
 			container.sortItems.topBar["groupTitle" + i].text = groupArray[i];
 			container.sortItems.topBar["groupTitle" + i]._x = funcBarX + groups.groupSections * i;
@@ -316,6 +339,7 @@ class ui.stage extends base.base
 		var theBase:MovieClip = container.settingsArea
 		theBase.theSettings.createTextField ("test", 10, settingsX, settingsY + tabHeight + (2 * gap), settingsWidth, 500);
 		theBase.theSettings.test.setNewTextFormat (settingsFormat);
+		theBase.theSettings.test.selectable = false;
 		//
 		//
 		tabNameArray = plugins.currentPlugin.optionsTabsArray;
