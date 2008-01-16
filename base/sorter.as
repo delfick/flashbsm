@@ -38,7 +38,7 @@ class base.sorter extends base.base
 	/*==============groupRollOutSort==============*/
 	public static function groupRollOutSort (group:Number):Void
 	{
-		plugins.speed = fastSpeed;		
+		plugins.speed = fastSpeed;
 		for (var j:Number = 0; j < pl_groupArray.length; j++)
 		{
 			for (var i:Number = 0; i < pl_groupArray[j].length; i++)
@@ -63,11 +63,11 @@ class base.sorter extends base.base
 		plugins.speed = slowSpeed;
 		for (var j:Number = 0; j < pl_groupArray.length; j++)
 		{
-			for (var i:Number = 0; i < pl_groupArray[j].length; i++)
+			if (groups.selectedGroup != j)
 			{
-				if (pluginObject[pl_groupArray[j][i]].action != "pressed")
+				if (j == group)
 				{
-					if (j == group)
+					for (var i:Number = 0;i<pl_groupArray[j].length;i++)
 					{
 						if (pluginObject[pl_groupArray[group][i]].action != "roll")
 						{
@@ -76,9 +76,12 @@ class base.sorter extends base.base
 							pluginObject[pl_groupArray[j][i]].changeAction ("roll");
 						}
 					}
-					else
+				}
+				else
+				{
+					for (var i:Number = 0;i<pl_groupArray[j].length;i++)
 					{
-						pluginObject[pl_groupArray[j][i]].changeAction ("dissapear");
+						pluginObject[pl_groupArray[j][i]].changeAction("dissapear");
 					}
 				}
 			}

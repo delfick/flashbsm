@@ -5,7 +5,7 @@ import mx.utils.Delegate;
 class ui.windows extends base.base
 {
 	//common variables to all classes
-	static var baseDepth:Number = 8000;
+	static var baseDepth:Number = 18000;
 	private var canvasDepth:Number = 10;
 	static var neededDepths:Number = 200;
 	private var container:MovieClip;

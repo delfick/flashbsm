@@ -29,11 +29,15 @@ class ui.funcbar.showAllBtn extends objects.functionBar
 		{
 			pluginObject[pl_groupArray[i][0]].switchContainer("normal");
 		}
-		active = false;
+		
 		arrays.stageObject.theStage.destroyOptionsMask ("normal");
 		reColour (base.white, 20, base.black);
-		plugins.pluginPress (plugins.currentPlugin.groupNum, plugins.currentPlugin.pluginNum, plugins.currentPlugin.pluginIndex);
+		if (active)
+		{
+			plugins.pluginPress (plugins.currentPlugin.groupNum, plugins.currentPlugin.pluginNum, plugins.currentPlugin.pluginIndex);
+		}
 		arrays.stageObject.theStage.createNormalStage ();
 		groups.showGroups ();
+		active = false;
 	}
 }

@@ -177,8 +177,8 @@ class objects.plugins extends base.base
 			case "sorter" :
 				container._parent.swapDepths(_root["sorter_"+groupName]);
 				break;
-			case "menu" :
-				container._parent.swapDepths(_root["menu_"+groupName]);
+			case "groupRoll" :
+				container._parent.swapDepths(_root["groupRoll_"+groupName]);
 				break;
 		}
 		firstContainerSwitch = false;
@@ -416,36 +416,39 @@ class objects.plugins extends base.base
 	//
 	static function pluginPress (group:Number, plugin:Number, pluginIndex:Number)
 	{
-
+		pluginObject[pl_groupArray[group][0]].switchContainer("normal");
+		groups.selectedGroup = group;
+		sorter.groupPressSort (group);
+		groupObject[groupArray[group]].reColour ("pressed");
+		menuObject[groupArray[group]].changeAction ("dissapear");
+		plugins.chosenTab = 0;
+		if (funcBarObject.ShowAll.active == true)
+		{
+			funcBarObject.ShowAll.active = false;
+			funcBarObject.ShowAll.inactivePress ();
+		}
+		//
 		for (var i:Number = 0; i < pluginArray.length; i++)
 		{
-			var nextPlugin:Object = pluginObject[pluginArrayAlpha[i]];
+			var nextPlugin:Object = pluginObject[pluginArray[i]];
 			if (nextPlugin.pluginIndex == pluginIndex)
 			{
-				selectedPlugin = group;
-				currentPlugin = nextPlugin;;
-				stage.fillOutPluginDescription();
-				var theName:String = currentPlugin.Name.toLowerCase ();
-				nextPlugin.isSelected = true;
-				nextPlugin.reColour ("selected");
-				menuObject[groupArray[group]].changeAction ("dissapear");
-				groupObject[groupArray[group]].reColour ("pressed");
-				groups.selectedGroup = group;
-				sorter.groupPressSort (group);
-				plugins.chosenTab = 0;
+				currentPlugin = nextPlugin;
 				stageObject.theStage.createSettingsArea ();
-
-				if (funcBarObject.ShowAll.active == true)
-				{
-					funcBarObject.ShowAll.inactivePress ();
-				}
+				stage.fillOutPluginDescription();
+				nextPlugin.isSelected = true;
+				nextPlugin.reColour ("selected");				
 			}
 			else
 			{
 				nextPlugin.isSelected = false;
 				nextPlugin.reColour ("normal");
 			}
-			if (nextPlugin.groupNum != group)
+		}
+		//
+		for (var i:Number = 0;i<groupArray.length;i++)
+		{
+			if (i != group)
 			{
 				groupObject[groupArray[i]].reColour ("rollOut");
 				menuObject[groupArray[i]].changeAction ("dissapear");

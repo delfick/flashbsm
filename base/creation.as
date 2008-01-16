@@ -54,7 +54,7 @@ class base.creation extends base.base
 		reportProgress("adding plugin holders with a depth higher than the menus");
 		for (var i:Number=0;i<groupArray.length;i++)
 		{
-			_root.createEmptyMovieClip ("menu_" + groupArray[i], depth + i);
+			_root.createEmptyMovieClip ("groupRoll_" + groupArray[i], depth + i);
 		}
 		depth += groupArray.length;
 		//
@@ -88,7 +88,6 @@ class base.creation extends base.base
 	}
 	static function createClips()
 	{
-
 		//
 		//
 		reportProgress("adding windows");

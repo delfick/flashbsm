@@ -6,7 +6,7 @@ class objects.menus extends base.base
 {
 	//common variables to all classes
 	public var baseDepth:Number;
-	public var neededDepths:Number = 1;
+	public var neededDepths:Number = 2;
 	private var container:MovieClip;
 	private var interval:Number;
 	//properties
@@ -43,7 +43,7 @@ class objects.menus extends base.base
 	{
 		for (var i:Number= 0; i<groupArray.length; i++)
 		{
-			var meName:String = menuObject[groupArray[i]].theName;
+			var meName:String = groupArray[i];
 			var meDepth:Number = menuObject[groupArray[i]].baseDepth;
 			_root.createEmptyMovieClip("menu_"+meName, meDepth);
 			menuObject[groupArray[i]].container = _root["menu_"+meName];

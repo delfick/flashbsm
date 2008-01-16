@@ -1,4 +1,6 @@
 ﻿import objects.*;
+import ui.*;
+import base.*;
 import mx.utils.Delegate;
 class objects.theMouse extends base.base
 {
@@ -25,7 +27,7 @@ class objects.theMouse extends base.base
 	//
 	function checkLocation (type:String, left:Number, right:Number, top:Number, bottom:Number, num:Number)
 	{
-		//createRectangle(container, left, top, right-left, bottom-top, 2, 0,  blue,  blue, 26);
+		//shapes.createShape("rectangle", container, left, top, right-left, bottom-top, 0,  blue, 26, false, true, 2, blue);
 		if (_root._ymouse < top)
 		{
 			stopChecking ();
@@ -59,7 +61,7 @@ class objects.theMouse extends base.base
 			{
 				menuObject[groupArray[num]].changeAction ("up");
 				groupObject[groupArray[num]].reColour ("rollOut");
-				//plugins.groupRollOutSort (num);
+				sorter.groupRollOutSort (num);
 			}
 			else
 			{
@@ -80,7 +82,7 @@ class objects.theMouse extends base.base
 			{
 				menuObject[groupArray[num]].changeAction ("up");
 				groupObject[groupArray[num]].reColour ("rollOut");
-			//	plugins.groupRollOutSort (num);
+				sorter.groupRollOutSort (num);
 			}
 			else
 			{
@@ -100,7 +102,7 @@ class objects.theMouse extends base.base
 			{
 				groupObject[groupArray[num]].reColour ("rollOut");
 				menuObject[groupArray[num]].changeAction ("up");
-			//	plugins.groupRollOutSort (num);
+				sorter.groupRollOutSort (num);
 			}
 			else
 			{
@@ -109,7 +111,7 @@ class objects.theMouse extends base.base
 			break;
 		case "overMenu" :
 			menuObject[groupArray[num]].changeAction ("up");
-		//	plugins.groupRollOutSort (num);
+			sorter.groupRollOutSort (num);
 			break;
 		}
 	}
@@ -136,7 +138,7 @@ class objects.theMouse extends base.base
 			break;
 		case "overMenu" :
 			menuObject[groupArray[num]].changeAction ("up");
-		//	plugins.groupRollOutSort (num);
+			sorter.groupRollOutSort (num);
 			break;
 		}
 	}
