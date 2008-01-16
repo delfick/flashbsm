@@ -448,10 +448,24 @@ class objects.plugins extends base.base
 		groupObject[groupArray[group]].reColour ("pressed");
 		menuObject[groupArray[group]].changeAction ("dissapear");
 		plugins.chosenTab = 0;
+		//
 		if (funcBarObject.ShowAll.active == true)
 		{
 			funcBarObject.ShowAll.active = false;
 			funcBarObject.ShowAll.inactivePress ();
+		}
+		//
+		if (sideHeight < menuObject[groupArray[groups.selectedGroup]].menuheight)
+		{
+			sideWidth = 130;
+			stage.setVariables();
+			stageObject.theStage.createNormalStage();
+		}
+		else
+		{
+			sideWidth = 110;
+			stage.setVariables();
+			stageObject.theStage.createNormalStage();
 		}
 		//
 		for (var i:Number = 0; i < pluginArray.length; i++)

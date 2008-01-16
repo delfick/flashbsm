@@ -22,6 +22,10 @@ class ui.stage extends base.base
 	//
 	public function stage (__container:MovieClip)
 	{
+		setVariables();
+	}
+	static public function setVariables()
+	{
 		container = _root;
 		//
 		//stageDimensions
@@ -97,7 +101,8 @@ class ui.stage extends base.base
 
 				container.createEmptyMovieClip ("pluginHeader", baseDepth + 4);
 
-					container.pluginHeader.createTextField("pluginDescription", 1, pluginDescriptionX + gap + descriptionHeight, pluginDescriptionY, pluginDescriptionWidth, pluginDescriptionHeight);
+					container.pluginHeader.createTextField("pluginDescription", 1, 0, pluginDescriptionY, pluginDescriptionWidth, pluginDescriptionHeight);
+					container.pluginHeader.pluginDescription._x = pluginDescriptionX + gap + descriptionHeight;
 					container.pluginHeader.createEmptyMovieClip("pluginDescriptionImage", 2);
 
 				container.createEmptyMovieClip ("theFuncBar", baseDepth +5);
@@ -130,7 +135,7 @@ class ui.stage extends base.base
 					container.createEmptyMovieClip ("sorterGroupsMask"+i, sortDepth + 2+i);
 					container.createEmptyMovieClip ("sorter_" + groupArray[i], sortDepth + 3 + i+groupArray.length);
 					container.createEmptyMovieClip ("groupSortScroller_"+groupArray[i], sortDepth + 4 + i + groupArray.length*2);
-						
+
 						container["groupSortScroller_"+groupArray[i]].createEmptyMovieClip("base", 1);
 						container["groupSortScroller_"+groupArray[i]].createEmptyMovieClip("grip", 2);
 
@@ -181,7 +186,7 @@ class ui.stage extends base.base
 	//	container.theFuncBar.clear();
 		container.theHelper.clear();
 	//	container.settingsArea.clear();
-	//	container.settingsArea.theSettings.clear();
+		container.settingsArea.theSettings.clear();
 	//	container.settingsArea.settingsMask.clear();
 	//	container.settingsArea.settingsScroller.clear();
 	//	container.settingsArea.settingsScroller.base.clear();
@@ -199,6 +204,8 @@ class ui.stage extends base.base
 			container.sortItems.topBar["groupTitle" + i].text = "";
 			container["groupSortScroller_"+groupArray[i]].base.clear();
 			container["groupSortScroller_"+groupArray[i]].grip.clear();
+			_root["normalScroller_"+groupArray[i]].base.clear();
+			_root["normalScroller_"+groupArray[i]].grip.clear();
 			container["normal_"+groupArray[i]]._y = 0;
 		}
 		container.sortItems.vertBars.clear();
@@ -215,6 +222,7 @@ class ui.stage extends base.base
 				{
 					shapes.createShape ("rectangle", container["sorterGroupsMask"+i], 0, 0, Stage.width, Stage.height, 0, orange, 50, false, false);
 				}
+				shapes.createShape ("rectangle", container["sorterGroupsMask"+groups.selectedGroup], 0, sideY, Stage.width, Stage.height-sideY, 0, orange, 50, false, false);
 				break;
 			case "groupSort" :
 				for (var i:Number = 0;i<groupArray.length;i++)
@@ -257,12 +265,30 @@ class ui.stage extends base.base
 		container.pluginHeader.pluginDescription.textColor = black;
 		container.pluginHeader.pluginDescription.setNewTextFormat (descriptionFormat);
 		container.pluginHeader.pluginDescription.selectable = false;
+
+			//create the scroller
+			var actualHeight:Number = menuObject[groupArray[groups.selectedGroup]].menuheight;
+			if (sideHeight < actualHeight)
+			{
+				//create a scroller
+				var scroller:MovieClip = container["normalScroller_"+groupArray[groups.selectedGroup]];
+				var beingMoved:MovieClip = container["normal_"+groupArray[groups.selectedGroup]];
+				var scrollerWidth:Number = 10;
+				var theTop:Number = sideY+groups.gap;
+				var theRight:Number = sideX+plugins.pluginWidth + scrollerWidth*1.3;
+				var scrollerHeight:Number = sideHeight-groups.gap*2;
+				var gripHeight:Number = (sideHeight/actualHeight)*scrollerHeight;
+
+				shapes.createControl("scroller", scroller, beingMoved, theTop, theRight, scrollerHeight, gripHeight, scrollerWidth, actualHeight, sideHeight, true);
+			}
+
 		base.trace("normal stage made", true, true, 14);
 	}
 	//
 	//
 	public static function fillOutPluginDescription()
 	{
+		container.pluginHeader.pluginDescription._x = pluginDescriptionX + gap + descriptionHeight;
 		iconLoad.load ("images/icons/plugin-" + plugins.currentPlugin.iconName + ".png");
 		iconLoad.onLoad = function (success:Boolean)
 		{
@@ -301,7 +327,7 @@ class ui.stage extends base.base
 		for (var i:Number= 0; i < groupArray.length; i++)
 		{
 			var requiredHeight:Number = stageHeight - (3 * gap) - funcBarHeight - panelHeight - topHeight;
-			var actualHeight:Number = menuObject[groupArray[i]].menuheight;;
+			var actualHeight:Number = menuObject[groupArray[i]].menuheight;
 			if (requiredHeight < actualHeight)
 			{
 				//create a scroller
@@ -312,7 +338,7 @@ class ui.stage extends base.base
 				var theRight:Number = funcBarX+groups.groupSections*(i+1)-groups.gap;
 				var scrollerHeight:Number = requiredHeight-groups.gap;
 				var gripHeight:Number = (requiredHeight/actualHeight)*scrollerHeight;
-				
+
 				shapes.createControl("scroller", scroller, beingMoved, theTop, theRight, scrollerHeight, gripHeight, scrollerWidth, actualHeight, requiredHeight, true);
 			}
 			shapes.createShape ("line", container.sortItems.vertBars, funcBarX + groups.groupSections * i, topY + gap, funcBarX + groups.groupSections * i, topY + gap + stageHeight - (3 * gap) - funcBarHeight - panelHeight, 1, black);

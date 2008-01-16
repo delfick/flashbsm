@@ -26,15 +26,17 @@ class base.creation extends base.base
 		}
 		//
 		//
-		reportProgress("adding plugin holders with a normal depth");
+		reportProgress("adding plugin holders with a normal depth and groupSort");
 		for (var i:Number=0;i<groupArray.length;i++)
 		{
 			_root.createEmptyMovieClip ("normal_" + groupArray[i], depth + i);
+			_root.createEmptyMovieClip ("normalScroller_"+groupArray[i], depth + groupArray.length + i);
+			_root["normalScroller_"+groupArray[i]].createEmptyMovieClip("base", 1);
+			_root["normalScroller_"+groupArray[i]].createEmptyMovieClip("grip", 2);
 		}
-		depth += groupArray.length
 		//
 		//
-		reportProgress("adding all plugin");
+		reportProgress("adding all plugins");
 		for (var i:Number= 0; i < pl_groupArray.length; i++)
 		{
 			for (var j:Number= 0; j < pl_groupArray[i].length; j++)
