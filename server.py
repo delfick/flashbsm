@@ -53,17 +53,16 @@ def getActivePluginList():
 	return data
 	
 def enableDisablePlugin(plugin, status) :
-	print context.Plugins[plugin[0]].Enabled
-	if status == True:
-		context.Plugins[plugin[0]].Enabled = False
-		return context.Plugins[plugin[0]].Enabled
-	else:
-		context.Plugins[plugin[0]].Enabled = True
-		return context.Plugins[plugin[0]].Enabled
-		
-		
+	if context.Plugins[plugin[0].Enabled == status:
+		return "wrongStatus"
+	else
+		if status == True:
+			context.Plugins[plugin[0]].Enabled = False
+			return context.Plugins[plugin[0]].Enabled
+		else:
+			context.Plugins[plugin[0]].Enabled = True
+			return context.Plugins[plugin[0]].Enabled
 
-	
 services = {
 	'getInfo.getNumberOfPlugins': getNumberOfPlugins,
 	'getInfo.getPluginNames' : getPluginNames,
