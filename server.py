@@ -53,9 +53,9 @@ def getActivePluginList():
 	return data
 	
 def enableDisablePlugin(plugin, status) :
-	if context.Plugins[plugin[0].Enabled == status:
+	if context.Plugins[plugin[0]].Enabled != status:
 		return "wrongStatus"
-	else
+	else:
 		if status == True:
 			context.Plugins[plugin[0]].Enabled = False
 			return context.Plugins[plugin[0]].Enabled

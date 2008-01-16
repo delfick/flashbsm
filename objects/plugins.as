@@ -253,44 +253,59 @@ class objects.plugins extends base.base
 		container.checkBox.onRelease = function ()
 		{
 
-			var nextPlugin:Object = arrays.pluginObject[arrays.pluginArrayAlpha[pluginIndex]];
-			arrays.communicate.activateService("enableDisablePlugin",2, nextPlugin.iconName, nextPlugin.isEnabled);
-			arrays.listener.gotData = function()
+			var nextPlugin:Object = arrays.pluginObject[arrays.pluginArray[pluginIndex]];
+			base.trace(nextPlugin.iconName);
+			if (nextPlugin.iconName.toString() == "core")
 			{
-				plugins.theWindow.editItem("text", "info", "It was"+(arrays.tempObject.toString() == true? " ":" not ")+"successful")
-				plugins.theWindow.openWindow(false);
-			}
-			if (nextPlugin.isEnabled == true)
-			{
-				if (nextPlugin.iconName.toString() == "core")
-				{
-					plugins.theWindow.editItem("text", "info", "You don't want to disable this plugin :p");
-				}
-				else
-				{
-					plugins.theWindow.editItem("text", "info", "Unloading " + nextPlugin.pluginName);
-				}
+				plugins.theWindow.editItem("text", "info", "You don't want to disable this plugin :p");
 				plugins.theWindow.openWindow(false);
 			}
 			else
 			{
-				plugins.theWindow.editItem("text", "info", "Loading " + nextPlugin.pluginName);
-				plugins.theWindow.openWindow(false);
-			}
-			if (nextPlugin.iconName.toString() != "core")
-			{
-				var thePlugin:Object = arrays.pluginObject[arrays.pl_groupArray[group][plugin]];
-				if (thePlugin.isEnabled == true)
+				
+				arrays.communicate.activateService("enableDisablePlugin", 2, nextPlugin.iconName, nextPlugin.isEnabled);
+				if (nextPlugin.isEnabled == true)
 				{
-					plugins.determineAbled (false, group, plugin);
+					plugins.theWindow.editItem("text", "info", "Attempting to disable the "+nextPlugin.pluginName+" plugin");
 				}
 				else
 				{
-					plugins.determineAbled (true, group, plugin);
+					plugins.theWindow.editItem("text", "info", "Attempting to enable the "+nextPlugin.pluginName+" plugin");
 				}
-				if (arrays.funcBarObject.ShowAll.active == true)
+				plugins.theWindow.openWindow(true);
+				arrays.listener.gotData = function()
 				{
-					sorter.doSort (true);
+					if (arrays.tempObject == "wrongStatus")
+					{
+						plugins.theWindow.editItem("text", "info", "It seems the plugin was already "+(nextPlugin.isEnabled==true?"enabled" : "disabled"));
+					}
+					else
+					{
+						if (nextPlugin.isEnabled == true)
+						{
+							plugins.theWindow.editItem("text", "info", "The action was"+(arrays.tempObject == false? " ":" not ")+"successful");
+						}
+						else
+						{
+							plugins.theWindow.editItem("text", "info", "The action was"+(arrays.tempObject == true? " ":" not ")+"successful");
+						}
+						plugins.theWindow.openWindow(false);
+						//
+						//
+						var thePlugin:Object = arrays.pluginObject[arrays.pl_groupArray[group][plugin]];
+						if (arrays.tempObject == true)
+						{
+							plugins.determineAbled (true, group, plugin);
+						}
+						else
+						{
+							plugins.determineAbled (false, group, plugin);
+						}
+						if (arrays.funcBarObject.ShowAll.active == true)
+						{
+							sorter.doSort (true);
+						}
+					}
 				}
 			}
 		};
