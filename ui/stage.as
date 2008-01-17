@@ -222,7 +222,7 @@ class ui.stage extends base.base
 				{
 					shapes.createShape ("rectangle", container["sorterGroupsMask"+i], 0, 0, Stage.width, Stage.height, 0, orange, 50, false, false);
 				}
-				shapes.createShape ("rectangle", container["sorterGroupsMask"+groups.selectedGroup], 0, sideY, Stage.width, Stage.height-sideY, 0, orange, 50, false, false);
+				shapes.createShape ("rectangle", container["sorterGroupsMask"+groups.selectedGroup], 0, sideY, Stage.width, sideHeight, 0, orange, 50, false, false);
 				break;
 			case "groupSort" :
 				for (var i:Number = 0;i<groupArray.length;i++)
