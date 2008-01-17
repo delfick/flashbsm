@@ -239,7 +239,7 @@ class ui.stage extends base.base
 			case "enableSort" :
 				for (var i:Number = 0;i<groupArray.length;i++)
 				{
-					shapes.createShape ("rectangle", container["sorterGroupsMask"+i], funcBarX, topY + topHeight, funcBarWidth, stageHeight - (2 * gap) - funcBarHeight - panelHeight - topHeight, 0, green, 100, false, true, 1, black);
+					shapes.createShape ("rectangle", container["sorterGroupsMask"+i], funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, blue, 100, false, true, 1, black);
 				}
 				break;
 		}
@@ -353,7 +353,6 @@ class ui.stage extends base.base
 		setPluginMask("enableSort");
 		shapes.createShape ("rectangle", container.sortCanvas.base, topX + 2.5, topY + 2.5, stageWidth - 6, funcBarY - gap, 0, white, 100, false, false);
 		shapes.createShape ("rectangle", container.sortCanvas.canvas, funcBarX, topY + gap, funcBarWidth, stageHeight - (3 * gap) - funcBarHeight - panelHeight, 0, white, 100, false, true, 1, black);
-		shapes.createShape ("line", container.sortItems.topBar, funcBarX, topY + topHeight, funcBarX + funcBarWidth, topY + topHeight, 1, black);
 	}
 	//
 	//

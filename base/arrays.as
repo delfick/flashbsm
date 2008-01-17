@@ -301,22 +301,22 @@ class base.arrays extends MovieClip
 				pluginArrayAlphaEnabled.push (pl_groupArray[i][j]);
 			}
 		}
-		var array:Array = pluginArrayAlphaEnabled;
+		var theArray:Array = pluginArrayAlphaEnabled;
 		var enabledIndex:Number = 0;
 		var disabledIndex:Number = 0;
-		for (var i:Number = 0; i < array.length; i++)
+		for (var i:Number = 0; i < theArray.length; i++)
 		{
-			var thePlugin:Object = arrays.pluginObject[array[i]];
-			var pluginName:String = array[i];
-			var pluginState:Boolean = arrays.pluginObject[array.splice (i, 1)].isEnabled;
+			var thePlugin:Object = pluginObject[theArray[i]];
+			var pluginName:String = theArray[i];
+			var pluginState:Boolean = pluginObject[theArray.splice (i, 1)].isEnabled;
 			if (pluginState == true)
 			{
-				array.splice (enabledIndex, 0, pluginName);
+				theArray.splice (enabledIndex, 0, pluginName);
 				enabledIndex++;
 			}
 			else
 			{
-				array.splice (enabledIndex + disabledIndex, 0, pluginName);
+				theArray.splice (enabledIndex + disabledIndex, 0, pluginName);
 				disabledIndex++;
 			}
 		}

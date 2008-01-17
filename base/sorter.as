@@ -21,6 +21,7 @@ class base.sorter extends objects.plugins
 	/*==============doSort==============*/
 	public static function doSort (doAnimate:Boolean)
 	{
+
 		if (functionBar.searchIn == "plugins")
 		{
 			switch (functionBar.searchType)
@@ -38,12 +39,40 @@ class base.sorter extends objects.plugins
 				enableSort (doAnimate);
 				break;
 			case "search" :
-				searchSort (_level0.optionsPane.pane.input_txt.text, _level0.optionsPane.pane.input_txt.length, doAnimate);
+				searchSort (_root.sortItems.optionsPane.pane.input_txt.text, _root.sortItems.optionsPane.pane.input_txt.length, doAnimate);
 				break;
 			}
 		}
 		else
 		{
+		}
+	}
+	/*==============normalSort==============*/
+	public static function normalSort (doAnimate:Boolean):Void
+	{
+		var thePlugins:Array = new Array ();
+		horizGridNumber = 0;
+		vertGridNumber = 0;
+		stageObject.theStage.createNormalSort ();
+		speed = sortSpeed;
+		if (functionBar.isAlphabetical == false)
+		{
+			arrays.createGroupEnabledSort ();
+			thePlugins = pluginArray;
+		}
+		else
+		{
+			thePlugins = pluginArrayAlpha;
+		}
+		for (var i:Number = 0; i < thePlugins.length; i++)
+		{
+			pluginObject[thePlugins[i]].isDone = false;
+			if (doAnimate == false)
+			{
+				pluginObject[thePlugins[i]].doItNow = true;
+			}
+			pluginObject[thePlugins[i]].createNormalGrid ();
+			pluginObject[thePlugins[i]].changeAction ("normalSort");
 		}
 	}
 	/*==============enableSort==============*/
@@ -96,7 +125,7 @@ class base.sorter extends objects.plugins
 			groupOrderArray[i] = 0;
 		}
 		stageObject.theStage.createGroupSort ();
-		speed = sortSpeed;
+		speed = fastSpeed;
 		if (functionBar.isAlphabetical == false)
 		{
 			arrays.createEnabledSort ();
@@ -159,76 +188,76 @@ class base.sorter extends objects.plugins
 		}
 		switch (functionBar.tempType)
 		{
-		case "normal" :
-			stageObject.theStage.createNormalSort ();
-			for (var i:Number = 0; i < thePlugins.length; i++)
-			{
-				var subs:String = thePlugins[i].substr (0, num);
-				if (subs.toLowerCase () == txt.toLowerCase ())
+			case "normal" :
+				stageObject.theStage.createNormalSort ();
+				for (var i:Number = 0; i < thePlugins.length; i++)
 				{
-					pluginObject[thePlugins[i]].isDone = false;
-					pluginObject[thePlugins[i]].createNormalGrid ();
-					if (doAnimate == false)
+					var subs:String = thePlugins[i].substr (0, num);
+					if (subs.toLowerCase () == txt.toLowerCase ())
 					{
-						pluginObject[thePlugins[i]].doItNow = true;
-					}
-					pluginObject[thePlugins[i]].changeAction ("normalSort");
-				}
-				else
-				{
-					pluginObject[thePlugins[i]].changeAction ("dissapear");
-				}
-			}
-			break;
-		case "group" :
-			stageObject.theStage.createGroupSort ();
-			for (var i:Number = 0; i < thePlugins.length; i++)
-			{
-				var subs:String = thePlugins[i].substr (0, num);
-				if (subs.toLowerCase () == txt.toLowerCase ())
-				{
-					pluginObject[thePlugins[i]].isDone = false;
-					pluginObject[thePlugins[i]].createGroupGrid ();
-					if (doAnimate == false)
-					{
-						pluginObject[thePlugins[i]].doItNow = true;
-					}
-					pluginObject[thePlugins[i]].changeAction ("groupSort");
-				}
-				else
-				{
-					pluginObject[thePlugins[i]].changeAction ("dissapear");
-				}
-			}
-			break;
-		case "enable" :
-			stageObject.theStage.createEnableSort ();
-			for (var i:Number = 0; i < thePlugins.length; i++)
-			{
-				var subs:String = thePlugins[i].substr (0, num);
-				if (subs.toLowerCase () == txt.toLowerCase ())
-				{
-					pluginObject[thePlugins[i]].isDone = false;
-					pluginObject[thePlugins[i]].createEnableGrid ();
-					if (doAnimate == false)
-					{
-						pluginObject[thePlugins[i]].doItNow = true;
-					}
-					if (pluginObject[thePlugins[i]].isEnabled == true)
-					{
-						pluginObject[thePlugins[i]].changeAction ("enableYesSort");
+						pluginObject[thePlugins[i]].isDone = false;
+						pluginObject[thePlugins[i]].createNormalGrid ();
+						if (doAnimate == false)
+						{
+							pluginObject[thePlugins[i]].doItNow = true;
+						}
+						pluginObject[thePlugins[i]].changeAction ("normalSort");
 					}
 					else
 					{
-						pluginObject[thePlugins[i]].changeAction ("enableNoSort");
+						pluginObject[thePlugins[i]].changeAction ("dissapear");
 					}
 				}
-				else
+				break;
+			case "group" :
+				stageObject.theStage.createGroupSort ();
+				for (var i:Number = 0; i < thePlugins.length; i++)
 				{
-					pluginObject[thePlugins[i]].changeAction ("dissapear");
+					var subs:String = thePlugins[i].substr (0, num);
+					if (subs.toLowerCase () == txt.toLowerCase ())
+					{
+						pluginObject[thePlugins[i]].isDone = false;
+						pluginObject[thePlugins[i]].createGroupGrid ();
+						if (doAnimate == false)
+						{
+							pluginObject[thePlugins[i]].doItNow = true;
+						}
+						pluginObject[thePlugins[i]].changeAction ("groupSort");
+					}
+					else
+					{
+						pluginObject[thePlugins[i]].changeAction ("dissapear");
+					}
 				}
-			}
-			break;
+				break;
+			case "enable" :
+				stageObject.theStage.createEnableSort ();
+				for (var i:Number = 0; i < thePlugins.length; i++)
+				{
+					var subs:String = thePlugins[i].substr (0, num);
+					if (subs.toLowerCase () == txt.toLowerCase ())
+					{
+						pluginObject[thePlugins[i]].isDone = false;
+						pluginObject[thePlugins[i]].createEnableGrid ();
+						if (doAnimate == false)
+						{
+							pluginObject[thePlugins[i]].doItNow = true;
+						}
+						if (pluginObject[thePlugins[i]].isEnabled == true)
+						{
+							pluginObject[thePlugins[i]].changeAction ("enableYesSort");
+						}
+						else
+						{
+							pluginObject[thePlugins[i]].changeAction ("enableNoSort");
+						}
+					}
+					else
+					{
+						pluginObject[thePlugins[i]].changeAction ("dissapear");
+					}
+				}
+				break;
 		}
 	}
 	//
@@ -236,25 +265,6 @@ class base.sorter extends objects.plugins
 	//////////////////////// GROUPS
 	//
 	//
-	/*==============normalSort==============*/
-	public static function normalSort (doAnimate:Boolean):Void
-	{
-		var thePlugins:Array = new Array ();
-		plugins.horizGridNumber = 0;
-		plugins.vertGridNumber = 0;
-		stageObject.theStage.createNormalSort ();
-		plugins.speed = sortSpeed;
-		for (var i:Number = 0; i < pluginArray.length; i++)
-		{
-			pluginObject[pluginArray[i]].isDone = false;
-			if (doAnimate == false)
-			{
-				pluginObject[pluginArray[i]].doItNow = true;
-			}
-			pluginObject[pluginArray[i]].createNormalGrid ();
-			pluginObject[pluginArray[i]].changeAction ("normalSort");
-		}
-	}
 	/*==============groupRollSort==============*/
 	public static function groupRollSort (group:Number):Void
 	{

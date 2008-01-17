@@ -112,6 +112,37 @@ class objects.plugins extends base.base
 			vertGridNumber++;
 		}
 	}
+	function createEnableGrid ()
+	{
+		if (isEnabled == true)
+		{
+			gridPosXEnable = horizGridNumberYesEnable;
+			gridPosYEnable = vertGridNumberYesEnable;
+			if (vertGridNumberYesEnable > vertGridSize)
+			{
+				vertGridNumberYesEnable = 0;
+				horizGridNumberYesEnable++;
+			}
+			else
+			{
+				vertGridNumberYesEnable++;
+			}
+		}
+		else
+		{
+			gridPosXEnable = horizGridNumberNoEnable;
+			gridPosYEnable = vertGridNumberNoEnable;
+			if (vertGridNumberNoEnable > vertGridSize)
+			{
+				vertGridNumberNoEnable = 0;
+				horizGridNumberNoEnable++;
+			}
+			else
+			{
+				vertGridNumberNoEnable++;
+			}
+		}
+	}
 	//
 	//
 	function setbaseDepth (__depth:Number):Number
@@ -282,6 +313,7 @@ class objects.plugins extends base.base
 				plugins.theWindow.openWindow(true);
 				arrays.listener.gotData = function()
 				{
+					base.trace("<<<>>>"+arrays.tempObject);
 					if (arrays.tempObject == "wrongStatus")
 					{
 						plugins.theWindow.editItem("text", "info", "It seems the plugin was already "+(nextPlugin.isEnabled==true?"enabled" : "disabled"));
@@ -292,9 +324,13 @@ class objects.plugins extends base.base
 						{
 							plugins.theWindow.editItem("text", "info", "The action was"+(arrays.tempObject == false? " ":" not ")+"successful");
 						}
-						else
+						else if (nextPlugin.isEnabled == false)
 						{
 							plugins.theWindow.editItem("text", "info", "The action was"+(arrays.tempObject == true? " ":" not ")+"successful");
+						}
+						else
+						{
+							plugins.theWindow.editItem("text", "info", "You sure compiz is running?");
 						}
 						plugins.theWindow.openWindow(false);
 						//
