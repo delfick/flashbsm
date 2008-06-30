@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ButtonBar xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="ui/components.*"
+	cornerRadius="10" itemClick="funcBarClick(event)" height="100%" horizontalGap="10"
+	width="320" buttonStyleName="funcBar">
+
+	<mx:Script>
+        <![CDATA[
+			import mx.events.ItemClickEvent;
+			import mx.core.Application;
+			import com.flashbsm.model.*;
+			import mx.managers.PopUpManager;
+			import mx.core.IFlexDisplayObject;
+			import com.flashbsm.views.*;
+
+			private function funcBarClick(event:ItemClickEvent):void
+			{
+				if (event.label == "Show All")
+				{
+					if (fbsmModel.getInstance().currentActivity == fbsmModel.VIEWING_NORMAL)
+					{
+						fbsmModel.getInstance().currentActivity = fbsmModel.VIEWING_SHOWALL;
+					}
+					else
+					{
+						fbsmModel.getInstance().currentActivity = fbsmModel.VIEWING_NORMAL;
+					}
+				}
+				else if (event.label == "Options")
+				{
+					var theOptionsPopup:IFlexDisplayObject = PopUpManager.createPopUp(this.parent.parent, options, true);
+				}
+				else if (event.label == "Profiles")
+				{
+					var theProfilesPopup:IFlexDisplayObject = PopUpManager.createPopUp(this.parent.parent, profiles, true);
+				}
+
+            }
+        ]]>
+	</mx:Script>
+
+	<mx:dataProvider>
+		<mx:String>Options</mx:String>
+		<mx:String>Profiles</mx:String>
+		<mx:String>Show All</mx:String>
+	</mx:dataProvider>
+</mx:ButtonBar>
+

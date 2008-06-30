@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:local="com.flashbsm.views.*"
+	verticalAlign="middle" horizontalAlign="center"
+	width="100%" height="100%">
+
+	<mx:Script>
+		<![CDATA[
+			import com.flashbsm.model.fbsmModel;
+		]]>
+
+	</mx:Script>
+
+	<mx:Panel width="200" height="150">
+		<mx:Text selectable="false" width="100%" height="100%">
+			<mx:text>please wait whilst flashbsm is initialised.
+			
+			If this takes too long, then make sure you've executed the server.py</mx:text>
+		</mx:Text>
+	</mx:Panel>
+</mx:VBox>

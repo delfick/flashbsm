@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:local="com.flashbsm.views.*"
+	xmlns:containers="com.components.containers.*"
+	width="100%" height="100%"
+	creationComplete="initApp()">
+
+	<mx:Script>
+		<![CDATA[
+			import com.flashbsm.model.fbsmModel;
+			import mx.controls.Alert;
+			import mx.collections.ArrayCollection;
+			import mx.events.CloseEvent;
+			import mx.controls.Image;
+			import com.flashbsm.events.*;
+			import com.flashbsm.views.*;
+			import mx.events.PropertyChangeEvent;
+			import mx.binding.utils.ChangeWatcher;
+			import flash.events.Event;
+			import mx.collections.*;
+			import flash.events.MouseEvent;
+			import com.components.containers.AnimatedTileList
+
+
+            private var sortA:Sort;
+			private var sortByCategIndex:SortField = new SortField("categIndex");
+			private var sortByPluginIndex:SortField = new SortField("pluginIndex");
+			private var sortByShortDesc:SortField = new SortField("ShortDesc", true);
+
+			public function initApp():void
+			{
+				sortByCategIndex.numeric = true;
+				sortByPluginIndex.numeric = true;
+			}
+
+            private function searchFilter(item:Object):Boolean {
+				return item.ShortDesc.match(new RegExp(sTI.text, "i"));
+			}
+
+			public function changeLayout(event:MouseEvent):void
+			{
+				switch(event.currentTarget.label)
+				{
+					case "Normal" :
+							showAllArea.sortType = AnimatedTileList.SORT_NORMAL;
+							showAllArea.layoutTiles();
+							currentState="";
+						break;
+					case "Group" :
+							showAllArea.sortType = AnimatedTileList.SORT_GROUPS;
+							showAllArea.layoutTiles();
+							currentState="groupSort";
+						break;
+					case "Enabled/Disabled" :
+							showAllArea.sortType = AnimatedTileList.SORT_ENABLED;
+							showAllArea.layoutTiles();
+							currentState="";
+						break;
+				}
+			}
+
+
+
+			public function createSort():void
+			{
+					sortA = new Sort();
+					if (slAlpha.selected)
+					{
+						sortA.fields = [sortByShortDesc];
+					}
+					else
+					{
+						sortA.fields = [sortByCategIndex, sortByPluginIndex];
+					}
+					showAllArea.sorter(sortA);
+
+			}
+		]]>
+
+	</mx:Script>
+
+	<mx:Style>
+		.optionsText
+		{
+		fontSize : 12;
+		fontFamily : "Verdana";
+		fontWeight : "bold";
+		verticalAlign : "middle";
+		}
+
+		.groupSortHeader
+		{
+		fontSize : 13;
+		borderStyle:none;
+		fontFamily : "Verdana";
+		fontWeight : "bold";
+		textAlign : "center";
+		backgroundAlpha : 0.19;
+		}
+	</mx:Style>
+
+    <mx:states>
+		<mx:State name="groupSort">
+			<mx:AddChild relativeTo="{outerBox}" position="before">
+				<mx:HBox width="100%" paddingLeft="16" horizontalGap="0">
+					<mx:Repeater id="header" dataProvider="{fbsmModel.getInstance().uiItems.allGroups}">
+						<mx:HBox minWidth="132" maxWidth="132" verticalAlign="middle"
+							y="0" x="{header.currentIndex * 132}">
+							<mx:TextArea text="{header.currentItem}" maxWidth="110" id="sortGroupHeaderText"  
+								selectable="false" styleName="groupSortHeader"/>
+						</mx:HBox>
+					</mx:Repeater>
+				</mx:HBox>
+            </mx:AddChild>
+        </mx:State>
+    </mx:states>
+
+
+	<mx:Number id="selectedCateg">{fbsmModel.getInstance().currentPlugin.categIndex}</mx:Number>
+	<mx:Number id="selectedPlugin">{fbsmModel.getInstance().currentPlugin.pluginIndex}</mx:Number>
+	<mx:String id="selectedPluginName">{fbsmModel.getInstance().uiItems.pluginItems.getItemAt(selectedCateg).plugins.getItemAt(selectedPlugin).Name}</mx:String>
+
+	<mx:VBox id="outerBox" width="100%" height="100%">
+		<containers:AnimatedTileList height="100%" width="100%" creationComplete="{showAllArea.layoutTiles()}"
+				id="showAllArea" verticalScrollPolicy="on" styleName="tileBox" paddingTop="10"
+				dataProvider="{fbsmModel.getInstance().uiItems.allPlugins}"
+				itemRenderer="com.flashbsm.views.showAllPlugins" useItemThumb="true"/>
+
+		<mx:VBox width="100%" height="72" styleName="whiteBoxNBNP">
+			<mx:HBox width="100%" height="100%" styleName="whiteBoxNBNP">
+				<mx:HBox width="200" height="100%" styleName="whiteBox">
+					<mx:Label text="Search Options" styleName="optionsText"/>
+				</mx:HBox>
+				<mx:HBox width="100%" height="100%" styleName="whiteBox">
+					<mx:RadioButton  groupName="searchOptions" label="Plugins" enabled="true" styleName="optionsText" selected="true" id="soPlugins"/>
+					<mx:RadioButton  groupName="searchOptions" label="Options" enabled="false" styleName="optionsText" id="soOptions"/>
+				</mx:HBox>
+			</mx:HBox>
+			<mx:HBox width="100%" height="100%" styleName="whiteBoxNBNP">
+				<mx:HBox width="200" height="100%" styleName="whiteBox">
+					<mx:Label text="Search Layout" styleName="optionsText"/>
+				</mx:HBox>
+				<mx:HBox width="120" height="100%" styleName="whiteBox">
+					<mx:CheckBox label="Alphabetical" styleName="optionsText" selected="false" id="slAlpha" click="createSort()"/>
+				</mx:HBox>
+				<mx:HBox width="100%" height="100%" styleName="whiteBox">
+					<mx:RadioButton groupName="searchLayout" label="Normal" selected="true" styleName="optionsText"
+						id="slNormal" click="{changeLayout(event)}"/>
+					<mx:RadioButton groupName="searchLayout" label="Group"  styleName="optionsText"
+						id="slGroup" click="{changeLayout(event)}" />
+					<mx:RadioButton groupName="searchLayout" label="Enabled/Disabled" styleName="optionsText"
+						id="slEd" click="{changeLayout(event)}"/>
+				</mx:HBox>
+			</mx:HBox>
+			<mx:HBox width="100%" height="100%" styleName="whiteBoxNBNP">
+				<mx:HBox width="200" height="100%" styleName="whiteBox">
+					<mx:Label text="Search" styleName="optionsText"/>
+				</mx:HBox>
+				<mx:HBox width="100%" height="100%" styleName="whiteBox">
+					<mx:TextInput width="100%" height="100%" id="sTI"
+						change="{showAllArea.filter(searchFilter, true)}"/>
+				</mx:HBox>
+			</mx:HBox>
+		</mx:VBox>
+
+		<mx:HBox width="100%" height="60" styleName="box" paddingLeft="10" paddingTop="10" paddingBottom="10">
+			<local:funcBar/>
+			<mx:Spacer width="100%"/>
+			<mx:Button label="Quit" styleName="funcBar" height="100%" width="100"/>
+		</mx:HBox>
+
+	</mx:VBox>
+</mx:VBox>

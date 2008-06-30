@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:local="com.flashbsm.views.*"
+	xmlns:containers="com.components.containers.*"
+	width="100%" height="100%"
+	creationComplete="initApp()">
+
+	<mx:Script>
+		<![CDATA[
+			import com.flashbsm.model.fbsmModel;
+			import mx.controls.Alert;
+			import mx.collections.ArrayCollection;
+			import mx.events.CloseEvent;
+			import mx.controls.Image;
+			import com.flashbsm.events.*;
+			import com.flashbsm.views.*;
+			import mx.events.PropertyChangeEvent;
+			import mx.binding.utils.ChangeWatcher;
+			import flash.events.Event;
+			import mx.events.FlexEvent;
+			import mx.events.PropertyChangeEvent;
+			import mx.binding.utils.ChangeWatcher;
+
+			[Bindable]
+			public var theTabs:ArrayCollection = new ArrayCollection();
+
+			private var currentCategWatcher:ChangeWatcher = ChangeWatcher.watch( fbsmModel.getInstance().currentPlugin, "categIndex", changeGroupHeader );
+
+			public function initApp():void
+			{
+				updateDescription();
+				logger.addEventListener( FlexEvent.VALUE_COMMIT, autoScrollToBottom );
+			}
+
+			public function changeGroupHeader(event:PropertyChangeEvent):void
+			{
+				groupHeaderBtns.selectedIndex = selectedCateg;
+				sideList.verticalScrollPosition = 0;
+			}
+
+			private function autoScrollToBottom( event:FlexEvent ):void
+    		{
+       			 // Auto-scroll to the bottom anytime the text changes
+        		event.target.validateNow();
+       			event.target.verticalScrollPosition = event.target.maxVerticalScrollPosition;
+			}
+
+			public function updateDescription():void
+			{
+				dispatchEvent( new pluginDescriptionEvent(selectedPlugin, selectedCateg) );
+				theTabs = fbsmModel.getInstance().settingsItems.allSettings[selectedPluginName];
+			}
+
+			public function updateSettings(event:Event):void
+			{
+				fbsmModel.getInstance().currentPlugin.selectedTab = event.currentTarget.selectedIndex;
+			}
+		]]>
+
+	</mx:Script>
+
+	<mx:Style>
+
+		.box
+		{
+		borderStyle:solid;
+		backgroundColor: #d3dfe5;
+		borderColor: #4f5a5f;
+		borderThickness: 1;
+		}
+
+		.whiteBox
+		{
+		borderStyle:solid;
+		backgroundColor: #FFFFFF;
+		borderColor: #4f5a5f;
+		borderThickness: 1;
+		horizontalGap : 0;
+		verticalGap : 0;
+		paddingLeft : 3;
+		verticalAlign : "middle";
+		}
+
+		.whiteBoxNBNP
+		{
+		backgroundColor: #FFFFFF;
+		horizontalGap : 0;
+		verticalGap : 0;
+		verticalAlign : "middle";
+		}
+
+		.tileBox
+		{
+		horizontalGap : 0;
+		borderStyle:solid;
+		backgroundColor: #FFFFFF;
+		borderColor: #4f5a5f;
+		borderThickness: 1;
+		}
+
+		.funcBar
+		{
+		cornerRadius: 10;
+		}
+
+		.plugin
+		{
+		borderStyle:solid;
+		backgroundColor: #FFFFFF;
+		backgroundAlpha: 0.26;
+		borderColor: #4f5a5f;
+		borderThickness: 1;
+		}
+
+		.pluginOver
+		{
+		borderStyle:solid;
+		backgroundColor: #3CAA46;
+		backgroundAlpha: 0.26;
+		borderColor: #4f5a5f;
+		borderThickness: 1;
+		}
+
+		.pluginPress
+		{
+		borderStyle:solid;
+		backgroundColor: #AB1010;
+		backgroundAlpha: 0.26;
+		borderColor: #4f5a5f;
+		borderThickness: 1;
+		}
+
+		.myCPStyle
+		{
+			borderThicknessLeft: 0;
+			borderThicknessTop: 0;
+			borderThicknessBottom: 0;
+			borderThicknessRight: 0;
+			headerHeight: 20;
+			dropShadowEnabled: false;
+			headerColors: #d9d9d9, #ffffff;
+			borderAlpha: 1;
+			backgroundAlpha: 0;
+			paddingTop: 4;
+			paddingLeft: 4;
+			paddingRight: 4;
+			verticalGap: 4;
+
+			openIcon:Embed(source="/assets/images/openArrow.png");
+			closedIcon:Embed(source="/assets/images/closedArrow.png");
+		}
+
+	</mx:Style>
+
+	<mx:Number id="selectedCateg">{fbsmModel.getInstance().currentPlugin.categIndex}</mx:Number>
+	<mx:Number id="selectedPlugin">{fbsmModel.getInstance().currentPlugin.pluginIndex}</mx:Number>
+	<mx:String id="selectedPluginName">{fbsmModel.getInstance().uiItems.pluginItems.getItemAt(selectedCateg).plugins.getItemAt(selectedPlugin).Name}</mx:String>
+
+	<mx:VBox id="outerBox" width="100%" height="100%">
+
+		<mx:HBox width="100%" height="60" styleName="box" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+			<local:groupButtons id="groupHeaderBtns" dataProvider="{fbsmModel.getInstance().uiItems.allGroups}"/>
+		</mx:HBox>
+
+		<mx:HBox width="100%" height="100%">
+			<containers:AnimatedTileList height="100%" width="170"
+				id="sideList" verticalScrollPolicy="on" styleName="tileBox" paddingTop="10" paddingBottom="10"
+				horizontalScrollPolicy="off" noCols="true"
+				dataProvider="{fbsmModel.getInstance().uiItems.pluginItems.getItemAt(selectedCateg).plugins}"
+				itemRenderer="com.flashbsm.views.plugins"  updateDescription="updateDescription"/>
+
+			<mx:VBox width="100%" height="100%">
+				<mx:HBox width="100%" height="60" styleName="box" horizontalAlign="center" verticalAlign="middle">
+					<mx:Spacer width="5"/>
+					<mx:Image id="pluginIcon" source="{fbsmModel.getInstance().currentPlugin.pluginDescriptionIcon}"/>
+					<mx:Spacer width="5"/>
+					<mx:Text width="100%" text="{fbsmModel.getInstance().currentPlugin.pluginDescription}"/>
+				</mx:HBox>
+
+				<mx:HBox width="100%" height="100%" styleName="box" id="settingsArea">
+					<mx:TabNavigator id="tn"  width="100%" height="100%"
+						change="updateSettings( event );">
+						<mx:Repeater id="tab" dataProvider="{theTabs}" >
+							<local:settingsArea id="thePluginSettings" label="{tab.currentItem.label}" tabNumber="{tab.currentIndex}"
+								theSubGroups="{tab.currentItem.subGroups}"/>
+						</mx:Repeater>
+					</mx:TabNavigator>
+				</mx:HBox>
+				<mx:HBox width="100%" height="60" styleName="box" id="logArea">
+					<mx:TextArea width="100%" height="100%" id="logger">
+						<mx:text>{fbsmModel.getInstance().logText}</mx:text>
+					</mx:TextArea>
+				</mx:HBox>
+			</mx:VBox>
+		</mx:HBox>
+
+		<mx:HBox width="100%" height="60" styleName="box" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+			<local:funcBar/>
+			<mx:Spacer width="100%"/>
+			<mx:Button label="Quit" styleName="funcBar" height="100%" width="100"/>
+		</mx:HBox>
+
+	</mx:VBox>
+</mx:VBox>

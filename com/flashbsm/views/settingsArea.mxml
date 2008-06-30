@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:containers="com.components.containers.*"
+	width="100%" height="100%">
+	<mx:Script>
+		<![CDATA[
+			import com.flashbsm.model.*;
+			import mx.controls.CheckBox;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Label;
+			import flash.events.Event;
+			import com.flashbsm.views.settings.*;
+
+			[Bindable]
+			public var tabNumber:Number;
+
+			[Bindable]
+			public var theSubGroups:ArrayCollection;
+
+			public function createTheSettings(event:Event):void
+			{
+				var theSetting:Object = event.currentTarget.currentItem;
+				switch (theSetting.Type)
+				{
+					case "Float" :
+						var nextFloat:sFloat = new sFloat;
+						nextFloat.ShortDesc = theSetting.ShortDesc;
+						nextFloat.info = theSetting.info;
+						nextFloat.theValue = theSetting.Value;
+						event.currentTarget.container.addChild(nextFloat);
+						break;
+					case "Bool" :
+						var nextBool:sBool = new sBool;
+						nextBool.ShortDesc = theSetting.ShortDesc;
+						nextBool.Value = theSetting.Value;
+						event.currentTarget.container.addChild(nextBool);
+						break;
+					case "Match" :
+						var nextMatch:sMatch = new sMatch;
+						nextMatch.ShortDesc = theSetting.ShortDesc;
+						event.currentTarget.container.addChild(nextMatch);
+						break;
+					case "List" :
+						var nextList:sList = new sList;
+						nextList.ShortDesc = theSetting.ShortDesc;
+						if (theSetting.info[0] == "Int")
+						{
+							nextList.totalNum = theSetting.info[1][1]+1;
+							nextList.totalRow = Math.round(nextList.totalNum/nextList.totalCol);
+						}
+						nextList.info = theSetting.info;
+						event.currentTarget.container.addChild(nextList);
+						break;
+					case "MultiList" :
+						var nextSMList:sMList = new sMList;
+						nextSMList.lists = theSetting.settingsArray;
+						event.currentTarget.container.addChild(nextSMList);
+						break;
+					case "String" :
+						var nextString:sString = new sString
+						nextString.ShortDesc = theSetting.ShortDesc;
+						event.currentTarget.container.addChild(nextString);
+						break;
+					case "Int" :
+					//	var nextInt:sInt = new sInt;
+					//	nextInt.ShortDesc = theSetting.ShortDesc;
+					//	event.currentTarget.container.addChild(nextInt);
+						break;
+					case "Action" :
+						var nextAction:sAction = new sAction;
+						nextAction.ShortDesc = theSetting.ShortDesc;
+						event.currentTarget.container.addChild(nextAction);
+						break;
+					case "Color" :
+						var nextColor:sColor = new sColor;
+						nextColor.ShortDesc = theSetting.ShortDesc;
+						nextColor.Value = theSetting.Value;
+						event.currentTarget.container.addChild(nextColor);
+						break;
+					default :
+						var nextLabel:Label = new Label()
+						nextLabel.text = theSetting.Type + "___" + theSetting.ShortDesc;
+						event.currentTarget.container.addChild(nextLabel);
+				}
+			}
+		]]>
+	</mx:Script>
+
+	<mx:Number id="selectedTab">{fbsmModel.getInstance().currentPlugin.selectedTab}</mx:Number>
+	<mx:Repeater id="subGroups" dataProvider="{theSubGroups}">
+		<containers:CollapsiblePanel width="100%" open="true"
+			title="{subGroups.currentItem.label}"  styleName="myCPStyle">
+
+			<mx:HBox width="100%" height="100%" >
+				<mx:Spacer width="5"/>
+				<mx:VBox width="100%" height="100%" id="settingsBox" >
+					<mx:Spacer height="5"/>
+					<mx:Repeater id="settings" dataProvider="{subGroups.currentItem.settings}" repeat="createTheSettings(event)"/>
+					<mx:Spacer height="5"/>
+				</mx:VBox>
+			</mx:HBox>
+		</containers:CollapsiblePanel>
+	</mx:Repeater>
+</mx:VBox>
+

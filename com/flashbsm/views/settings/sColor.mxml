@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:components="com.components.*"
+	width="100%" height="100%"
+	creationComplete="initApp()">
+	<mx:Script>
+		<![CDATA[
+
+			[Bindable]
+			public var ShortDesc:String;
+
+			[Bindable]
+			public var Value:*
+
+			[Bindable]
+			public var theColor:String;
+
+			public function initApp():void
+			{
+				var red:Number = Math.round(Value[0]/256);
+				var green:Number = Math.round(Value[1]/256);
+				var blue:Number = Math.round(Value[2]/256);
+				var alpha:Number = Math.round(Value[3]/256);
+
+
+				cp.selectedColor=(red * 65536) + (green * 256) + (blue);
+				
+			}
+		]]>
+	</mx:Script>
+
+	<mx:Label text="{ShortDesc}"/>
+
+	<mx:ColorPicker id="cp"/>
+</mx:HBox>

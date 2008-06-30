@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="getInfo()">
+	<mx:Script>
+		<![CDATA[
+
+			import flash.net.NetConnection;
+			import flash.net.Responder;
+			import com.flashbsm.events.*;
+			import flash.display.*;
+			import mx.collections.ArrayCollection;
+			import mx.utils.ObjectProxy;
+
+		    // Gateway connection object
+			private var gateway:NetConnection;
+
+			[Bindable]
+			private var theError:String;
+			private var tempObject:*;
+			private var firstTime:Boolean = true;
+			public var theType:String;
+			public var theParams:Array;
+			public var hasParams:Boolean = false;
+			public var isAccumulative:Boolean = false;
+			public var doOnStart:Boolean = true;
+			public var dataType:String = "array";
+			public var seperatorString:String = " ";
+			public var theTarget:ArrayCollection;
+			public var theTargetObject:*;
+
+	        public function getInfo ():void
+			{
+				if (doOnStart)
+				{
+					gateway = new NetConnection();
+					gateway.connect( "http://localhost:8000" );
+					var responder:Responder = new Responder( onResult, onFault );
+					if (hasParams)
+					{
+						gateway.call(theType, responder, theParams);
+					}
+					else
+					{
+						gateway.call(theType, responder);
+					}
+				}
+				else
+				{
+					doOnStart = true;
+				}
+			}
+
+	        // Result handler method
+	        private function onResult( result:* ): void
+			{
+				if (firstTime)
+				{
+					tempObject = result;
+					firstTime=false;
+					dispatchEvent( new gotDataEvent( theTarget, theTargetObject, theType ) )
+				}
+				else
+				{
+					if (isAccumulative)
+					{
+						switch (dataType)
+						{
+							case "string" :
+								tempObject = result + seperatorString + tempObject;
+								break;
+							case "array" :
+								for (var aResult:* in result)
+								{
+									tempObject.push(result[aResult]);
+								}
+								break;
+						}
+					}
+					else
+					{
+						tempObject = result;
+					}
+					dispatchEvent( new gotDataEvent( theTarget, theTargetObject, theType ) )
+				}
+			}
+			[Bindable(event="gotData")]
+			public function get theResult():*
+			{
+				return tempObject;
+			}
+
+	        // Fault handler method displays error message
+	        private function onFault( error:* ): void
+	        {
+				// Notify the user of the problem
+	            theError = "Remoting error: \n";
+	            for ( var d:String in error ) {
+	               theError += error[d] + "\n";
+				}
+				trace(theError);
+				dispatchEvent(new Event("gotError"));
+			}
+			[Bindable(event="gotError")]
+			public function get receivedError():*
+			{
+				trace("Recieved a remoting error : ");
+				trace(theError);
+			}
+
+		 ]]>
+	</mx:Script>
+</mx:Module>

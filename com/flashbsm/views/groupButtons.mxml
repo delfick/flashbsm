@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ToggleButtonBar xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:uic="ui/components.*"
+	cornerRadius="10" itemClick="groupClick(event)" height="100%"
+	width="100%" toggleOnClick="true" buttonStyleName="funcBar">
+
+	<mx:Script>
+        <![CDATA[
+			import mx.events.ItemClickEvent;
+			import mx.core.Application;
+			import com.flashbsm.model.*;
+			import com.flashbsm.events.*;
+
+			private function groupClick(event:ItemClickEvent):void
+			{
+				fbsmModel.getInstance().setCurrentPlugin(event.index, 0);
+				parentDocument.updateDescription();
+			}
+        ]]>
+	</mx:Script>
+
+</mx:ToggleButtonBar>
+
+

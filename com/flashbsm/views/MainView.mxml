@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ViewStack
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:views="com.flashbsm.views.*"
+	resizeToContent="true">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.events.PropertyChangeEvent;
+			import mx.binding.utils.ChangeWatcher;
+			import com.flashbsm.model.fbsmModel;
+
+			private var activityWatcher:ChangeWatcher = ChangeWatcher.watch( fbsmModel.getInstance(), "currentActivity", handle_activityChange );
+
+			private function handle_activityChange( event:PropertyChangeEvent ):void
+			{
+				if ( event.newValue == fbsmModel.VIEWING_NORMAL )
+				{
+					selectedChild = normal;
+					if (event.oldValue == fbsmModel.VIEWING_SHOWALL)
+					{
+						var selectedCateg:uint = fbsmModel.getInstance().currentPlugin.categIndex;
+						var selectedPlugin:uint = fbsmModel.getInstance().currentPlugin.pluginIndex;
+						var selectedPluginName:String = fbsmModel.getInstance().uiItems.pluginItems.getItemAt(selectedCateg).plugins.getItemAt(selectedPlugin).Name;
+						normal.theTabs = fbsmModel.getInstance().settingsItems.allSettings[selectedPluginName];
+					//	normal.tn.selectedIndex = 0;
+					}
+					
+
+				}
+				else if (event.newValue == fbsmModel.VIEWING_SHOWALL )
+				{
+					trace(event.newValue);
+					selectedChild = showAll;
+				}
+				else if (event.newValue == fbsmModel.VIEWING_INITIAL)
+				{
+					selectedChild = initial;
+				}
+
+			}
+		]]>
+	</mx:Script>
+
+	<views:initial id="initial"/>
+	<views:normal id="normal"/>
+	<views:showAll id="showAll"/>
+
+
+
+
+
+
+
+
+</mx:ViewStack>

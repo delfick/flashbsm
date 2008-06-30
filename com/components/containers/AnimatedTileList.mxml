@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (C) 2003-2006 Adobe Macromedia Software LLC and its licensors.
+// All Rights Reserved.
+// The following is Sample Code and is subject to all restrictions on such code
+// as contained in the End User License Agreement accompanying this product.
+// If you have received this file from a source other than Adobe,
+// then your use, modification, or distribution of it requires
+// the prior written permission of Adobe.
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*">
+
+    <mx:Script>
+
+        <![CDATA[
+
+        import mx.collections.ArrayCollection;
+        import mx.core.IFactory;
+        import mx.effects.Fade;
+        import mx.effects.Move;
+		import mx.events.EffectEvent;
+		import mx.collections.*;
+		import com.flashbsm.model.*;
+		import mx.controls.VRule;
+
+
+ 		// The list of items to display
+		private var items:ArrayCollection;
+
+		private static var firstTime:Boolean = true;
+
+		public static const SORT_NORMAL:String = "normal";
+		public static const SORT_GROUPS:String = "groups";
+		public static const SORT_ENABLED:String = "enabledDisabled";
+
+        public function set dataProvider(dataProvider:ArrayCollection):void
+		{
+        	items = dataProvider;
+        	createTiles();
+        	layoutTiles();
+        }
+
+		// Array of Booleans to keep track of the status of each item vis-a-vis the filter criteria
+		// (satisfies filter criteria = true / doesn't satisfy filter criteria = false)
+        private var selectionFlags:Array;
+
+        // The Array of Thumbnail instances used to display the items
+		public var thumbs:Array;
+
+        // The total number of items that are in the current filter selection.
+        public var filteredCount:Number;
+
+		// The class used to display each thumbnail
+		public var itemRenderer:IFactory;
+
+		public var updateDescription:Function;
+
+		public var padding:int = 4;
+
+		public var noCols:Boolean = false;
+
+		public var useItemThumb:Boolean = false;
+
+		private var theThumb:*;
+
+		public var sortType:String = SORT_NORMAL;
+
+        public function filter(filterCallback:Function, relayout:Boolean):void
+		{
+		    if (items == null || thumbs == null) return; //too early
+            filteredCount = 0;
+            var n:int = items.length;
+            var fadeOut:Fade;
+			var theSelectionFlag:Boolean;
+			for (var i:int = 0 ; i < n ; i++)
+			{
+				useItemThumb ? theThumb = items[i].thumb : theThumb = thumbs[i];
+				useItemThumb ? theSelectionFlag = items[i].selectionFlag : theSelectionFlag = selectionFlags[i];
+                if (filterCallback.call(this, items[i]))
+				{
+                    filteredCount++;
+                    useItemThumb ? items[i].selectionFlag = true : selectionFlags[i] = true;
+                    theThumb.alpha = 1;
+                }
+				else
+				{
+                    useItemThumb ? items[i].selectionFlag = false : selectionFlags[i] = false;
+                    if (relayout)
+                    {
+                    	fadeOut = new Fade(theThumb);
+	                    fadeOut.alphaTo = 0.1;
+	                    fadeOut.play();
+                    }
+                    else
+                    {
+                    	theThumb.alpha = 0.1;
+                    }
+                }
+            }
+
+            if (relayout)
+			{
+
+            	if (fadeOut)
+				{
+
+            		fadeOut.addEventListener(EffectEvent.EFFECT_END,
+    					function(event:EffectEvent):void
+						{
+    						layoutTiles();
+    					});
+                	}
+            	else
+            	{
+                	layoutTiles();
+             	}
+            }
+		}
+
+		public function sorter(theSort:Sort):void
+		{
+			items.sort = theSort;
+			items.refresh()
+			layoutTiles();
+		}
+
+        private function createTiles():void
+        {
+			removeAllChildren();
+			thumbs = new Array(items.length);
+            selectionFlags =  new Array(items.length);
+
+            var row:int = 0;
+            var col:int = -1;
+
+			var n:int = items.length;
+
+			var i:int;
+
+			if (useItemThumb)
+			{
+				for (i = 0; i < n; i++)
+				{
+					items[i].thumb = itemRenderer.newInstance();
+					items[i].thumb.item = items[i];
+					items[i].thumb.visible=false;
+					addChild(items[i].thumb)
+					items[i].selectionFlag = true;
+					selectionFlags[i] = items[i].selectionFlag;
+
+
+				}
+			}
+			else
+			{
+				for (i = 0; i < n; i++)
+				{
+					thumbs[i] = itemRenderer.newInstance();
+					addChild(thumbs[i]);
+					thumbs[i].item = items[i];
+					thumbs[i].visible = false;
+					selectionFlags[i] = true;
+				}
+			}
+        }
+
+        public function layoutTiles():void
+		{
+			if (thumbs.length == 0)
+				return;
+
+		    //should really use border metrics to take the scrollbar into
+			//account, but we're lazy
+			var numCols:int = 0;
+			var numRows:int = 0;
+
+			if (useItemThumb)
+			{
+				numCols = (width-20) / (items[0].thumb.width + padding + 5);
+				numRows = (height-20) / (items[0].thumb.height + padding + 5);
+			}
+			else
+			{
+				numCols = (width-20) / (thumbs[0].width + padding + 5);
+				numRows = (height-20) / (thumbs[0].height + padding + 5);
+			}
+
+			verticalScrollPosition = 0;
+
+			var row:int = -1;
+			var col:int = 0;
+			var disabledCol:Number = numCols;
+			var disabledRow:Number = -1;
+			var enabledCol:Number = 0;
+			var enabledRow:Number = -1;
+
+
+			var move:Move = null;
+
+			var n:int = items.length;
+
+			var rowArray:Array = new Array();
+			for (i=0; i< fbsmModel.getInstance().uiItems.allGroups.length;i++)
+			{
+				rowArray.push(-1);
+			}
+
+
+			var theSelectionFlag:Boolean;
+
+			for (var i:int = 0 ; i < n ; i++)
+			{
+				useItemThumb ? theThumb = items[i].thumb : theThumb = thumbs[i];
+				useItemThumb ? theSelectionFlag = items[i].selectionFlag : theSelectionFlag = selectionFlags[i];
+
+
+				if (theSelectionFlag)
+				{
+
+					var xTo:Number = 0;
+					var yTo:Number = 0;
+					switch (sortType)
+					{
+						case SORT_NORMAL :
+
+							row++;
+							if (!noCols)
+							{
+								if (row > numRows)
+								{
+									col++;
+									row = 0;
+								}
+							}
+							if (!noCols)
+							{
+								xTo =  col * (theThumb.width);
+							}
+
+							yTo = 6+padding + row * (theThumb.height + padding);
+							break;
+
+						case SORT_GROUPS :
+							rowArray[items[i].categIndex]++;
+
+							xTo = items[i].categIndex * (theThumb.width);
+							yTo = 6+padding + rowArray[items[i].categIndex] * (theThumb.height + padding);
+
+							break;
+
+						case SORT_ENABLED :
+							if (items[i].isEnabled)
+							{
+								enabledRow++
+								if (enabledRow > numRows)
+								{
+									enabledCol++;
+									enabledRow = 0;
+								}
+								xTo = enabledCol * (theThumb.width);
+								yTo = 6+padding + enabledRow * (theThumb.height + padding);
+							}
+							else
+							{
+								disabledRow++
+								if (disabledRow > numRows)
+								{
+									disabledCol--;
+									disabledRow = 0;
+								}
+								xTo = disabledCol * (theThumb.width);
+								yTo = 6+padding + disabledRow * (theThumb.height + padding);
+							}
+							break;
+					}
+
+                    // If the thumbnail is already visible
+					// animate it to its new position.
+
+                    if (theThumb.visible)
+					{
+                        // Animate only if the position is different
+						// from its current position.
+                        if (theThumb.x != xTo || theThumb.y != yTo)
+						{
+                            move = new Move(theThumb);
+                            move.xTo = xTo;
+                            move.yTo = yTo;
+                            move.play();
+                        }
+					}
+
+                    // If the thumbnail was not previously visible, sets its
+					// x and y coordinates. We'll make it reappear after all
+					// the visible thumbnails have reached their new position.
+
+					else
+					{
+                        theThumb.x = xTo;
+                        theThumb.y = yTo;
+                        theThumb.includeInLayout = true;
+					}
+
+
+                }
+				else
+				{
+				    theThumb.visible = false;
+				    theThumb.includeInLayout = false;
+
+				}
+
+
+			}
+
+            if (!move)
+			{
+                // No visible thumbnails were animated to a new position;
+				// fade in newly selected thumbnails right away.
+			    fadeInThumbnails();
+            }
+			else
+			{
+                // Fade in newly selected thumbnails after the last
+				// visible thumbnail has moved to its new position.
+		        move.addEventListener(EffectEvent.EFFECT_END,
+					function(event:EffectEvent):void
+					{
+						fadeInThumbnails();
+					});
+			}
+
+
+
+
+        }
+
+        private function fadeInThumbnails():void
+		{
+			var n:int = items.length;
+			var theSelectionFlag:Boolean;
+			for (var i:int = 0; i < n ; i++)
+			{
+				useItemThumb ? theThumb = items[i].thumb : theThumb = thumbs[i];
+				useItemThumb ? theSelectionFlag = items[i].selectionFlag : theSelectionFlag = selectionFlags[i];
+
+                if (theSelectionFlag && !theThumb.visible)
+				{
+
+                    theThumb.alpha = 0;
+                    theThumb.visible = true;
+
+					var fadeIn:Fade = new Fade(theThumb);
+                    fadeIn.alphaTo = 1;
+					fadeIn.play();
+				}
+
+            }
+        }
+
+        ]]>
+
+    </mx:Script>
+
+</mx:Canvas>
+

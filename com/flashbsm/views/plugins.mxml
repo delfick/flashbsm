@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:custom="components.*"
+	xmlns:model="com.flashbsm.model.*"
+	height="50" width="150"
+	creationComplete="initApp()">
+
+	<mx:Script>
+		<![CDATA[
+			import flash.events.MouseEvent;
+			import flash.events.Event;
+			import com.flashbsm.model.*;
+			import mx.controls.Alert;
+			import mx.events.PropertyChangeEvent;
+			import mx.binding.utils.ChangeWatcher;
+			import com.flashbsm.events.*;
+
+			[Bindable]
+			public var pluginIndex:uint = 0;
+
+			[Bindable]
+			public var categIndex:uint = 0;
+
+			[Bindable]
+			public var theName:String;
+
+			[Bindable]
+			public var ShortDesc:String;
+
+			[Bindable]
+			public var globalIndex:uint = 0;
+
+			[Bindable]
+			public var spacerWidth:uint = 1;
+
+			[Bindable]
+			public var checkBoxWidth:uint = 20;
+
+			[Bindable]
+       		public var item:Object;
+
+			private var currentPluginWatcher:ChangeWatcher = ChangeWatcher.watch( fbsmModel.getInstance().currentPlugin, "pluginIndex", resetToNormalStyle );
+
+			public function initApp():void
+			{
+				pluginIndex = item.pluginIndex;
+				categIndex = item.categIndex;
+				theName = item.Name;
+				ShortDesc = item.ShortDesc;
+				globalIndex = item.globalIndex;
+
+
+
+				determineStatus.getInfo();
+				enabler.addEventListener("gotData", gotEnablerData);
+				pluginContainer.addEventListener(MouseEvent.CLICK, itemClick);
+				pluginContainer.addEventListener(MouseEvent.MOUSE_OVER , itemOver);
+				pluginContainer.addEventListener(MouseEvent.MOUSE_OUT , itemOut);
+				if (ShortDesc == "General Options")
+				{
+					theCheckBox.selected = true;
+				}
+				else
+				{
+					determineStatus.addEventListener("gotData", determineTheStatus);
+					theCheckBox.selected = fbsmModel.getInstance().uiItems.pluginItems.getItemAt(categIndex).plugins.getItemAt(pluginIndex).isEnabled;
+				}
+				if (fbsmModel.getInstance().currentPlugin.ShortDesc == ShortDesc)
+				{
+					pluginContainer.setStyle('backgroundColor', 0xAB1010);
+				}
+			}
+
+			public function itemClick(event:MouseEvent):void
+			{
+
+				var currentCateg:uint = fbsmModel.getInstance().currentPlugin.categIndex;
+				fbsmModel.getInstance().setCurrentPlugin(categIndex, pluginIndex);
+				pluginContainer.setStyle('backgroundColor', 0xAB1010);
+
+				if (fbsmModel.getInstance().currentActivity == fbsmModel.VIEWING_NORMAL)
+				{
+					parentDocument.updateDescription();
+				}
+				else
+				{
+					fbsmModel.getInstance().currentActivity = fbsmModel.VIEWING_NORMAL;
+					dispatchEvent( new pluginDescriptionEvent(pluginIndex, categIndex) );
+				}
+			}
+
+			public function itemOver(event:MouseEvent):void
+			{
+				if (fbsmModel.getInstance().currentPlugin.ShortDesc != ShortDesc)
+				{
+					pluginContainer.setStyle('backgroundColor', 0x3CAA46);
+				}
+			}
+
+			public function itemOut(event:MouseEvent):void
+			{
+				if (fbsmModel.getInstance().currentPlugin.ShortDesc != ShortDesc)
+				{
+					pluginContainer.setStyle('backgroundColor', 0xFFFFFF);
+				}
+			}
+
+			public function resetToNormalStyle(event:PropertyChangeEvent):void
+			{
+				if (fbsmModel.getInstance().currentPlugin.ShortDesc != ShortDesc)
+				{
+					pluginContainer.setStyle('backgroundColor', 0xFFFFFF);
+				}
+				if (fbsmModel.getInstance().currentPlugin.ShortDesc == ShortDesc)
+				{
+					pluginContainer.setStyle('backgroundColor', 0xAB1010);
+				}
+
+			}
+
+
+			public function determineTheStatus(event:gotDataEvent):void
+			{
+				theCheckBox.selected = determineStatus.theResult;
+				fbsmModel.getInstance().uiItems.pluginItems.getItemAt(categIndex).plugins.getItemAt(pluginIndex).isEnabled = determineStatus.theResult;
+
+			}
+
+
+			public function enableDisable(event:MouseEvent):void
+			{
+				var theParams:Array = [theName, !theCheckBox.selected, categIndex, pluginIndex, ShortDesc]
+				event.stopPropagation();
+				if (theName == "core")
+				{
+					fbsmModel.getInstance().logText  += "\nThe core plugin cannot be disabled"
+					fbsmModel.getInstance().uiItems.pluginItems.getItemAt(0).plugins.getItemAt(0).isEnabled = true;
+					theCheckBox.selected = true;
+				}
+				else
+				{
+					fbsmModel.getInstance().logText += "\nAttempting to " + (theParams[1] == true? "disable" : "enable") + " the " + theParams[0] + " plugin";
+					enabler.theParams = theParams;
+					enabler.getInfo();
+				}
+			}
+
+			public function gotEnablerData(event:gotDataEvent):void
+			{
+				var theCateg:uint = event.target.theParams[2];
+				var thePlugin:uint = event.target.theParams[3];
+				var startText:String;
+				var middleText:String;
+				var endText:String;
+				if (event.target.theResult == "wrongStatus")
+				{
+					startText = "\n\t\t It seems the " + event.target.theParams[4];
+					endText = " plugin was already " + (event.target.theParams[1] == true ? "disabled" : "enabled");
+					fbsmModel.getInstance().logText += startText + endText;
+					fbsmModel.getInstance().uiItems.allPlugins.getItemAt(globalIndex).isEnabled = !event.target.theParams[1];
+					fbsmModel.getInstance().uiItems.pluginItems.getItemAt(theCateg).plugins.getItemAt(thePlugin).isEnabled = !event.target.theParams[1];
+					theCheckBox.selected = !event.target.theParams[1];
+				}
+				else
+				{
+					startText = "\n\t\t The attempt to " + (event.target.theParams[1] == true? "disable" : "enable");
+					middleText = " the " + event.target.theParams[4] + " plugin ";
+					endText = event.target.theResult;
+					fbsmModel.getInstance().logText += startText + middleText + endText;
+
+					if (event.target.theResult == "succeeded")
+					{
+						fbsmModel.getInstance().uiItems.allPlugins.getItemAt(globalIndex).isEnabled = !event.target.theParams[1];
+						fbsmModel.getInstance().uiItems.pluginItems.getItemAt(theCateg).plugins.getItemAt(thePlugin).isEnabled = !event.target.theParams[1];
+						theCheckBox.selected = !(event.target.theParams[1]);
+					}
+					else
+					{
+						fbsmModel.getInstance().uiItems.allPlugins.getItemAt(globalIndex).isEnabled = event.target.theParams[1];
+						fbsmModel.getInstance().uiItems.pluginItems.getItemAt(theCateg).plugins.getItemAt(thePlugin).isEnabled = event.target.theParams[1];
+						theCheckBox.selected = event.target.theParams[1];
+					}
+
+				}
+				if (fbsmModel.getInstance().currentActivity == fbsmModel.VIEWING_SHOWALL)
+				{
+					if (parentDocument.parentDocument.sideList.sortType == "enabledDisabled")
+					{
+						parentDocument.parentDocument.sideList.layoutTiles();
+					}
+				}
+			}
+		]]>
+	</mx:Script>
+
+
+	<mx:Style>
+		.pluginText
+		{
+		fontSize : 9;
+		fontFamily : "Verdana";
+		fontWeight : "bold";
+		textalign : "left";
+		}
+	</mx:Style>
+
+	<model:communicate id="determineStatus" theType="getStatus"
+		theTargetObject="fbsmModel.getInstance().uiItems.pluginItems.getItemAt(categIndex).plugins.getItemAt(pluginIndex).isEnabled"
+		hasParams="true" theParams="{[theName]}" doOnStart="false"/>
+
+	<model:communicate id="enabler" theType="enableDisablePlugin" doOnStart="false"
+		hasParams="true" theParams="{[theName, theCheckBox.selected]}"/>
+
+	<mx:HBox width="100%" height="100%"  id="pluginContainer" styleName="plugin" verticalAlign="middle"
+		paddingLeft="2" >
+		<mx:Text selectable="false" cacheAsBitmap="true" width="100%" text="{ShortDesc}" styleName="pluginText"/>
+		<mx:CheckBox id="theCheckBox" click="enableDisable(event)" width="{checkBoxWidth}"/>
+	</mx:HBox>
+	<mx:Spacer width="{spacerWidth}"/>
+
+</mx:HBox>
+

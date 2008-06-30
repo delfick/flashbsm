@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="100%" height="100%">
+	<mx:Script>
+		<![CDATA[
+
+			[Bindable]
+			public var ShortDesc:String;
+		]]>
+	</mx:Script>
+
+	<mx:Label text="{ShortDesc}"/>
+</mx:HBox>

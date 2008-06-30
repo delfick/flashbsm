@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<local:plugins
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:local="com.flashbsm.views.*"
+	width="132" height="40"
+	spacerWidth="0" checkBoxWidth="17"/>

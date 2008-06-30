@@ -1,0 +1,16 @@
+convert normal view to this
+
+VBox
+{
+	-------------------    groupHeaderBtns
+	HBox
+	{
+		------------ sideList
+		VBox
+		{
+			-------------- descriptionArea
+			-------------- settingsArea
+		}
+	}
+	--------------------- footerArea
+}
