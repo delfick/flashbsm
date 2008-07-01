@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:parts="com.flashbsm.views.parts.*"
+	xmlns:containers="com.components.containers.*"
+	width="100%" height="100%">
+
+	<mx:Script>
+		<![CDATA[
+			//sadf
+		]]>
+
+	</mx:Script>
+
+	<mx:Style>
+		.optionsText
+		{
+		fontSize : 12;
+		fontFamily : "Verdana";
+		fontWeight : "bold";
+		verticalAlign : "middle";
+		}
+
+		.groupSortHeader
+		{
+		fontSize : 13;
+		borderStyle:none;
+		fontFamily : "Verdana";
+		fontWeight : "bold";
+		textAlign : "center";
+		backgroundAlpha : 0.19;
+		}
+	</mx:Style>
+	
+	<mx:VBox width="100%" height="100%" >
+		
+		<parts:showAllArea width="100%" height="100%" styleName="box"/>
+		<parts:footerArea width="100%" height="60" styleName="box"/>		
+	</mx:VBox>
+</mx:VBox>

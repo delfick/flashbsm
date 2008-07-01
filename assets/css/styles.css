@@ -1,0 +1,89 @@
+.box
+{
+	borderStyle:solid;
+	backgroundColor: #d3dfe5;
+	borderColor: #4f5a5f;
+	borderThickness: 1;
+}
+
+.whiteBox
+{
+	borderStyle:solid;
+	backgroundColor: #FFFFFF;
+	borderColor: #4f5a5f;
+	borderThickness: 1;
+	horizontalGap : 0;
+	verticalGap : 0;
+	paddingLeft : 3;
+	verticalAlign : "middle";
+}
+
+.whiteBoxNBNP
+{
+	backgroundColor: #FFFFFF;
+	horizontalGap : 0;
+	verticalGap : 0;
+	verticalAlign : "middle";
+}
+
+.tileBox
+{
+	horizontalGap : 0;
+	borderStyle:solid;
+	backgroundColor: #FFFFFF;
+	borderColor: #4f5a5f;
+	borderThickness: 1;
+}
+
+.funcBar
+{
+	cornerRadius: 10;	
+}
+
+.plugin
+{
+	borderStyle:solid;
+	backgroundColor: #FFFFFF;
+	backgroundAlpha: 0.26;
+	borderColor: #4f5a5f;
+	borderThickness: 1;
+}
+
+.pluginOver
+{
+	borderStyle:solid;
+	backgroundColor: #3CAA46;
+	backgroundAlpha: 0.26;
+	borderColor: #4f5a5f;
+	borderThickness: 1;
+}
+
+.pluginPress
+{
+	borderStyle:solid;
+	backgroundColor: #AB1010;
+	backgroundAlpha: 0.26;
+	borderColor: #4f5a5f;
+	borderThickness: 1;
+}
+
+.myCPStyle
+{
+	borderThicknessLeft: 0;
+	borderThicknessTop: 0;
+	borderThicknessBottom: 0;
+	borderThicknessRight: 0;
+	headerHeight: 20;
+	dropShadowEnabled: false;
+	headerColors: #d9d9d9, #ffffff;
+	borderAlpha: 1;
+	backgroundAlpha: 0;
+	paddingTop: 4;
+	paddingLeft: 4;
+	paddingRight: 4;
+	verticalGap: 4;
+
+	openIcon:Embed(source="/assets/images/openArrow.png");
+	closedIcon:Embed(source="/assets/images/closedArrow.png");
+
+}

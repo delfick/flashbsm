@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:local="com.flashbsm.views.parts.*"
+	paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+
+
+	<mx:Script>
+		<![CDATA[
+			//stuff goes here
+		]]>
+
+	</mx:Script>
+	
+	<local:funcBar/>
+	<mx:Spacer width="100%"/>
+	<mx:Button label="Quit" styleName="funcBar" height="100%" width="100"/>
+	
+</mx:HBox>

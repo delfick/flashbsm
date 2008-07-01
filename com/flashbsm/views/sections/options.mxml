@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<mx:TitleWindow
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	creationComplete="doInit();">
+    <mx:Script>
+        <![CDATA[
+            import mx.managers.PopUpManager;
+
+            private function doInit():void
+			{
+                PopUpManager.centerPopUp(this);
+            }
+        ]]>
+    </mx:Script>
+    <mx:Label text="nothing to see here yet"/>
+    <mx:HBox>
+        <mx:Button click="PopUpManager.removePopUp(this);" label="Cancel"/>
+    </mx:HBox>
+</mx:TitleWindow>
