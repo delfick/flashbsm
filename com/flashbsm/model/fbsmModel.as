@@ -49,7 +49,7 @@ package com.flashbsm.model
 		public function recieveData(event:gotDataEvent):void
 		{
 			trace("recieved information from the server");
-			var theData:* = event.target.theResult;
+			var theData:* = event.Result;
 			trace("data decoded, now objectifying");
 			for each (var categ:Object in theData)
 			{

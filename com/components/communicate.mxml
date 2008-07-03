@@ -15,7 +15,7 @@
 
 			[bindable]
 			private var theError:String;
-			private var tempObject:*;
+			private var theResult:*;
 			private var firstTime:Boolean = true;
 			public var theType:String;
 			public var theParams:Array;
@@ -24,8 +24,7 @@
 			public var doOnStart:Boolean = true;
 			public var dataType:String = "array";
 			public var seperatorString:String = " ";
-			public var theTarget:ArrayCollection;
-			public var theTargetObject:*;
+			public var outObject:Object = null;
 
 	        public function getInfo ():void
 			{
@@ -54,9 +53,9 @@
 			{
 				if (firstTime)
 				{
-					tempObject = result;
+					theResult = result;
 					firstTime=false;
-					dispatchEvent( new gotDataEvent( theTarget, theTargetObject, theType ) )
+					dispatchEvent( new gotDataEvent( outObject, theResult ) )
 				}
 				else
 				{
@@ -65,27 +64,22 @@
 						switch (dataType)
 						{
 							case "string" :
-								tempObject = result + seperatorString + tempObject;
+								theResult = result + seperatorString + theResult;
 								break;
 							case "array" :
 								for (var aResult:* in result)
 								{
-									tempObject.push(result[aResult]);
+									theResult.push(result[aResult]);
 								}
 								break;
 						}
 					}
 					else
 					{
-						tempObject = result;
+						theResult = result;
 					}
-					dispatchEvent( new gotDataEvent( theTarget, theTargetObject, theType ) )
+					dispatchEvent( new gotDataEvent( outObject, theResult) )
 				}
-			}
-			[Bindable(event="gotData")]
-			public function get theResult():*
-			{
-				return tempObject;
 			}
 
 	        // Fault handler method displays error message

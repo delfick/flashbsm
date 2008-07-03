@@ -8,18 +8,21 @@ package com.flashbsm.events
 	public class settingsEvent extends Event
 	{
 		public static const SETTINGSCHANGE:String = "settingsChange";
-
-		private var theData:*;
+		
+		private var theNewData:*;
 
 		private var theType:String;
 		
 		private var theSetting:Object;
+		
+		private var theSettingObject:Object;
 
-		public function settingsEvent( inType:String, inData:*, inSettingType:String, inSetting:Object)
+		public function settingsEvent( inType:String, inNewData:*, inSettingType:String, inSetting:Object, inSettingObject:*)
 		{
 			super( inType, true );
 			theSetting = inSetting;
-			theData = inData;
+			theNewData = inNewData;
+			theSettingObject = inSettingObject;
 			settingType = inSettingType;
 		}
 		
@@ -31,11 +34,24 @@ package com.flashbsm.events
 		public function set Value(inValue:*):void
 		{
 		    theSetting.Value = inValue;
+		    theSettingObject.newValue = inValue;
 		}
-
-		public function get data():*
+		
+		public function get Path ():Array
 		{
-			return theData;
+		    return theSetting.Path;
+		}
+		
+		public function get PathIndex ():Array
+		{
+		    return theSetting.PathIndex;
+		}
+		
+		
+
+		public function get newData():*
+		{
+			return theNewData;
 		}
 
 		public function set settingFlag(inFlag:String):void
@@ -52,6 +68,12 @@ package com.flashbsm.events
 		{
 			theType = inType;
 		}
+		
+		public function get Name ():String
+		{
+		    return theSetting.Name;
+		}
+		
 
 	}
 }

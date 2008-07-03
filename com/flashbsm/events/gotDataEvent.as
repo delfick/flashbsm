@@ -9,17 +9,27 @@ package com.flashbsm.events
 	{
 		public static const GOT_DATA:String = "gotData";
 
-		public var theTarget:ArrayCollection;
-		public var theTargetObject:*;
-		public var theType:String;
+		private var theOutObject:Object;
+		private var theResult:*;
 
 
-		public function gotDataEvent( _theTarget:ArrayCollection , _theTargetObject:*, _theType:String)
+		public function gotDataEvent(inOutObject:Object, inResult:*)
 		{
 			super( GOT_DATA, true );
-			this.theTarget = _theTarget;
-			this.theTargetObject = _theTargetObject;
-			this.theType = _theType;
+			theOutObject = inOutObject;
+			theResult = inResult;
 		}
+		
+		public function get outObject ():Object
+		{
+		    return theOutObject;
+		}
+		
+		public function get Result ():*
+		{
+		    return theResult;
+		}
+		
+		
 	}
 }

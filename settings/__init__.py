@@ -1,17 +1,17 @@
 import compizconfig
 context = compizconfig.Context()
+globalInfoObject = []
 
 def getInfoObject():
-    InfoObject = []
     for category in sorted(context.Categories, CatSortCompare):
         nextCateg = {}
         nextCateg["Name"] = category
         nextCateg["Plugins"] = []
-        InfoObject.append(nextCateg)
+        globalInfoObject.append(nextCateg)
         for plugin in sorted(context.Categories[category], PluginSortCompare):
             nextPlugin = getPluginInfo(plugin)
             nextCateg["Plugins"].append(nextPlugin)
-    return InfoObject
+    return globalInfoObject
             
 def getPluginInfo(plugin):
     infoObject = {}
@@ -59,6 +59,46 @@ def getSettingInfo(setting):
     infoObject["Value"] = setting.Value
     infoObject["Default"] = setting.DefaultValue
     return infoObject
+    
+def changeSetting(params):
+    categ = params[0][0]
+    plugin = params[0][1]
+    group = params[0][2]
+    subGroup = params[0][3]
+    setting = params[0][4]
+    categIndex = params[1][0]
+    pluginIndex = params[1][1]
+    groupIndex = params[1][2]
+    subGroupIndex = params[1][3]
+    settingIndex = params[1][4]
+    Value = params[2]
+    items = context.Plugins[plugin].Groups[group].items()
+    for subGroupName, theSubGroup in items:
+        if subGroupName == subGroup:
+            theSettings = sum((v.values() for v in [theSubGroup.Display]+[theSubGroup.Screens[0]]), [])
+            for theSetting in theSettings:
+                if theSetting.Name == setting:
+                    theSetting.Value = Value
+                    return theSetting.Value == Value
+    
+def renewValue(params):
+    categ = params[0][0]
+    plugin = params[0][1]
+    group = params[0][2]
+    subGroup = params[0][3]
+    setting = params[0][4]
+    categIndex = params[1][0]
+    pluginIndex = params[1][1]
+    groupIndex = params[1][2]
+    subGroupIndex = params[1][3]
+    settingIndex = params[1][4]
+    items = context.Plugins[plugin].Groups[group].items()
+    for subGroupName, theSubGroup in items:
+        if subGroupName == subGroup:
+            theSettings = sum((v.values() for v in [theSubGroup.Display]+[theSubGroup.Screens[0]]), [])
+            for theSetting in theSettings:
+                if theSetting.Name == setting:
+                    return theSetting.Value 
     
 def CatSortCompare(v1, v2):
     if v1 == v2:

@@ -8,6 +8,7 @@
 	<mx:Script>
 		<![CDATA[
 		    import com.flashbsm.model.*;
+		    import com.components.*;
 			import flash.events.*;
 			import com.custom.*;
 			import com.flashbsm.events.*;
@@ -17,6 +18,7 @@
 			import mx.effects.Move;
 
 			private var changeMade:Boolean = false;
+			private var changeSettings:communicate = new communicate();
 
 			public function initApp():void
 			{
@@ -25,39 +27,39 @@
 			
 			public function dealWithEvent(inEvent:settingsEvent):void
 			{
-
-				//determine if the change is made
-				//will add a timer to simulate the time it takes to apply the setting and determine if it is applied successfully
-
-				//START REDUNDANT STUFF
-
+			
 				var outObject:Object = new Object;
 				outObject.changeMade = changeMade;
-				outObject.inEvent = inEvent;
+				outObject.settingsEvent = inEvent;
 				outObject.oldData = inEvent.oldData;
 				
-				var theTimer:dataTimer = new dataTimer(1000, 2);
-				theTimer.data = outObject;
-				theTimer.start();
-				theTimer.addEventListener("timerComplete", continueDealingWithEvent);
+				var pluginName:String = fbsmModel.getInstance().everything.currentPlugin.Name;
+				var settingName:String = inEvent.Name;
+				
+				
+				changeSettings.theType="settingsChange";
+				changeSettings.outObject = outObject;
+				changeSettings.hasParams = true;
+				changeSettings.theParams = [inEvent.Path, inEvent.PathIndex, inEvent.newData];
+			    changeSettings.getInfo();
+			    changeSettings.addEventListener("gotData", continueDealingWithEvent);
 			}
-			private function continueDealingWithEvent(inEvent:TimerEvent):void
+			private function continueDealingWithEvent(inEvent:gotDataEvent):void
 			{
-				var tmr:dataTimer = inEvent.currentTarget as dataTimer;
-				var theEvent:settingsEvent = tmr.data.inEvent;
-				var oldData:* = tmr.data.oldData; 
-
-				//END REDUNDANT STUFF
-
-				theEvent.Value = theEvent.data;
-				if (tmr.data.changeMade)
+			    var theSettingsEvent:settingsEvent = inEvent.outObject.settingsEvent;
+				var newData:* = theSettingsEvent.newData;
+				var oldData:* = theSettingsEvent.oldData;
+				
+				theSettingsEvent.Value = newData;
+				if (inEvent.Result)
 				{
-					theEvent.settingFlag = "changed";
+					theSettingsEvent.settingFlag = "changed";
+					
 				}
 				else
 				{
-					theEvent.settingFlag = "error";
-					theEvent.Value = oldData;
+					theSettingsEvent.settingFlag = "error";
+					theSettingsEvent.Value = oldData;
 				}
 			}
 		]]>

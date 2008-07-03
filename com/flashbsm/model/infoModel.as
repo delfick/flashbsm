@@ -62,8 +62,10 @@ class category extends EventDispatcher implements IEventDispatcher
 	import mx.collections.ArrayCollection;
 	private var theName:String;
 	private var theIndex:Number;
-	private var pluginIndex:Number;
 	private var isSelected:Boolean;
+	private var thePath:Array = new Array();
+	private var thePathIndex:Array = new Array();
+	private var pluginCount:Number;
 	
 	[Bindable]
 	public var thePlugins:ArrayCollection = new ArrayCollection;
@@ -72,11 +74,13 @@ class category extends EventDispatcher implements IEventDispatcher
 	    theIndex = inIndex;
 		theName = inCateg.Name;
 		isSelected = false;
-		pluginIndex = 0;
+		thePath.push(theName);
+		thePathIndex.push(theIndex);
+		pluginCount = 0;
 		for (var nextPlugin:String in inCateg.Plugins)
 		{
-			thePlugins.addItem(new plugin(inCateg.Plugins[nextPlugin], pluginIndex, theIndex));
-			pluginIndex++
+			thePlugins.addItem(new plugin(inCateg.Plugins[nextPlugin], pluginCount, thePath, thePathIndex));
+			pluginCount++
 		}
 	}
 
@@ -105,6 +109,16 @@ class category extends EventDispatcher implements IEventDispatcher
 	    return theIndex;
 	}
 	
+	public function get Path ():Array
+	{
+	    return thePath;
+	}
+	
+	public function get PathIndex ():Array
+	{
+	    return thePathIndex;
+	}
+	
 	
 
 	public function getPlugin(theIndex:Number):plugin
@@ -125,11 +139,14 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	private var hasIcon:Boolean;
 	private var theIcon:String;
 	private var theIndex:Number;
-	private var theGroupIndex:Number
+	private var theGroupIndex:Number;
+	private var thePath:Array = new Array();
+	private var thePathIndex:Array = new Array();
+	private var groupCount:Number;
 	[Bindable]
 	public var theGroups:ArrayCollection = new ArrayCollection;
 
-	public function plugin(inPlugin:Object, inIndex:Number, inGroupIndex:Number):void
+	public function plugin(inPlugin:Object, inIndex:Number, inPath:Array, inPathIndex:Array):void
 	{
 		theName = inPlugin.Name;
 		theShortDesc = inPlugin.ShortDesc;
@@ -139,12 +156,24 @@ class plugin extends EventDispatcher implements IEventDispatcher
 		theRanking = inPlugin.Ranking;
 		isSelected = false;
 		theIndex = inIndex;
-		theGroupIndex = inGroupIndex;
+		for each (var pathPart:String in inPath)
+		{
+		    thePath.push(pathPart);
+		}
+		for each (var indexPart:Number in inPathIndex)
+		{
+		    theGroupIndex = indexPart;
+		    thePathIndex.push(indexPart);
+		}
+		thePath.push(theName);
+		thePathIndex.push(theIndex);
 		inPlugin.HasIcon == true? theIcon = theName: theIcon = "unknown";
 		theIcon = 'assets/icons/plugin-'+ theIcon + '.png'
+		groupCount = 0;
 		for (var nextGroup:String in inPlugin.Groups)
 		{
-			theGroups.addItem(new group(inPlugin.Groups[nextGroup]));
+			theGroups.addItem(new group(inPlugin.Groups[nextGroup], groupCount, thePath, thePathIndex));
+			groupCount++;
 		}
 	}
 
@@ -240,6 +269,17 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	    return theIndex;
 	}
 	
+	public function get Path ():Array
+	{
+	    return thePath;
+	}
+	
+	public function get PathIndex ():Array
+	{
+	    return thePathIndex;
+	}
+	
+	
 	public function get GroupIndex ():Number
 	{
 	    return theGroupIndex;
@@ -256,14 +296,31 @@ class group extends EventDispatcher implements IEventDispatcher
 {
 	import mx.collections.ArrayCollection;
 	private var theName:String;
+	private var theIndex:Number;
+	private var thePath:Array = new Array();
+	private var thePathIndex:Array = new Array();
+	private var subGroupCount:Number;
 	[Bindable]
 	public var theSubGroups:ArrayCollection = new ArrayCollection;
-	public function group(inGroup:Object)
+	public function group(inGroup:Object, inIndex:Number, inPath:Array, inPathIndex:Array)
 	{
 		theName = inGroup.Name;
+		theIndex = inIndex;
+		for each (var pathPart:String in inPath)
+		{
+		    thePath.push(pathPart);
+		}
+		for each (var indexPart:Number in inPathIndex)
+		{
+		    thePathIndex.push(indexPart);
+		}
+		theName == "General" ?  thePath.push(""): thePath.push(theName);
+		thePathIndex.push(theIndex);
+		subGroupCount = 0;
 		for (var nextSubGroup:String in inGroup.SubGroups)
 		{
-			theSubGroups.addItem(new subGroup(inGroup.SubGroups[nextSubGroup]));
+			theSubGroups.addItem(new subGroup(inGroup.SubGroups[nextSubGroup], subGroupCount, thePath, thePathIndex));
+			subGroupCount++
 		}
 	}
 
@@ -275,6 +332,21 @@ class group extends EventDispatcher implements IEventDispatcher
 	public function set Name(inName:String):void
 	{
 		theName = inName;
+	}
+	
+	public function get Index ():Number
+	{
+	    return theIndex;
+	}
+	
+	public function get Path ():Array
+	{
+	    return thePath;
+	}
+	
+	public function get PathIndex ():Array
+	{
+	    return thePathIndex;
 	}
 
 	public function getSubGroup(theIndex:Number):subGroup
@@ -286,14 +358,31 @@ class subGroup extends EventDispatcher implements IEventDispatcher
 {
 	import mx.collections.ArrayCollection;
 	private var theName:String;
+	private var thePath:Array = new Array();
+	private var thePathIndex:Array = new Array();
+	private var settingsCount:Number;
+	private var theIndex:Number;
 	[Bindable]
 	public var theSettings:ArrayCollection = new ArrayCollection;
-	public function subGroup(inSubGroup:Object)
+	public function subGroup(inSubGroup:Object, inIndex:Number, inPath:Array, inPathIndex:Array)
 	{
 		theName = inSubGroup.Name;
+		theIndex = inIndex;
+		for each (var pathPart:String in inPath)
+		{
+		    thePath.push(pathPart);
+		}
+		for each (var indexPart:Number in inPathIndex)
+		{
+		    thePathIndex.push(indexPart);
+		}
+		thePath.push(theName);
+		thePathIndex.push(theIndex);
+		settingsCount = 0;
 		for (var nextSetting:String in inSubGroup.Settings)
 		{
-			theSettings.addItem(new setting(inSubGroup.Settings[nextSetting]));
+			theSettings.addItem(new setting(inSubGroup.Settings[nextSetting], settingsCount, thePath, thePathIndex));
+			settingsCount++
 		}
 	}
 
@@ -307,6 +396,21 @@ class subGroup extends EventDispatcher implements IEventDispatcher
 		theName = inName;
 	}
 
+	public function get Index ():Number
+	{
+	    return theIndex;
+	}
+	
+	public function get Path ():Array
+	{
+	    return thePath;
+	}
+	
+	public function get PathIndex ():Array
+	{
+	    return thePathIndex;
+	}
+	
 	public function getSetting(theIndex:Number):setting
 	{
 		return theSettings.getItemAt(theIndex) as setting;
@@ -323,10 +427,14 @@ class setting extends EventDispatcher implements IEventDispatcher
 	private var theInfo:Object;
 	private var theValue:Object;
 	private var theDefault:Object;
+	private var thePath:Array = new Array();
+	private var thePathIndex:Array = new Array();
+	private var theIndex:Number;
 
-	public function setting(inSetting:Object):void
+	public function setting(inSetting:Object, inIndex:Number, inPath:Array, inPathIndex:Array):void
 	{
 		theName = inSetting.Name;
+		theIndex = inIndex;
 		theShortDesc = inSetting.ShortDesc;
 		theLongDesc = inSetting.LongDesc;
 		theType = inSetting.Type;
@@ -334,6 +442,16 @@ class setting extends EventDispatcher implements IEventDispatcher
 		theInfo = inSetting.Info
 		theValue = inSetting.Value
 		theDefault = inSetting.Default
+		for each (var pathPart:String in inPath)
+		{
+		    thePath.push(pathPart);
+		}
+		for each (var indexPart:Number in inPathIndex)
+		{
+		    thePathIndex.push(indexPart);
+		}
+		thePath.push(theName);
+		thePathIndex.push(theIndex);
 	}
 
 	[Bindable]
@@ -414,6 +532,21 @@ class setting extends EventDispatcher implements IEventDispatcher
 	public function set Default(inDefault:Object):void
 	{
 		theDefault = inDefault;
+	}
+	
+	public function get Index ():Number
+	{
+	    return theIndex;
+	}
+	
+	public function get Path ():Array
+	{
+	    return thePath;
+	}
+	
+	public function get PathIndex ():Array
+	{
+	    return thePathIndex;
 	}
 }
 
