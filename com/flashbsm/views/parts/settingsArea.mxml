@@ -1,13 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox
-	xmlns:mx="http://www.adobe.com/2006/mxml">
-
-
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:containers="com.components.containers.*"
+	xmlns:parts="com.flashbsm.views.parts.*"
+	width="100%" height="100%"
+	creationComplete="initApp()">
 	<mx:Script>
 		<![CDATA[
-			//stuff goes here
-		]]>
+		    import com.flashbsm.model.*;
+			import flash.events.*;
+			import com.custom.*;
+			import com.flashbsm.events.*;
+			import flash.utils.Timer;
+			import flash.events.TimerEvent;
+			import mx.effects.Effect;
+			import mx.effects.Move;
 
+			private var changeMade:Boolean = false;
+
+			public function initApp():void
+			{
+				this.addEventListener( settingsEvent.SETTINGSCHANGE, dealWithEvent );
+			}	
+			
+			public function dealWithEvent(inEvent:settingsEvent):void
+			{
+
+				//determine if the change is made
+				//will add a timer to simulate the time it takes to apply the setting and determine if it is applied successfully
+
+				//START REDUNDANT STUFF
+
+				var outObject:Object = new Object;
+				outObject.changeMade = changeMade;
+				outObject.inEvent = inEvent;
+				outObject.oldData = inEvent.oldData;
+				
+				var theTimer:dataTimer = new dataTimer(1000, 2);
+				theTimer.data = outObject;
+				theTimer.start();
+				theTimer.addEventListener("timerComplete", continueDealingWithEvent);
+			}
+			private function continueDealingWithEvent(inEvent:TimerEvent):void
+			{
+				var tmr:dataTimer = inEvent.currentTarget as dataTimer;
+				var theEvent:settingsEvent = tmr.data.inEvent;
+				var oldData:* = tmr.data.oldData; 
+
+				//END REDUNDANT STUFF
+
+				theEvent.Value = theEvent.data;
+				if (tmr.data.changeMade)
+				{
+					theEvent.settingFlag = "changed";
+				}
+				else
+				{
+					theEvent.settingFlag = "error";
+					theEvent.Value = oldData;
+				}
+			}
+		]]>
 	</mx:Script>
 	
+	<mx:TabNavigator width="100%" height="100%" >
+	    <mx:Repeater id="groupR" dataProvider="{fbsmModel.getInstance().everything.currentPlugin.theGroups}">
+		    <mx:VBox label="{groupR.currentItem.Name}">
+		        <parts:theSettings theSubGroups="{groupR.currentItem.theSubGroups}"/>
+		    </mx:VBox>
+	    </mx:Repeater>
+	</mx:TabNavigator>
 </mx:VBox>
+

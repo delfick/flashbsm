@@ -1,0 +1,419 @@
+package com.flashbsm.model
+{
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
+	public class infoModel extends EventDispatcher implements IEventDispatcher
+	{
+		import mx.collections.ArrayCollection;
+
+		[Bindable]
+		public var theCategories:ArrayCollection = new ArrayCollection;
+		
+		[Bindable]
+		public var currentPlugins:ArrayCollection = new ArrayCollection;
+		
+		[Bindable]
+		public var currentPlugin:plugin;
+		
+		[Bindable]
+		public var currentGroup:category;
+		
+		private var groupCount:Number = 0;
+		
+		private var currentGroupIndex:Number = 0;
+		private var currentPluginIndex:Array = [0,0];
+
+		public function addCategory(theData:Object):void
+		{
+			theCategories.addItem(new category(theData, groupCount));
+			groupCount++;
+		}
+
+		public function getCategory(theIndex:Number):category
+		{
+			return theCategories.getItemAt(theIndex) as category;
+		}
+		
+		public function setCurrentGroup (inGroupIndex:Number):void
+		{
+		    theCategories.getItemAt(currentGroupIndex).Selected = false;
+		    currentGroupIndex = inGroupIndex;
+		    currentPlugins = theCategories.getItemAt(currentGroupIndex).thePlugins;
+		    theCategories.getItemAt(currentGroupIndex).Selected = true;
+		    currentGroup = getCategory(currentGroupIndex);
+		    setCurrentPlugin(currentGroupIndex, 0)
+		}
+		
+		public function setCurrentPlugin(inGroupIndex:Number, inPluginIndex:Number):void
+		{
+		    getCategory(currentPluginIndex[0]).getPlugin(currentPluginIndex[1]).Selected = false;
+		    currentPluginIndex = [inGroupIndex, inPluginIndex];
+		    theCategories.getItemAt(inGroupIndex).getPlugin(inPluginIndex).Selected = true;
+		    currentPlugin = getCategory(inGroupIndex).getPlugin(inPluginIndex)
+		}
+		
+	}
+}
+import flash.events.EventDispatcher;
+import flash.events.IEventDispatcher;
+
+class category extends EventDispatcher implements IEventDispatcher
+{
+	import mx.collections.ArrayCollection;
+	private var theName:String;
+	private var theIndex:Number;
+	private var pluginIndex:Number;
+	private var isSelected:Boolean;
+	
+	[Bindable]
+	public var thePlugins:ArrayCollection = new ArrayCollection;
+	public function category(inCateg:Object, inIndex:Number)
+	{
+	    theIndex = inIndex;
+		theName = inCateg.Name;
+		isSelected = false;
+		pluginIndex = 0;
+		for (var nextPlugin:String in inCateg.Plugins)
+		{
+			thePlugins.addItem(new plugin(inCateg.Plugins[nextPlugin], pluginIndex, theIndex));
+			pluginIndex++
+		}
+	}
+
+	[Bindable]
+	public function get Name():String
+	{
+		return theName;
+	}
+	public function set Name(inName:String):void
+	{
+		theName = inName;
+	}
+	
+	[Bindable]
+	public function get Selected ():Boolean
+	{
+	    return isSelected;
+	}
+	public function set Selected (inSelected:Boolean):void
+	{
+	    isSelected = inSelected;
+	}
+	
+	public function get Index ():Number
+	{
+	    return theIndex;
+	}
+	
+	
+
+	public function getPlugin(theIndex:Number):plugin
+	{
+		return thePlugins.getItemAt(theIndex) as plugin;
+	}
+}
+class plugin extends EventDispatcher implements IEventDispatcher
+{
+	import mx.collections.ArrayCollection;
+	private var theName:String;
+	private var theShortDesc:String;
+	private var theLongDesc:String;
+	private var theEnabled:Boolean;
+	private var theFeatures:ArrayCollection = new ArrayCollection;
+	private var theRanking:Object;
+	private var isSelected:Boolean;
+	private var hasIcon:Boolean;
+	private var theIcon:String;
+	private var theIndex:Number;
+	private var theGroupIndex:Number
+	[Bindable]
+	public var theGroups:ArrayCollection = new ArrayCollection;
+
+	public function plugin(inPlugin:Object, inIndex:Number, inGroupIndex:Number):void
+	{
+		theName = inPlugin.Name;
+		theShortDesc = inPlugin.ShortDesc;
+		theLongDesc = inPlugin.LongDesc;
+		theEnabled = inPlugin.Enabled;
+		Features = inPlugin.Features;
+		theRanking = inPlugin.Ranking;
+		isSelected = false;
+		theIndex = inIndex;
+		theGroupIndex = inGroupIndex;
+		inPlugin.HasIcon == true? theIcon = theName: theIcon = "unknown";
+		theIcon = 'assets/icons/plugin-'+ theIcon + '.png'
+		for (var nextGroup:String in inPlugin.Groups)
+		{
+			theGroups.addItem(new group(inPlugin.Groups[nextGroup]));
+		}
+	}
+
+	[Bindable]
+	public function get Name():String
+	{
+		return theName;
+	}
+	public function set Name(inName:String):void
+	{
+		theName = inName;
+	}
+
+	[Bindable]
+	public function get ShortDesc():String
+	{
+		return theShortDesc;
+	}
+	public function set ShortDesc(inShortDesc:String):void
+	{
+		theShortDesc = inShortDesc;
+	}
+
+	[Bindable]
+	public function get LongDesc():String
+	{
+		return theLongDesc;
+	}
+	public function set LongDesc(inLongDesc:String):void
+	{
+		theLongDesc = inLongDesc;
+	}
+
+	[Bindable]
+	public function get Enabled():Boolean
+	{
+		return theEnabled;
+	}
+	public function set Enabled(inEnabled:Boolean):void
+	{
+		theEnabled = inEnabled;
+	}
+
+	[Bindable]
+	public function get Features():*
+	{
+		return theFeatures;
+	}
+	public function set Features(inFeatures:*):void
+	{
+		theFeatures = new ArrayCollection();
+		for (var feature:String in inFeatures)
+		{
+			theFeatures.addItem(inFeatures[feature]);
+		}
+	}
+
+	[Bindable]
+	public function get Ranking():Object
+	{
+		return theRanking;
+	}
+	public function set Ranking(inRanking:Object):void
+	{
+		theRanking = inRanking;
+	}
+	
+	[Bindable]
+	public function get Selected ():Boolean
+	{
+	    return isSelected;
+	}
+	public function set Selected (inSelected:Boolean):void
+	{
+	    isSelected = inSelected;
+	}
+	
+	[Bindable]
+	public function get Icon ():String
+	{
+	    return theIcon;
+	}
+	
+	public function set Icon (inIcon:String):void
+	{
+	    theIcon = inIcon;
+	}
+		
+	
+	
+	public function get Index ():Number
+	{
+	    return theIndex;
+	}
+	
+	public function get GroupIndex ():Number
+	{
+	    return theGroupIndex;
+	}
+
+	public function getGroup(theIndex:Number):group
+	{
+		return theGroups.getItemAt(theIndex) as group;
+	}
+
+
+}
+class group extends EventDispatcher implements IEventDispatcher
+{
+	import mx.collections.ArrayCollection;
+	private var theName:String;
+	[Bindable]
+	public var theSubGroups:ArrayCollection = new ArrayCollection;
+	public function group(inGroup:Object)
+	{
+		theName = inGroup.Name;
+		for (var nextSubGroup:String in inGroup.SubGroups)
+		{
+			theSubGroups.addItem(new subGroup(inGroup.SubGroups[nextSubGroup]));
+		}
+	}
+
+	[Bindable]
+	public function get Name():String
+	{
+		return theName;
+	}
+	public function set Name(inName:String):void
+	{
+		theName = inName;
+	}
+
+	public function getSubGroup(theIndex:Number):subGroup
+	{
+		return theSubGroups.getItemAt(theIndex) as subGroup;
+	}
+}
+class subGroup extends EventDispatcher implements IEventDispatcher
+{
+	import mx.collections.ArrayCollection;
+	private var theName:String;
+	[Bindable]
+	public var theSettings:ArrayCollection = new ArrayCollection;
+	public function subGroup(inSubGroup:Object)
+	{
+		theName = inSubGroup.Name;
+		for (var nextSetting:String in inSubGroup.Settings)
+		{
+			theSettings.addItem(new setting(inSubGroup.Settings[nextSetting]));
+		}
+	}
+
+	[Bindable]
+	public function get Name():String
+	{
+		return theName;
+	}
+	public function set Name(inName:String):void
+	{
+		theName = inName;
+	}
+
+	public function getSetting(theIndex:Number):setting
+	{
+		return theSettings.getItemAt(theIndex) as setting;
+	}
+}
+class setting extends EventDispatcher implements IEventDispatcher
+{
+	import mx.collections.ArrayCollection;
+	private var theName:String;
+	private var theShortDesc:String;
+	private var theLongDesc:String;
+	private var theType:String;
+	private var theHints:String;
+	private var theInfo:Object;
+	private var theValue:Object;
+	private var theDefault:Object;
+
+	public function setting(inSetting:Object):void
+	{
+		theName = inSetting.Name;
+		theShortDesc = inSetting.ShortDesc;
+		theLongDesc = inSetting.LongDesc;
+		theType = inSetting.Type;
+		theHints = inSetting.Hints
+		theInfo = inSetting.Info
+		theValue = inSetting.Value
+		theDefault = inSetting.Default
+	}
+
+	[Bindable]
+	public function get Name():String
+	{
+		return theName;
+	}
+	public function set Name(inName:String):void
+	{
+		theName = inName;
+	}
+
+	[Bindable]
+	public function get ShortDesc():String
+	{
+		return theShortDesc;
+	}
+	public function set ShortDesc(inShortDesc:String):void
+	{
+		theShortDesc = inShortDesc;
+	}
+
+	[Bindable]
+	public function get LongDesc():String
+	{
+		return theLongDesc;
+	}
+	public function set LongDesc(inLongDesc:String):void
+	{
+		theLongDesc = inLongDesc;
+	}
+
+	[Bindable]
+	public function get Type():String
+	{
+		return theType;
+	}
+	public function set Type(inType:String):void
+	{
+		theType = inType;
+	}
+
+	[Bindable]
+	public function get Hints():String
+	{
+		return theHints;
+	}
+	public function set Hints(inHints:String):void
+	{
+		theHints = inHints;
+	}
+
+	[Bindable]
+	public function get Info():Object
+	{
+		return theInfo;
+	}
+	public function set Info(inInfo:Object):void
+	{
+		theInfo = inInfo;
+	}
+
+	[Bindable]
+	public function get Value():Object
+	{
+		return theValue;
+	}
+	public function set Value(inValue:Object):void
+	{
+		theValue = inValue;
+	}
+
+	[Bindable]
+	public function get Default():Object
+	{
+		return theDefault;
+	}
+	public function set Default(inDefault:Object):void
+	{
+		theDefault = inDefault;
+	}
+}
+

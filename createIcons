@@ -1,0 +1,11 @@
+#!/bin/bash
+
+ccsmImages=/usr/local/share/ccsm/icons/hicolor/scalable/apps
+
+ls $ccsmImages
+cp $ccsmImages/* assets/icons/
+cd assets/icons
+for i in *.svg; do inkscape -f "$i" -e "${i%%.svg*}.png" -w 50; done
+rm *.svg
+cd ../../..
+exit 0

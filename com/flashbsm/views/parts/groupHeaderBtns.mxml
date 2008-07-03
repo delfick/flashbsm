@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox
-	xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:HBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:parts="com.flashbsm.views.parts.*"
+	paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
 
 
 	<mx:Script>
 		<![CDATA[
-			//stuff goes here
+			import flash.events.Event;
+			import mx.core.Application;
+			import com.flashbsm.model.*;
+			import com.flashbsm.events.*;
+
+			private function groupClick(event:Event):void
+			{
+				fbsmModel.getInstance().everything.setCurrentGroup(event.target.info.Index);
+				//parentDocument.updateDescription();
+			}
 		]]>
 
 	</mx:Script>
-	
-</mx:VBox>
+    	
+	<mx:Repeater id="groups" dataProvider="{fbsmModel.getInstance().everything.theCategories}" >
+		<parts:box info="{groups.currentItem}" itemClick="{groupClick(event)}"/>
+	</mx:Repeater>
+</mx:HBox>

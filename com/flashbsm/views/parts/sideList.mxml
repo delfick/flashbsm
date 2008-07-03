@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox
-	xmlns:mx="http://www.adobe.com/2006/mxml">
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:parts="com.flashbsm.views.parts.*"
+	paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10"
+	verticalScrollPolicy="on">
 
 
 	<mx:Script>
 		<![CDATA[
-			//stuff goes here
+			import flash.events.Event;
+			import mx.core.Application;
+			import com.flashbsm.model.*;
+			import com.flashbsm.events.*;
+
+			private function pluginClick(event:Event):void
+			{
+				fbsmModel.getInstance().everything.setCurrentPlugin(event.target.info.GroupIndex, event.target.info.Index);
+				//parentDocument.updateDescription();
+			}
 		]]>
 
 	</mx:Script>
-	
+    	
+	<mx:Repeater id="plugins" dataProvider="{fbsmModel.getInstance().everything.currentPlugins}" >
+		<parts:box info="{plugins.currentItem}" itemClick="{pluginClick(event)}"
+		width="100%" height="60" />
+	</mx:Repeater>
 </mx:VBox>

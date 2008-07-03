@@ -44,9 +44,9 @@
 			}
 		]]>
 	</mx:Script>
-	<views:normal id="normal" />
+
 	<views:initial id="initial"/>
-	
+	<views:normal id="normal" />
 	<views:showAll id="showAll" />
 
 

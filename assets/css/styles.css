@@ -6,6 +6,30 @@
 	borderThickness: 1;
 }
 
+.groupNormal
+{
+	borderStyle:solid;
+	backgroundColor: #d3dfe5;
+	borderColor: #4f5a5f;
+	borderThickness: 1;
+}
+
+.groupOver
+{
+	borderStyle:solid;
+	backgroundColor: #99e19c;
+	borderColor: #4f5a5f;
+	borderThickness: 1;
+}
+
+.groupDown
+{
+	borderStyle:solid;
+	backgroundColor: #99c8e1;
+	borderColor: #4f5a5f;
+	borderThickness: 1;
+}
+
 .whiteBox
 {
 	borderStyle:solid;
