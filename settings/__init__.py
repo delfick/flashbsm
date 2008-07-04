@@ -52,12 +52,6 @@ def getSettingInfo(setting):
     infoObject["Hints"] = setting.Hints
     infoObject["SettingNumber"] = len(settingsHolder)
     settingsHolder.append(setting)
-    if setting.ShortDesc == 'Edge Flip Pointer':
-        print "found the setting"
-        print setting.Value
-        setting.Value = False
-        print setting.Value
-        #That doesn't change the setting on my computer....
     if setting.Type == "List":
         theInfo = {}
         theInfo["ListType"] = setting.Info[0]
@@ -74,7 +68,7 @@ def changeSetting(params):
     Value = params[1]
     settingsHolder[settingNum].Value = Value
     context.Write()
-    return (Value == settingsHolder[settingNum].Value)
+    return (Value != settingsHolder[settingNum].Value)
     
 def renewValue(params):
     settingNum = params[0]

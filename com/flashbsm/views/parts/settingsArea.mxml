@@ -19,6 +19,7 @@
 
 			private var changeMade:Boolean = false;
 			private var changeSettings:communicate = new communicate();
+			private var tnToBeReset:Boolean = true;
 
 			public function initApp():void
 			{
@@ -62,10 +63,20 @@
 					theSettingsEvent.Value = oldData;
 				}
 			}
+			private function stateChanged(inEvent:Event):void
+			{
+			    trace("state changed");
+			    trace(tn.selectedChild);
+			    trace(tn.selectedIndex);
+			    trace(fbsmModel.getInstance().everything.currentPlugin.SelectedGroup);
+			    fbsmModel.getInstance().everything.currentPlugin.SelectedGroup = tn.selectedIndex
+			    trace(fbsmModel.getInstance().everything.currentPlugin.SelectedGroup);
+			}
 		]]>
 	</mx:Script>
 	
-	<mx:TabNavigator width="100%" height="100%" >
+	<mx:TabNavigator width="100%" height="100%" id="tn" updateComplete="stateChanged(event)" 
+	selectedIndex="{fbsmModel.getInstance().everything.currentPlugin.SelectedGroup}" >
 	    <mx:Repeater id="groupR" dataProvider="{fbsmModel.getInstance().everything.currentPlugin.theGroups}">
 		    <mx:VBox label="{groupR.currentItem.Name}">
 		        <parts:theSettings theSubGroups="{groupR.currentItem.theSubGroups}"/>

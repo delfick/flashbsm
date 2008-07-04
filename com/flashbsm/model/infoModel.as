@@ -15,13 +15,11 @@ package com.flashbsm.model
 		[Bindable]
 		public var currentPlugin:plugin;
 		
+		
 		[Bindable]
 		public var currentGroup:category;
 		
 		private var groupCount:Number = 0;
-		
-		private var currentGroupIndex:Number = 0;
-		private var currentPluginIndex:Array = [0,0];
 
 		public function addCategory(theData:Object):void
 		{
@@ -36,26 +34,27 @@ package com.flashbsm.model
 		
 		public function setCurrentGroup (inGroupIndex:Number):void
 		{
-		    theCategories.getItemAt(currentGroupIndex).Selected = false;
-		    currentGroupIndex = inGroupIndex;
-		    currentPlugins = theCategories.getItemAt(currentGroupIndex).thePlugins;
-		    theCategories.getItemAt(currentGroupIndex).Selected = true;
-		    currentGroup = getCategory(currentGroupIndex);
-		    setCurrentPlugin(currentGroupIndex, 0)
+		    currentGroup.Selected = false;
+		    currentGroup = getCategory(inGroupIndex);
+		    currentPlugins = currentGroup.thePlugins;
+		    currentGroup.Selected = true;
+		    setCurrentPlugin(inGroupIndex, 0)
 		}
 		
 		public function setCurrentPlugin(inGroupIndex:Number, inPluginIndex:Number):void
 		{
-		    getCategory(currentPluginIndex[0]).getPlugin(currentPluginIndex[1]).Selected = false;
-		    currentPluginIndex = [inGroupIndex, inPluginIndex];
-		    theCategories.getItemAt(inGroupIndex).getPlugin(inPluginIndex).Selected = true;
-		    currentPlugin = getCategory(inGroupIndex).getPlugin(inPluginIndex)
+		    currentPlugin.SelectedGroup = 0;
+		    currentPlugin.Selected = false;
+			currentPlugin = getCategory(inGroupIndex).getPlugin(inPluginIndex);
+		    currentPlugin.Selected = true;
 		}
 		
 	}
 }
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
+import com.components.*;
+import com.flashbsm.events.*;
 
 class category extends EventDispatcher implements IEventDispatcher
 {
@@ -143,6 +142,7 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	private var thePath:Array = new Array();
 	private var thePathIndex:Array = new Array();
 	private var groupCount:Number;
+	private var theSelectedGroup:Number;
 	[Bindable]
 	public var theGroups:ArrayCollection = new ArrayCollection;
 
@@ -156,6 +156,7 @@ class plugin extends EventDispatcher implements IEventDispatcher
 		theRanking = inPlugin.Ranking;
 		isSelected = false;
 		theIndex = inIndex;
+        theSelectedGroup = 0;
 		for each (var pathPart:String in inPath)
 		{
 		    thePath.push(pathPart);
@@ -261,6 +262,19 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	{
 	    theIcon = inIcon;
 	}
+	
+	[Bindable]
+	public function get SelectedGroup ():Number
+	{
+	    return theSelectedGroup;
+	}
+	
+	public function set SelectedGroup (inSelectedGroup:Number):void
+	{
+	    theSelectedGroup = inSelectedGroup;
+	}
+	
+	
 		
 	
 	
@@ -431,6 +445,7 @@ class setting extends EventDispatcher implements IEventDispatcher
 	private var thePathIndex:Array = new Array();
 	private var theIndex:Number;
 	private var theSettingNumber:Number;
+	private var renewSettings:communicate = new communicate();
 
 	public function setting(inSetting:Object, inIndex:Number, inPath:Array, inPathIndex:Array):void
 	{
@@ -555,6 +570,21 @@ class setting extends EventDispatcher implements IEventDispatcher
 	public function get PathIndex ():Array
 	{
 	    return thePathIndex;
+	}
+	
+	public function renewValue():void
+	{
+		renewSettings.theType="renewValue";
+		renewSettings.hasParams = true;
+		renewSettings.theParams = [theSettingNumber]
+		renewSettings.getInfo();
+	    renewSettings.addEventListener("gotData", renewTheValue);
+	}
+	
+	private function renewTheValue(inEvent:gotDataEvent):void
+	{
+	    theValue = inEvent.Result;
+	    dispatchEvent(new Event("gotNewValue"));
 	}
 }
 
