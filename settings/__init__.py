@@ -73,6 +73,7 @@ def changeSetting(params):
     settingNum = params[0]
     Value = params[1]
     settingsHolder[settingNum].Value = Value
+    context.Write()
     return (Value == settingsHolder[settingNum].Value)
     
 def renewValue(params):
