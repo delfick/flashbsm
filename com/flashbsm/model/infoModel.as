@@ -430,6 +430,7 @@ class setting extends EventDispatcher implements IEventDispatcher
 	private var thePath:Array = new Array();
 	private var thePathIndex:Array = new Array();
 	private var theIndex:Number;
+	private var theSettingNumber:Number;
 
 	public function setting(inSetting:Object, inIndex:Number, inPath:Array, inPathIndex:Array):void
 	{
@@ -441,6 +442,7 @@ class setting extends EventDispatcher implements IEventDispatcher
 		theHints = inSetting.Hints
 		theInfo = inSetting.Info
 		theValue = inSetting.Value
+		theSettingNumber = inSetting.SettingNumber
 		theDefault = inSetting.Default
 		for each (var pathPart:String in inPath)
 		{
@@ -538,6 +540,12 @@ class setting extends EventDispatcher implements IEventDispatcher
 	{
 	    return theIndex;
 	}
+	
+	public function get SettingNumber ():Number
+	{
+	    return theSettingNumber;
+	}
+	
 	
 	public function get Path ():Array
 	{

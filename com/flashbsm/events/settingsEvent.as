@@ -47,6 +47,12 @@ package com.flashbsm.events
 		    return theSetting.PathIndex;
 		}
 		
+		public function get SettingNumber ():Number
+		{
+		    return theSetting.SettingNumber;
+		}
+		
+		
 		
 
 		public function get newData():*

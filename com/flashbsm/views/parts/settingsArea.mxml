@@ -40,7 +40,7 @@
 				changeSettings.theType="settingsChange";
 				changeSettings.outObject = outObject;
 				changeSettings.hasParams = true;
-				changeSettings.theParams = [inEvent.Path, inEvent.PathIndex, inEvent.newData];
+				changeSettings.theParams = [inEvent.SettingNumber, inEvent.newData];
 			    changeSettings.getInfo();
 			    changeSettings.addEventListener("gotData", continueDealingWithEvent);
 			}
