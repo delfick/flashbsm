@@ -89,7 +89,7 @@
 		</mx:Repeater>
 	</mx:HBox>
 	<mx:HBox styleName="plain"
-	width="100%" height="{Height-tabs.height}"  
+	width="100%" height="{Height-tabs.height-6}"  
 	verticalScrollPolicy="on">
 		<parts:theSettings theSubGroups="{fbsmModel.getInstance().everything.currentGroup.theSubGroups}" styleName="settingsArea"/>
 	</mx:HBox>

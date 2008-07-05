@@ -588,8 +588,11 @@ class setting extends EventDispatcher implements IEventDispatcher
 	
 	private function renewTheValue(inEvent:gotDataEvent):void
 	{
-	    theValue = inEvent.Result;
-	    dispatchEvent(new Event("gotNewValue"));
+		if (theValue != inEvent.Result)
+		{
+	    	theValue = inEvent.Result;
+	    	dispatchEvent(new Event("gotNewValue"));
+	    }
 	}
 }
 
