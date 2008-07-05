@@ -3,7 +3,8 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:parts="com.flashbsm.views.parts.*"
 	xmlns:containers="com.components.containers.*"
-	width="100%" height="100%">
+	width="100%" height="100%"
+	verticalScrollPolicy="off">
 	<!--creationComplete="initApp()"-->
 
 
@@ -23,7 +24,7 @@
 			
 			<mx:VBox width="100%" height="100%"> 
 				<parts:descriptionArea  width="100%" height="60"    styleName="box"     id="descArea"/>
-				<parts:settingsArea     width="100%" height="100%"  styleName="box"     id="settingsArea"/>
+				<parts:settingsArea     width="100%" height="100%"  				    id="settingsArea"/>
 				<parts:logText          width="100%" height="60"    styleName="box"     id="logArea"/>
 			</mx:VBox>
 			

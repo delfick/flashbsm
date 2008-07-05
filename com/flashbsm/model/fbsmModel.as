@@ -56,9 +56,10 @@ package com.flashbsm.model
 				everything.addCategory(categ)
 			}
 			trace("added all categories");
-			everything.currentGroup = everything.getCategory(0);
-			everything.currentPlugin = everything.currentGroup.getPlugin(0);
-			everything.setCurrentGroup(0);
+			everything.currentCateg = everything.getCategory(0);
+			everything.currentPlugin = everything.currentCateg.getPlugin(0);
+			everything.currentGroup = everything.currentPlugin.getGroup(0);
+			everything.setCurrentCateg(0);
 			changeTheView(NORMAL);
 			
 		}

@@ -3,7 +3,6 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:containers="com.components.containers.*"
 	xmlns:parts="com.flashbsm.views.parts.*"
-	width="100%" height="100%"
 	creationComplete="initApp()">
 	<mx:Script>
 		<![CDATA[
@@ -20,24 +19,42 @@
 			private var changeMade:Boolean = false;
 			private var changeSettings:communicate = new communicate();
 			private var tnToBeReset:Boolean = true;
+			private var theHeight:Number = 100;
+			
+			[Bindable]
+			public function get Height():Number
+			{
+				return theHeight;
+			}
+			public function set Height(inHeight:Number):void
+			{
+				theHeight = inHeight;
+			}
 
 			public function initApp():void
 			{
+				Height = height;
 				this.addEventListener( settingsEvent.SETTINGSCHANGE, dealWithEvent );
-			}	
+			}
 			
+			public function tabClick (inEvent:Event):void
+			{
+				fbsmModel.getInstance().everything.setCurrentGroup(inEvent.target.info.PathIndex, inEvent.target.info.Index);			
+			}
+			
+
 			public function dealWithEvent(inEvent:settingsEvent):void
 			{
-			
+
 				var outObject:Object = new Object;
 				outObject.changeMade = changeMade;
 				outObject.settingsEvent = inEvent;
 				outObject.oldData = inEvent.oldData;
-				
+
 				var pluginName:String = fbsmModel.getInstance().everything.currentPlugin.Name;
 				var settingName:String = inEvent.Name;
-				
-				
+
+
 				changeSettings.theType="settingsChange";
 				changeSettings.outObject = outObject;
 				changeSettings.hasParams = true;
@@ -50,12 +67,12 @@
 			    var theSettingsEvent:settingsEvent = inEvent.outObject.settingsEvent;
 				var newData:* = theSettingsEvent.newData;
 				var oldData:* = theSettingsEvent.oldData;
-				
+
 				theSettingsEvent.Value = newData;
 				if (inEvent.Result)
 				{
 					theSettingsEvent.settingFlag = "changed";
-					
+
 				}
 				else
 				{
@@ -65,23 +82,26 @@
 			}
 			private function stateChanged(inEvent:Event):void
 			{
-			    trace("state changed");
+			   /* trace("state changed");
 			    trace(tn.selectedChild);
 			    trace(tn.selectedIndex);
 			    trace(fbsmModel.getInstance().everything.currentPlugin.SelectedGroup);
 			    fbsmModel.getInstance().everything.currentPlugin.SelectedGroup = tn.selectedIndex
-			    trace(fbsmModel.getInstance().everything.currentPlugin.SelectedGroup);
+			    trace(fbsmModel.getInstance().everything.currentPlugin.SelectedGroup);*/
 			}
 		]]>
 	</mx:Script>
+
+	<mx:HBox width="100%" id="tabs">
+		<mx:Repeater id="groups" dataProvider="{fbsmModel.getInstance().everything.currentPlugin.theGroups}">
+			<parts:tab minWidth="60" height="100%" info="{groups.currentItem}" itemClick="tabClick(event)"/>
+		</mx:Repeater>
+	</mx:HBox>
+	<mx:HBox styleName="plain"
+	width="100%" height="{Height-tabs.height}"  
+	verticalScrollPolicy="on">
+		<parts:theSettings theSubGroups="{fbsmModel.getInstance().everything.currentGroup.theSubGroups}" styleName="settingsArea"/>
+	</mx:HBox>
 	
-	<mx:TabNavigator width="100%" height="100%" id="tn" updateComplete="stateChanged(event)" 
-	selectedIndex="{fbsmModel.getInstance().everything.currentPlugin.SelectedGroup}" >
-	    <mx:Repeater id="groupR" dataProvider="{fbsmModel.getInstance().everything.currentPlugin.theGroups}">
-		    <mx:VBox label="{groupR.currentItem.Name}">
-		        <parts:theSettings theSubGroups="{groupR.currentItem.theSubGroups}"/>
-		    </mx:VBox>
-	    </mx:Repeater>
-	</mx:TabNavigator>
 </mx:VBox>
 

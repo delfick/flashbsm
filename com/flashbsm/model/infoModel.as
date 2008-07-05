@@ -15,9 +15,11 @@ package com.flashbsm.model
 		[Bindable]
 		public var currentPlugin:plugin;
 		
+		[Bindable]
+		public var currentGroup:group;
 		
 		[Bindable]
-		public var currentGroup:category;
+		public var currentCateg:category;
 		
 		private var groupCount:Number = 0;
 
@@ -32,21 +34,28 @@ package com.flashbsm.model
 			return theCategories.getItemAt(theIndex) as category;
 		}
 		
-		public function setCurrentGroup (inGroupIndex:Number):void
+		public function setCurrentCateg (inGroupIndex:Number):void
 		{
-		    currentGroup.Selected = false;
-		    currentGroup = getCategory(inGroupIndex);
-		    currentPlugins = currentGroup.thePlugins;
-		    currentGroup.Selected = true;
+		    currentCateg.Selected = false;
+		    currentCateg = getCategory(inGroupIndex);
+		    currentPlugins = currentCateg.thePlugins;
+		    currentCateg.Selected = true;
 		    setCurrentPlugin(inGroupIndex, 0)
 		}
 		
 		public function setCurrentPlugin(inGroupIndex:Number, inPluginIndex:Number):void
 		{
-		    currentPlugin.SelectedGroup = 0;
 		    currentPlugin.Selected = false;
 			currentPlugin = getCategory(inGroupIndex).getPlugin(inPluginIndex);
 		    currentPlugin.Selected = true;
+		    setCurrentGroup(currentPlugin.PathIndex, 0);
+		}
+		
+		public function setCurrentGroup(inPathIndex:Array, inGroupIndex:Number):void
+		{
+		    currentGroup.Selected = false;
+			currentGroup = getCategory(inPathIndex[0]).getPlugin(inPathIndex[1]).getGroup(inPathIndex[2]);
+		    currentGroup.Selected = true;
 		}
 		
 	}
@@ -55,6 +64,7 @@ import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 import com.components.*;
 import com.flashbsm.events.*;
+import com.flashbsm.model.*;
 
 class category extends EventDispatcher implements IEventDispatcher
 {
@@ -142,7 +152,6 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	private var thePath:Array = new Array();
 	private var thePathIndex:Array = new Array();
 	private var groupCount:Number;
-	private var theSelectedGroup:Number;
 	[Bindable]
 	public var theGroups:ArrayCollection = new ArrayCollection;
 
@@ -156,7 +165,6 @@ class plugin extends EventDispatcher implements IEventDispatcher
 		theRanking = inPlugin.Ranking;
 		isSelected = false;
 		theIndex = inIndex;
-        theSelectedGroup = 0;
 		for each (var pathPart:String in inPath)
 		{
 		    thePath.push(pathPart);
@@ -261,22 +269,7 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	public function set Icon (inIcon:String):void
 	{
 	    theIcon = inIcon;
-	}
-	
-	[Bindable]
-	public function get SelectedGroup ():Number
-	{
-	    return theSelectedGroup;
-	}
-	
-	public function set SelectedGroup (inSelectedGroup:Number):void
-	{
-	    theSelectedGroup = inSelectedGroup;
-	}
-	
-	
-		
-	
+	}	
 	
 	public function get Index ():Number
 	{
@@ -314,12 +307,14 @@ class group extends EventDispatcher implements IEventDispatcher
 	private var thePath:Array = new Array();
 	private var thePathIndex:Array = new Array();
 	private var subGroupCount:Number;
+	private var isSelected:Boolean;
 	[Bindable]
 	public var theSubGroups:ArrayCollection = new ArrayCollection;
 	public function group(inGroup:Object, inIndex:Number, inPath:Array, inPathIndex:Array)
 	{
 		theName = inGroup.Name;
 		theIndex = inIndex;
+		isSelected = false;
 		for each (var pathPart:String in inPath)
 		{
 		    thePath.push(pathPart);
@@ -346,6 +341,16 @@ class group extends EventDispatcher implements IEventDispatcher
 	public function set Name(inName:String):void
 	{
 		theName = inName;
+	}
+	
+	[Bindable]
+	public function get Selected ():Boolean
+	{
+	    return isSelected;
+	}
+	public function set Selected (inSelected:Boolean):void
+	{
+	    isSelected = inSelected;
 	}
 	
 	public function get Index ():Number

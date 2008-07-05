@@ -6,6 +6,12 @@
 	borderThickness: 1;
 }
 
+.settingsArea
+{
+	borderStyle:none;
+	backgroundColor: #FFFFFF;
+}
+
 .groupNormal
 {
 	borderStyle:solid;
@@ -28,6 +34,24 @@
 	backgroundColor: #99c8e1;
 	borderColor: #4f5a5f;
 	borderThickness: 1;
+}
+
+.tabNormal
+{
+	borderStyle:none;
+	backgroundColor: #e0e0e0;
+}
+
+.tabOver
+{
+	borderStyle:none;
+	backgroundColor: #99e19c;
+}
+
+.tabDown
+{
+	borderStyle:none;
+	backgroundColor: #99c8e1;
 }
 
 .whiteBox
