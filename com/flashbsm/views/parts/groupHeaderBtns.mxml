@@ -15,7 +15,6 @@
 			private function groupClick(event:Event):void
 			{
 				fbsmModel.getInstance().everything.setCurrentCateg(event.target.info.Index);
-				//parentDocument.updateDescription();
 			}
 		]]>
 

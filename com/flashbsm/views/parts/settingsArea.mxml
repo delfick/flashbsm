@@ -80,15 +80,6 @@
 					theSettingsEvent.Value = oldData;
 				}
 			}
-			private function stateChanged(inEvent:Event):void
-			{
-			   /* trace("state changed");
-			    trace(tn.selectedChild);
-			    trace(tn.selectedIndex);
-			    trace(fbsmModel.getInstance().everything.currentPlugin.SelectedGroup);
-			    fbsmModel.getInstance().everything.currentPlugin.SelectedGroup = tn.selectedIndex
-			    trace(fbsmModel.getInstance().everything.currentPlugin.SelectedGroup);*/
-			}
 		]]>
 	</mx:Script>
 

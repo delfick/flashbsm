@@ -14,7 +14,7 @@ package com.flashbsm.views.settings
    		import flash.text.TextFormat;
 
 		public var theText:TextField;
-		private var theTextFormat:TextFormat
+		private var theTextFormat:TextFormat;
 		private var theGlow:Glow = new Glow();
 		private var theFlag:String = "normal";
 		private var flagTimer:Timer = new Timer(500, 1);
@@ -24,9 +24,25 @@ package com.flashbsm.views.settings
 		
 		[Bindable]
 		public var theSetting:Object;
+		
+		public function settingsBase(inSetting:Object):void
+		{
+			super();
+			this.addEventListener("flagChange", flagChange);
+			this.addEventListener("flagChange", applyEffect);
+			theSetting = inSetting;
+			theSetting.addEventListener("gotNewValue", function(inEvent:Event):void{ renewValue() });
+		}
+
 
 		public function set isEnabled(inEnabled:Boolean):void
 		{
+			//implemented by children
+		}
+		
+		public function renewValue():void
+		{
+			trace("he");
 			//implemented by children
 		}
 
@@ -49,14 +65,7 @@ package com.flashbsm.views.settings
     		}
     		theLabel = theSetting.ShortDesc;
 		}
-
-		public function settingsBase():void
-		{
-			super();
-			this.addEventListener("flagChange", flagChange);
-			this.addEventListener("flagChange", applyEffect);
-		}
-
+		
 		public function set flag(inFlag:String):void
 		{
 			if (theFlag != inFlag)

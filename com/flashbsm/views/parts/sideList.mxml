@@ -16,7 +16,6 @@
 			private function pluginClick(event:Event):void
 			{
 				fbsmModel.getInstance().everything.setCurrentPlugin(event.target.info.GroupIndex, event.target.info.Index);
-				//parentDocument.updateDescription();
 			}
 		]]>
 
