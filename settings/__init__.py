@@ -72,6 +72,7 @@ def updateContext():
 	context.ProcessEvents()	
 	
 def changeSetting(params):
+	updateContext()
 	settingNum = params[0]
 	Value = params[1]
 	settingsHolder[settingNum].Value = Value
