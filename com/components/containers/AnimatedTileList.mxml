@@ -19,6 +19,7 @@
         <![CDATA[
 
         import mx.collections.ArrayCollection;
+        import flash.events.Event;
         import mx.core.IFactory;
         import mx.effects.Fade;
         import mx.effects.Move;
@@ -71,7 +72,7 @@
 
         public function filter(filterCallback:Function, relayout:Boolean):void
 		{
-		    if (items == null || thumbs == null) return; //too early
+		    if (items == null || thumbs == null) {return; }//too early
             filteredCount = 0;
             var n:int = items.length;
             var fadeOut:Fade;
@@ -127,6 +128,12 @@
 			items.refresh()
 			layoutTiles();
 		}
+		
+		private function pluginClick(inEvent:Event):void
+		{
+			fbsmModel.getInstance().everything.setCurrentPlugin(inEvent.target.info.PathIndex, inEvent.target.info.Index);
+			fbsmModel.getInstance().changeTheView(fbsmModel.NORMAL);
+		}
 
         private function createTiles():void
         {
@@ -146,7 +153,8 @@
 				for (i = 0; i < n; i++)
 				{
 					items[i].thumb = itemRenderer.newInstance();
-					items[i].thumb.item = items[i];
+					items[i].thumb.info = items[i];
+					items[i].thumb.addEventListener("itemClick", pluginClick);
 					items[i].thumb.visible=false;
 					addChild(items[i].thumb)
 					items[i].selectionFlag = true;
@@ -161,7 +169,7 @@
 				{
 					thumbs[i] = itemRenderer.newInstance();
 					addChild(thumbs[i]);
-					thumbs[i].item = items[i];
+					thumbs[i].info = items[i];
 					thumbs[i].visible = false;
 					selectionFlags[i] = true;
 				}
@@ -170,8 +178,8 @@
 
         public function layoutTiles():void
 		{
-			if (thumbs.length == 0)
-				return;
+			if (thumbs.length == 0){return;}
+			if (width == 0) {return;}
 
 		    //should really use border metrics to take the scrollbar into
 			//account, but we're lazy
@@ -180,18 +188,18 @@
 
 			if (useItemThumb)
 			{
-				numCols = (width-20) / (items[0].thumb.width + padding + 5);
-				numRows = (height-20) / (items[0].thumb.height + padding + 5);
+				numCols = (width-40) / (items[0].thumb.width + padding) - 1;
+				numRows = (height-40) / (items[0].thumb.height + padding) - 1;
 			}
 			else
 			{
-				numCols = (width-20) / (thumbs[0].width + padding + 5);
-				numRows = (height-20) / (thumbs[0].height + padding + 5);
+				numCols = (width-40) / (thumbs[0].width + padding) - 1;
+				numRows = (height-40) / (thumbs[0].height + padding) - 1;
 			}
 
 			verticalScrollPosition = 0;
 
-			var row:int = -1;
+			var row:int = 0;
 			var col:int = 0;
 			var disabledCol:Number = numCols;
 			var disabledRow:Number = -1;
@@ -204,7 +212,7 @@
 			var n:int = items.length;
 
 			var rowArray:Array = new Array();
-			for (i=0; i< fbsmModel.getInstance().uiItems.allGroups.length;i++)
+			for (i=0; i< fbsmModel.getInstance().everything.theCategories.length;i++)
 			{
 				rowArray.push(-1);
 			}
@@ -227,21 +235,23 @@
 					{
 						case SORT_NORMAL :
 
-							row++;
+							
 							if (!noCols)
 							{
-								if (row > numRows)
+								if (col > numCols)
 								{
-									col++;
-									row = 0;
+									row++;
+									col = 0;
 								}
 							}
 							if (!noCols)
 							{
-								xTo =  col * (theThumb.width);
+								xTo =  10 + col * (theThumb.width+padding);
 							}
 
-							yTo = 6+padding + row * (theThumb.height + padding);
+							yTo = 10 + row * (theThumb.height + padding);
+							
+							col++;
 							break;
 
 						case SORT_GROUPS :

@@ -14,7 +14,12 @@ package com.flashbsm.model
 		public var currentPlugins:ArrayCollection = new ArrayCollection;
 		
 		[Bindable]
+		public var allPlugins:ArrayCollection = new ArrayCollection;
+		
+		[Bindable]
 		public var currentPlugin:plugin;
+		
+		
 		
 		[Bindable]
 		public var currentGroup:group;
@@ -43,28 +48,44 @@ package com.flashbsm.model
 			return theCategories.getItemAt(theIndex) as category;
 		}
 		
-		public function setCurrentCateg (inGroupIndex:Number):void
+		public function setCurrentCateg (inPathIndex:Array):void
 		{
 		    currentCateg.Selected = false;
-		    currentCateg = getCategory(inGroupIndex);
+		    currentCateg = getCategory(inPathIndex[0]);
 		    currentPlugins = currentCateg.thePlugins;
 		    currentCateg.Selected = true;
-		    setCurrentPlugin(inGroupIndex, 0)
+		    setCurrentPlugin(inPathIndex, "setCateg")
 		}
 		
-		public function setCurrentPlugin(inGroupIndex:Number, inPluginIndex:Number):void
+		public function setCurrentPlugin(inPathIndex:Array, executedFrom:String = "elsewhere"):void
 		{
-		    currentPlugin.Selected = false;
-			currentPlugin = getCategory(inGroupIndex).getPlugin(inPluginIndex);
-		    currentPlugin.Selected = true;
-		    setCurrentGroup(currentPlugin.PathIndex, 0);
+			
+			if (executedFrom != "setCateg")
+			{
+				setCurrentCateg(inPathIndex);
+			}
+			else
+			{
+				currentPlugin.Selected = false;
+				currentPlugin = getCategory(inPathIndex[0]).getPlugin(inPathIndex[1]);
+				currentPlugin.Selected = true;
+				setCurrentGroup(inPathIndex, executedFrom);
+		    }
 		}
 		
-		public function setCurrentGroup(inPathIndex:Array, inGroupIndex:Number):void
+		public function setCurrentGroup(inPathIndex:Array, executedFrom:String = "elsewhere"):void
 		{
-		    currentGroup.Selected = false;
-		    currentGroup = getCategory(inPathIndex[0]).getPlugin(inPathIndex[1]).getGroup(inPathIndex[2]);
-		    currentGroup.Selected = true;
+			if (executedFrom != "setCateg")
+			{
+				setCurrentCateg(inPathIndex);
+			}
+			else
+			{
+				currentGroup.Selected = false;
+				currentGroup = getCategory(inPathIndex[0]).getPlugin(inPathIndex[1]).getGroup(inPathIndex[2]);
+				currentGroup.Selected = true;
+		    }
+		    
 		}
 		
 		public function updateContext():void
@@ -103,7 +124,9 @@ class category extends EventDispatcher implements IEventDispatcher
 		for (var nextPlugin:String in inCateg.Plugins)
 		{
 			thePlugins.addItem(new plugin(inCateg.Plugins[nextPlugin], pluginCount, thePath, thePathIndex));
+			fbsmModel.getInstance().everything.allPlugins.addItem(getPlugin(pluginCount));
 			pluginCount++
+			
 		}
 	}
 
@@ -167,6 +190,8 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	private var thePathIndex:Array = new Array();
 	private var groupCount:Number;
 	private var emptyGroup:Object = new Object;
+	private var theThumb:*;
+	private var theSelectionFlag:Boolean;
 	[Bindable]
 	public var theGroups:ArrayCollection = new ArrayCollection;
 
@@ -291,6 +316,28 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	{
 	    theIcon = inIcon;
 	}	
+	
+	[Bindable]
+	public function get thumb ():*
+	{
+	    return theThumb;
+	}
+	
+	public function set thumb (inThumb:*):void
+	{
+	    theThumb = inThumb;
+	}	
+	
+	[Bindable]
+	public function get selectionFlag ():*
+	{
+	    return theSelectionFlag;
+	}
+	
+	public function set selectionFlag (inSelectionFlag:*):void
+	{
+	    theSelectionFlag = inSelectionFlag;
+	}		
 	
 	public function get Index ():Number
 	{

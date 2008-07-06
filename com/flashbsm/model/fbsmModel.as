@@ -59,7 +59,7 @@ package com.flashbsm.model
 			everything.currentCateg = everything.getCategory(0);
 			everything.currentPlugin = everything.currentCateg.getPlugin(0);
 			everything.currentGroup = everything.currentPlugin.getGroup(0);
-			everything.setCurrentCateg(0);
+			everything.setCurrentCateg([0,0,0]);
 			changeTheView(NORMAL);
 			
 		}

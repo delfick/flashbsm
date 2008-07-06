@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox
-	xmlns:mx="http://www.adobe.com/2006/mxml">
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:containers="com.components.containers.*">
 
 
 	<mx:Script>
 		<![CDATA[
-			//stuff goes here
+			import com.flashbsm.model.*;
 		]]>
 
 	</mx:Script>
+	
+		
 	
 </mx:VBox>

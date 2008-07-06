@@ -39,7 +39,8 @@
 			
 			public function tabClick (inEvent:Event):void
 			{
-				fbsmModel.getInstance().everything.setCurrentGroup(inEvent.target.info.PathIndex, inEvent.target.info.Index);			
+				var group:Object = fbsmModel.getInstance().everything.currentPlugin.getGroup(inEvent.target.info.Index);
+				fbsmModel.getInstance().everything.setCurrentGroup(group.PathIndex, "setCateg");			
 			}
 			
 
