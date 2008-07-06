@@ -68,10 +68,6 @@ package com.flashbsm.views.settings.types
 		
 		override public function renewValue():void
 		{
-			//trace("renewed value");
-			//trace(theSetting.Name);
-			//trace(newValue);
-			//trace(theSetting.Value);
 		    newValue = theSetting.Value;
 		}
 

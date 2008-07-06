@@ -29,6 +29,7 @@ package com.flashbsm.model
 		public function infoModel()
 		{
 			contextUpdater.theType = "updateContext";
+			
 		}
 
 		public function addCategory(theData:Object):void
@@ -62,7 +63,7 @@ package com.flashbsm.model
 		public function setCurrentGroup(inPathIndex:Array, inGroupIndex:Number):void
 		{
 		    currentGroup.Selected = false;
-			currentGroup = getCategory(inPathIndex[0]).getPlugin(inPathIndex[1]).getGroup(inPathIndex[2]);
+		    currentGroup = getCategory(inPathIndex[0]).getPlugin(inPathIndex[1]).getGroup(inPathIndex[2]);
 		    currentGroup.Selected = true;
 		}
 		
@@ -165,6 +166,7 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	private var thePath:Array = new Array();
 	private var thePathIndex:Array = new Array();
 	private var groupCount:Number;
+	private var emptyGroup:Object = new Object;
 	[Bindable]
 	public var theGroups:ArrayCollection = new ArrayCollection;
 
@@ -196,6 +198,12 @@ class plugin extends EventDispatcher implements IEventDispatcher
 		{
 			theGroups.addItem(new group(inPlugin.Groups[nextGroup], groupCount, thePath, thePathIndex));
 			groupCount++;
+		}
+		if (groupCount == 0)
+		{
+			emptyGroup.Name = "This plugin has no settings"
+			emptyGroup.SubGroups = new ArrayCollection();
+			theGroups.addItem(new group(emptyGroup, 0, [], []));
 		}
 	}
 
