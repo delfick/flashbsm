@@ -76,7 +76,6 @@ def changeSetting(params):
 	
 def renewValue(params):
 	settingNum = params[0]
-	print dir(settingsHolder[settingNum])
 	return settingsHolder[settingNum].Value 
 	
 def CatSortCompare(v1, v2):

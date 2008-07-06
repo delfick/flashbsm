@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns="ui/components.*"
 	cornerRadius="10" itemClick="funcBarClick(event)" height="100%" horizontalGap="10"
-	width="320" buttonStyleName="funcBar">
+	width="427" buttonStyleName="funcBar">
 
 	<mx:Script>
         <![CDATA[
@@ -35,6 +35,10 @@
 				{
 					var theProfilesPopup:IFlexDisplayObject = PopUpManager.createPopUp(this.parent.parent, profiles, true);
 				}
+				else if (event.label == "About")
+				{
+					var theAboutPopup:IFlexDisplayObject = PopUpManager.createPopUp(this.parent.parent, about, true);
+				}
 
             }
         ]]>
@@ -43,6 +47,7 @@
 	<mx:dataProvider>
 		<mx:String>Options</mx:String>
 		<mx:String>Profiles</mx:String>
+		<mx:String>About</mx:String>
 		<mx:String>Show All</mx:String>
 	</mx:dataProvider>
 </mx:ButtonBar>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<mx:TitleWindow
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	creationComplete="doInit();">
+    <mx:Script>
+        <![CDATA[
+            import mx.managers.PopUpManager;
+
+            private function doInit():void
+			{
+                PopUpManager.centerPopUp(this);
+            }
+        ]]>
+    </mx:Script>
+    <mx:TextArea width="600" height="300">
+    		<mx:htmlText>
+    			<![CDATA[
+This is a working demo of the flashbsm.
+The flashbsm is a settings manager for the Compiz-Fusion compizconfig settings system made using the Adobe Flex Framework.
+		            
+The Compiz-Fusion homepage can be found here : http://www.compiz-fusion.org
+The Adobe Flex homepage can be found here : http://www.adobe.com/products/flex/
+		            
+The Homepage for the flashbsm can be found here : http://flashbsm.googlecode.com
+		            
+Please note that this is still a work in progress.
+		            
+--------------
+		            
+Created By : Stephen Moore
+a.k.a : delfick
+    			]]>
+    		</mx:htmlText>
+        </mx:TextArea>
+    <mx:HBox>
+        <mx:Button click="PopUpManager.removePopUp(this);" label="Cancel"/>
+    </mx:HBox>
+</mx:TitleWindow>
