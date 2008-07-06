@@ -5,6 +5,7 @@ package com.flashbsm.model
 	public class infoModel extends EventDispatcher implements IEventDispatcher
 	{
 		import mx.collections.ArrayCollection;
+		import com.components.*;
 
 		[Bindable]
 		public var theCategories:ArrayCollection = new ArrayCollection;
@@ -22,6 +23,13 @@ package com.flashbsm.model
 		public var currentCateg:category;
 		
 		private var groupCount:Number = 0;
+		
+		private var contextUpdater:communicate = new communicate();
+		
+		public function infoModel()
+		{
+			contextUpdater.theType = "updateContext";
+		}
 
 		public function addCategory(theData:Object):void
 		{
@@ -56,6 +64,11 @@ package com.flashbsm.model
 		    currentGroup.Selected = false;
 			currentGroup = getCategory(inPathIndex[0]).getPlugin(inPathIndex[1]).getGroup(inPathIndex[2]);
 		    currentGroup.Selected = true;
+		}
+		
+		public function updateContext():void
+		{
+			contextUpdater.getInfo();
 		}
 		
 	}

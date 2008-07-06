@@ -91,6 +91,7 @@
 			}
 			public function updateSettings (inEvent:Event):void
 			{
+				fbsmModel.getInstance().everything.updateContext()
 				for each (var subGroup:Object in theSubGroups)
 				{
 					for each (var theSetting:Object in subGroup.theSettings)

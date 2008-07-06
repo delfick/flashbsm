@@ -1,5 +1,6 @@
 import compizconfig
 import time
+import os
 from threading import Thread
 context = compizconfig.Context()
 globalInfoObject = []
@@ -27,7 +28,7 @@ def getPluginInfo(plugin):
 	infoObject["Features"] = plugin.Features
 	infoObject["Ranking"] = plugin.Ranking
 	infoObject["Groups"] = []
-	infoObject["HasIcon"] = fileExists('assets/icons/plugin-'+plugin.Name + '.png')
+	infoObject["HasIcon"] = os.path.exists('assets/icons/plugin-'+plugin.Name + '.png')
 	for name, group in sorted(plugin.Groups.items(), FirstItemSortCompare):
 		nextGroup = {}
 		if name == '':
@@ -67,6 +68,9 @@ def getSettingInfo(setting):
 	infoObject["Default"] = setting.DefaultValue
 	return infoObject
 	
+def updateContext():
+	context.ProcessEvents()	
+	
 def changeSetting(params):
 	settingNum = params[0]
 	Value = params[1]
@@ -75,7 +79,6 @@ def changeSetting(params):
 	return (Value == settingsHolder[settingNum].Value)
 	
 def renewValue(params):
-	#If changes have been made outside of the flashbsm, this doesn't get the new value
 	settingNum = params[0]
 	return settingsHolder[settingNum].Value 
 	
@@ -96,12 +99,3 @@ def PluginSortCompare(p1, p2):
 	
 def SettingSortCompare(v1, v2):
 	return cmp(v1.Plugin.Ranking[v1.Name], v2.Plugin.Ranking[v2.Name])
-	
-def fileExists(f):
-	 try:
-		 file = open(f)
-	 except IOError:
-		 exists = False
-	 else:
-		 exists = True
-	 return exists
