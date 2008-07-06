@@ -75,6 +75,7 @@ def changeSetting(params):
 	return (Value == settingsHolder[settingNum].Value)
 	
 def renewValue(params):
+	#If changes have been made outside of the flashbsm, this doesn't get the new value
 	settingNum = params[0]
 	return settingsHolder[settingNum].Value 
 	
