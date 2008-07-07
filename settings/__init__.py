@@ -70,6 +70,7 @@ def getSettingInfo(setting):
 	
 def updateContext():
 	context.ProcessEvents()	
+	return True
 	
 def changeSetting(params):
 	updateContext()
