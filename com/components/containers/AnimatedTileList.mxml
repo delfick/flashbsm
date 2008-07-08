@@ -19,6 +19,7 @@
         <![CDATA[
 
         import mx.collections.ArrayCollection;
+        import com.flashbsm.events.*;
         import flash.events.Event;
         import mx.core.IFactory;
         import mx.effects.Fade;
@@ -27,6 +28,7 @@
 		import mx.collections.*;
 		import com.flashbsm.model.*;
 		import mx.controls.VRule;
+		import com.flashbsm.views.parts.showAllBox;
 
 
  		// The list of items to display
@@ -34,9 +36,9 @@
 
 		private static var firstTime:Boolean = true;
 
-		public static const SORT_NORMAL:String = "normal";
-		public static const SORT_GROUPS:String = "groups";
-		public static const SORT_ENABLED:String = "enabledDisabled";
+		public static const LAYOUT_NORMAL:String = "normal";
+		public static const LAYOUT_GROUPS:String = "groups";
+		public static const LAYOUT_ENABLED:String = "enabledDisabled";
 
         public function set dataProvider(dataProvider:ArrayCollection):void
 		{
@@ -44,14 +46,7 @@
         	createTiles();
         	layoutTiles();
         }
-
-		// Array of Booleans to keep track of the status of each item vis-a-vis the filter criteria
-		// (satisfies filter criteria = true / doesn't satisfy filter criteria = false)
-        private var selectionFlags:Array;
-
-        // The Array of Thumbnail instances used to display the items
-		public var thumbs:Array;
-
+        
         // The total number of items that are in the current filter selection.
         public var filteredCount:Number;
 
@@ -62,34 +57,30 @@
 
 		public var padding:int = 4;
 
-		public var noCols:Boolean = false;
+		private var theThumb:showAllBox;
 
-		public var useItemThumb:Boolean = false;
-
-		private var theThumb:*;
-
-		public var sortType:String = SORT_NORMAL;
+		public var layoutType:String = LAYOUT_NORMAL;
 
         public function filter(filterCallback:Function, relayout:Boolean):void
 		{
-		    if (items == null || thumbs == null) {return; }//too early
+		    if (items == null) {return; }//too early
             filteredCount = 0;
             var n:int = items.length;
             var fadeOut:Fade;
 			var theSelectionFlag:Boolean;
 			for (var i:int = 0 ; i < n ; i++)
 			{
-				useItemThumb ? theThumb = items[i].thumb : theThumb = thumbs[i];
-				useItemThumb ? theSelectionFlag = items[i].selectionFlag : theSelectionFlag = selectionFlags[i];
+				theThumb = items[i].Thumb;
+				theSelectionFlag = items[i].SelectionFlag;
                 if (filterCallback.call(this, items[i]))
 				{
                     filteredCount++;
-                    useItemThumb ? items[i].selectionFlag = true : selectionFlags[i] = true;
+                    items[i].SelectionFlag = true;
                     theThumb.alpha = 1;
                 }
 				else
 				{
-                    useItemThumb ? items[i].selectionFlag = false : selectionFlags[i] = false;
+                    items[i].SelectionFlag = false;
                     if (relayout)
                     {
                     	fadeOut = new Fade(theThumb);
@@ -131,15 +122,13 @@
 		
 		private function pluginClick(inEvent:Event):void
 		{
-			fbsmModel.getInstance().everything.setCurrentPlugin(inEvent.target.info.PathIndex, inEvent.target.info.Index);
+			fbsmModel.getInstance().everything.setCurrentPlugin(inEvent.target.info.PathIndex);
 			fbsmModel.getInstance().changeTheView(fbsmModel.NORMAL);
 		}
 
         private function createTiles():void
         {
 			removeAllChildren();
-			thumbs = new Array(items.length);
-            selectionFlags =  new Array(items.length);
 
             var row:int = 0;
             var col:int = -1;
@@ -147,55 +136,32 @@
 			var n:int = items.length;
 
 			var i:int;
-
-			if (useItemThumb)
+			
+			for (i = 0; i < n; i++)
 			{
-				for (i = 0; i < n; i++)
-				{
-					items[i].thumb = itemRenderer.newInstance();
-					items[i].thumb.info = items[i];
-					items[i].thumb.addEventListener("itemClick", pluginClick);
-					items[i].thumb.visible=false;
-					addChild(items[i].thumb)
-					items[i].selectionFlag = true;
-					selectionFlags[i] = items[i].selectionFlag;
+				items[i].Thumb = itemRenderer.newInstance();
+				items[i].Thumb.info = items[i];
+				items[i].Thumb.addEventListener("itemClick", pluginClick);
+				items[i].Thumb.visible=false;
+				addChild(items[i].Thumb)
+				items[i].SelectionFlag = true;
 
 
-				}
-			}
-			else
-			{
-				for (i = 0; i < n; i++)
-				{
-					thumbs[i] = itemRenderer.newInstance();
-					addChild(thumbs[i]);
-					thumbs[i].info = items[i];
-					thumbs[i].visible = false;
-					selectionFlags[i] = true;
-				}
 			}
         }
 
         public function layoutTiles():void
 		{
-			if (thumbs.length == 0){return;}
+			if (items.length == 0){return;}
 			if (width == 0) {return;}
 
 		    //should really use border metrics to take the scrollbar into
 			//account, but we're lazy
 			var numCols:int = 0;
 			var numRows:int = 0;
-
-			if (useItemThumb)
-			{
-				numCols = (width-40) / (items[0].thumb.width + padding) - 1;
-				numRows = (height-40) / (items[0].thumb.height + padding) - 1;
-			}
-			else
-			{
-				numCols = (width-40) / (thumbs[0].width + padding) - 1;
-				numRows = (height-40) / (thumbs[0].height + padding) - 1;
-			}
+			
+			numCols = (width-40) / (items[0].Thumb.width + padding) - 1;
+			numRows = (height-40) / (items[0].Thumb.height + padding) - 1;
 
 			verticalScrollPosition = 0;
 
@@ -222,8 +188,8 @@
 
 			for (var i:int = 0 ; i < n ; i++)
 			{
-				useItemThumb ? theThumb = items[i].thumb : theThumb = thumbs[i];
-				useItemThumb ? theSelectionFlag = items[i].selectionFlag : theSelectionFlag = selectionFlags[i];
+				theThumb = items[i].Thumb;
+				theSelectionFlag = items[i].SelectionFlag;
 
 
 				if (theSelectionFlag)
@@ -231,39 +197,33 @@
 
 					var xTo:Number = 0;
 					var yTo:Number = 0;
-					switch (sortType)
+					switch (layoutType)
 					{
-						case SORT_NORMAL :
-
+						case LAYOUT_NORMAL :
+						
+							if (col > numCols)
+							{
+								row++;
+								col = 0;
+							}
 							
-							if (!noCols)
-							{
-								if (col > numCols)
-								{
-									row++;
-									col = 0;
-								}
-							}
-							if (!noCols)
-							{
-								xTo =  10 + col * (theThumb.width+padding);
-							}
-
+							xTo =  10 + col * (theThumb.width+padding);
 							yTo = 10 + row * (theThumb.height + padding);
 							
 							col++;
+							
 							break;
 
-						case SORT_GROUPS :
-							rowArray[items[i].categIndex]++;
+						case LAYOUT_GROUPS :
+							rowArray[items[i].PathIndex[0]]++;
 
-							xTo = items[i].categIndex * (theThumb.width);
-							yTo = 6+padding + rowArray[items[i].categIndex] * (theThumb.height + padding);
+							xTo = 10 + items[i].PathIndex[0] * (theThumb.width+padding);
+							yTo = 10 + rowArray[items[i].PathIndex[0]] * (theThumb.height + padding);
 
 							break;
 
-						case SORT_ENABLED :
-							if (items[i].isEnabled)
+						case LAYOUT_ENABLED :
+							if (items[i].Enabled)
 							{
 								enabledRow++
 								if (enabledRow > numRows)
@@ -271,8 +231,8 @@
 									enabledCol++;
 									enabledRow = 0;
 								}
-								xTo = enabledCol * (theThumb.width);
-								yTo = 6+padding + enabledRow * (theThumb.height + padding);
+								xTo = 10 + enabledCol * (theThumb.width + padding);
+								yTo = 10 + enabledRow * (theThumb.height + padding);
 							}
 							else
 							{
@@ -282,8 +242,8 @@
 									disabledCol--;
 									disabledRow = 0;
 								}
-								xTo = disabledCol * (theThumb.width);
-								yTo = 6+padding + disabledRow * (theThumb.height + padding);
+								xTo = 10 + disabledCol * (theThumb.width + padding);
+								yTo = 10 + disabledRow * (theThumb.height + padding);
 							}
 							break;
 					}
@@ -355,8 +315,8 @@
 			var theSelectionFlag:Boolean;
 			for (var i:int = 0; i < n ; i++)
 			{
-				useItemThumb ? theThumb = items[i].thumb : theThumb = thumbs[i];
-				useItemThumb ? theSelectionFlag = items[i].selectionFlag : theSelectionFlag = selectionFlags[i];
+				theThumb = items[i].Thumb;
+				theSelectionFlag = items[i].SelectionFlag;
 
                 if (theSelectionFlag && !theThumb.visible)
 				{

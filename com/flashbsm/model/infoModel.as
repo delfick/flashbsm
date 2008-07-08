@@ -100,6 +100,7 @@ import flash.events.IEventDispatcher;
 import com.components.*;
 import com.flashbsm.events.*;
 import com.flashbsm.model.*;
+import com.flashbsm.views.parts.showAllBox;
 
 class category extends EventDispatcher implements IEventDispatcher
 {
@@ -190,7 +191,7 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	private var thePathIndex:Array = new Array();
 	private var groupCount:Number;
 	private var emptyGroup:Object = new Object;
-	private var theThumb:*;
+	private var theThumb:showAllBox;
 	private var theSelectionFlag:Boolean;
 	[Bindable]
 	public var theGroups:ArrayCollection = new ArrayCollection;
@@ -318,23 +319,24 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	}	
 	
 	[Bindable]
-	public function get thumb ():*
+	public function get Thumb ():showAllBox
 	{
 	    return theThumb;
 	}
 	
-	public function set thumb (inThumb:*):void
+	public function set Thumb (inThumb:showAllBox):void
 	{
 	    theThumb = inThumb;
+	    
 	}	
 	
 	[Bindable]
-	public function get selectionFlag ():*
+	public function get SelectionFlag ():*
 	{
 	    return theSelectionFlag;
 	}
 	
-	public function set selectionFlag (inSelectionFlag:*):void
+	public function set SelectionFlag (inSelectionFlag:*):void
 	{
 	    theSelectionFlag = inSelectionFlag;
 	}		
@@ -343,6 +345,12 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	{
 	    return theIndex;
 	}
+	
+	public function get CategIndex ():Number
+	{
+		return thePathIndex[0];
+	}
+	
 	
 	public function get Path ():Array
 	{

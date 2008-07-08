@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:containers="com.components.containers.*"
+	width="100%" height="100"
+	
+	styleName="boxTenPad">
+	
+	<mx:Metadata>
+		[Event(name="changeShowAll", type="com.flashbsm.events.changeShowAllEvent")]
+	</mx:Metadata>
+
+
+	<mx:Script>
+		<![CDATA[
+			import com.flashbsm.model.*;
+			import com.flashbsm.events.*;
+			import flash.events.Event;
+			import com.components.containers.AnimatedTileList;
+			
+			private var changeShowAll:changeShowAllEvent;
+			
+			private function changeLayout(event:Event, inLayoutType:String):void
+			{
+				changeShowAll = new changeShowAllEvent();
+				changeShowAll.changeTheLayout(inLayoutType);
+				dispatchEvent(changeShowAll);
+			}
+
+			private function changeSort(event:Event, inSortType:String):void
+			{
+				changeShowAll = new changeShowAllEvent();
+				changeShowAll.changeTheSort(inSortType);
+				dispatchEvent(changeShowAll);
+			}
+			
+			private function changeFilter(event:Event, inFilterType:String, inFilterText:String):void
+			{
+				changeShowAll = new changeShowAllEvent();
+				changeShowAll.changeTheFilter(inFilterType);
+				changeShowAll.FilterText = inFilterText;
+				dispatchEvent(changeShowAll);
+			}
+			
+			
+		]]>
+
+	</mx:Script>
+	
+	<mx:VBox width="100%" height="100%">
+	
+		<mx:Label text="Layout : " styleName="optionsText"/>
+		
+		<mx:HBox>
+		
+			<mx:RadioButton groupName="searchLayout" label="Normal" selected="true" styleName="optionsText"
+				id="slNormal" click="{changeLayout(event, AnimatedTileList.LAYOUT_NORMAL)}" />
+				
+			<mx:RadioButton groupName="searchLayout" label="Group"  				styleName="optionsText"
+				id="slGroup" click="{changeLayout(event, AnimatedTileList.LAYOUT_GROUPS)}"  />
+				
+			<mx:RadioButton groupName="searchLayout" label="Enabled/Disabled" 		styleName="optionsText"
+				id="slEd" click="{changeLayout(event, AnimatedTileList.LAYOUT_ENABLED)}"	/>
+				
+		</mx:HBox>		
+		
+		<mx:CheckBox label="Alphabetical" styleName="optionsText" selected="true" id="slAlpha" 
+			click="changeSort(event, slAlpha.selected == true? changeShowAllEvent.CP_SORT : changeShowAllEvent.ALPHA_SORT)"/>
+		
+	</mx:VBox>
+	
+	<mx:VBox width="100%" height="100%">
+	
+		<mx:VBox width="100%" height="100%">
+		
+			<mx:HBox width="100%" height="100%">
+			
+				<mx:Label text="Search Options : " styleName="optionsText"/>
+				
+				<mx:RadioButton  groupName="searchOptions" label="Plugins" enabled="true" styleName="optionsText" 
+						id="soPlugins" selected="true"/>
+						
+				<mx:RadioButton  groupName="searchOptions" label="Options" enabled="false" styleName="optionsText" 	
+						id="soOptions"/>
+						
+			</mx:HBox>			
+			
+			<mx:HBox width="100%" height="100%" >
+			
+				<mx:Label text="Search" styleName="optionsText"/>
+				
+				<mx:TextInput width="100%" height="100%" id="sTI" 
+						change="{changeFilter(event, changeShowAllEvent.SEARCH, sTI.text)}"/>
+						
+			</mx:HBox>
+			
+		</mx:VBox>
+			
+	</mx:VBox>		
+	
+</mx:HBox>

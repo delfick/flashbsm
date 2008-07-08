@@ -6,6 +6,18 @@
 	borderThickness: 1;
 }
 
+.boxTenPad
+{
+	borderStyle:solid;
+	backgroundColor: #d3dfe5;
+	borderColor: #4f5a5f;
+	borderThickness: 1;
+	paddingTop : 10;
+	paddingBottom : 10;
+	paddingLeft : 10;
+	paddingRight : 10;
+}
+
 .settingsArea
 {
 	borderStyle:none;
@@ -134,4 +146,26 @@
 	openIcon:Embed(source="/assets/images/openArrow.png");
 	closedIcon:Embed(source="/assets/images/closedArrow.png");
 
+}
+
+.optionsText
+{
+	fontSize : 12;
+	fontFamily : "Verdana";
+	fontWeight : "bold";
+	verticalAlign : "middle";
+	paddingTop : 0;
+	paddingBottom : 0;
+	paddingLeft : 0;
+	paddingRight : 0;
+}
+
+.groupSortHeader
+{
+fontSize : 13;
+borderStyle:none;
+fontFamily : "Verdana";
+fontWeight : "bold";
+textAlign : "center";
+backgroundAlpha : 0.19;
 }
