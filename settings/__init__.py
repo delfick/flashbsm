@@ -5,6 +5,7 @@ from threading import Thread
 context = compizconfig.Context()
 globalInfoObject = []
 settingsHolder = []
+pluginsHolder = []
 changed = []
 	
 
@@ -27,6 +28,8 @@ def getPluginInfo(plugin):
 	infoObject["Enabled"] = plugin.Enabled
 	infoObject["Features"] = plugin.Features
 	infoObject["Ranking"] = plugin.Ranking
+	infoObject["PluginNumber"] = len(pluginsHolder)
+	pluginsHolder.append(plugin)
 	infoObject["Groups"] = []
 	infoObject["HasIcon"] = os.path.exists('assets/icons/plugin-'+plugin.Name + '.png')
 	for name, group in sorted(plugin.Groups.items(), FirstItemSortCompare):
@@ -83,6 +86,14 @@ def changeSetting(params):
 def renewValue(params):
 	settingNum = params[0]
 	return settingsHolder[settingNum].Value 
+	
+def changePluginStatus(params):
+	updateContext()
+	pluginNum = params[0]
+	Enabled = params[1]
+	pluginsHolder[pluginNum].Enabled = Enabled
+	context.Write()
+	return (Value == pluginsHolder[pluginNum].Enabled);
 	
 def CatSortCompare(v1, v2):
 	if v1 == v2:

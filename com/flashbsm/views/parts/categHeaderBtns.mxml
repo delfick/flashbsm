@@ -21,6 +21,6 @@
 	</mx:Script>
     	
 	<mx:Repeater id="groups" dataProvider="{fbsmModel.getInstance().everything.theCategories}" >
-		<parts:box info="{groups.currentItem}" itemClick="{groupClick(event)}"/>
+		<parts:categBox info="{groups.currentItem}" itemClick="{groupClick(event)}"/>
 	</mx:Repeater>
 </mx:HBox>

@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox
-	xmlns:mx="http://www.adobe.com/2006/mxml"
-	width="100%" height="100%" >
+	xmlns:mx="http://www.adobe.com/2006/mxml" >
 
 
 	<mx:Script>
 		<![CDATA[
 			import com.flashbsm.model.fbsmModel;
 			import flash.events.Event;
+			
+			[Bindable]
+			public var boxDownStyle:String = 'boxDown';
+			
+			[Bindable]
+			public var boxStyle:String = 'box';
+			
+			[Bindable]
+			public var boxOverStyle:String = 'boxOver';
+			
+			[Bindable]
+			public var havePaddedText:Boolean = false;
 			
 			[Bindable]
 			public var info:Object;
@@ -25,14 +36,14 @@
 	    [Event(name="itemClick", type="flash.events.Event")] 
 	</mx:Metadata>
 	
-	<mx:VBox id="group" width="100%" height="100%" click="{itemClick(event)}"
+	<mx:VBox id="theBox" width="100%" height="100%" click="{itemClick(event)}"
 	
-	    styleName="{info.Selected==true?'groupDown':'groupNormal'}"
-	    mouseOver="{info.Selected==true?group.styleName = 'groupDown':group.styleName = 'groupOver'}"
-	    mouseOut="{info.Selected==true?group.styleName = 'groupDown':group.styleName = 'groupNormal'}"
+	    styleName="{info.Selected==false? boxStyle : boxDownStyle}"
+	    mouseOver="{info.Selected==false? theBox.styleName = boxOverStyle : theBox.styleName = boxDownStyle}"
+	    mouseOut="{info.Selected==false?  theBox.styleName = boxStyle     : theBox.styleName = boxDownStyle}"
 	    
 	    horizontalAlign="center" verticalAlign="middle">
-		<mx:Label text="{info.Name}" />
+		<mx:Label text="{havePaddedText ? '  ' + info.Name + '  ' : info.Name}" />
 	</mx:VBox>
 	
 

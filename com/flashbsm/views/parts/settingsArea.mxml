@@ -16,7 +16,6 @@
 			import mx.effects.Effect;
 			import mx.effects.Move;
 
-			private var changeMade:Boolean = false;
 			private var changeSettings:communicate = new communicate();
 			private var tnToBeReset:Boolean = true;
 			private var theHeight:Number = 100;
@@ -48,19 +47,18 @@
 			{
 
 				var outObject:Object = new Object;
-				outObject.changeMade = changeMade;
 				outObject.settingsEvent = inEvent;
 				outObject.oldData = inEvent.oldData;
 
 				var pluginName:String = fbsmModel.getInstance().everything.currentPlugin.Name;
 				var settingName:String = inEvent.Name;
-
-
-				changeSettings.theType="settingsChange";
+				
 				changeSettings.outObject = outObject;
 				changeSettings.hasParams = true;
+				
+				changeSettings.theType="settingsChange";
 				changeSettings.theParams = [inEvent.SettingNumber, inEvent.newData];
-			    changeSettings.getInfo();
+				changeSettings.getInfo();
 			    changeSettings.addEventListener("gotData", continueDealingWithEvent);
 			}
 			private function continueDealingWithEvent(inEvent:gotDataEvent):void
@@ -68,12 +66,12 @@
 			    var theSettingsEvent:settingsEvent = inEvent.outObject.settingsEvent;
 				var newData:* = theSettingsEvent.newData;
 				var oldData:* = theSettingsEvent.oldData;
-
+				var settingType:String = theSettingsEvent.settingType;
+				
 				theSettingsEvent.Value = newData;
 				if (inEvent.Result)
 				{
 					theSettingsEvent.settingFlag = "changed";
-
 				}
 				else
 				{
@@ -86,7 +84,8 @@
 
 	<mx:HBox width="100%" id="tabs">
 		<mx:Repeater id="groups" dataProvider="{fbsmModel.getInstance().everything.currentPlugin.theGroups}">
-			<parts:tab minWidth="60" height="100%" info="{groups.currentItem}" itemClick="tabClick(event)"/>
+			<parts:box minWidth="60" height="100%" info="{groups.currentItem}" itemClick="tabClick(event)"
+				boxStyle="tab" boxOverStyle="tabOver" boxDownStyle="tabDown" havePaddedText="true"/>
 		</mx:Repeater>
 	</mx:HBox>
 	<mx:HBox styleName="plain"

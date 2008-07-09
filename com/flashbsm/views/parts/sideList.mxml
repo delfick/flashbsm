@@ -8,21 +8,28 @@
 
 	<mx:Script>
 		<![CDATA[
-			import flash.events.Event;
-			import mx.core.Application;
-			import com.flashbsm.model.*;
+		    import com.flashbsm.model.*;
+		    import com.components.*;
+			import flash.events.*;
+			import com.custom.*;
 			import com.flashbsm.events.*;
+			import flash.utils.Timer;
+			import flash.events.TimerEvent;
+			import mx.effects.Effect;
+			import mx.effects.Move;
 
+			
 			private function pluginClick(event:Event):void
 			{
 				fbsmModel.getInstance().everything.setCurrentPlugin(event.target.info.PathIndex, "setCateg");
 			}
+
 		]]>
 
 	</mx:Script>
     	
 	<mx:Repeater id="plugins" dataProvider="{fbsmModel.getInstance().everything.currentPlugins}" >
-		<parts:box info="{plugins.currentItem}" itemClick="{pluginClick(event)}"
+		<parts:sideBox info="{plugins.currentItem}" itemClick="{pluginClick(event)}"
 		width="100%" height="60" />
 	</mx:Repeater>
 </mx:VBox>

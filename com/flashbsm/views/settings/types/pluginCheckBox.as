@@ -2,7 +2,7 @@ package com.flashbsm.views.settings.types
 {
 	import com.flashbsm.views.settings.*;
 
-	public class checkBox extends settingsBase
+	public class pluginCheckBox extends settingsBase
 	{
 		import flash.events.*;
 		import com.components.*;
@@ -14,25 +14,24 @@ package com.flashbsm.views.settings.types
 		private var thing:CheckBox;
 		private var isChecked:Boolean;
 		
-		public function checkBox (inSetting:Object)
+		public function pluginCheckBox ()
 		{
 			super();
-			theSetting = inSetting;
-			super.setUpEventListeners();
-		}
+			//In this case, "theSetting" is actually a plugin object, but oh well.....
+		}		
 
 		override protected function createChildren():void
 		{
 			super.createChildren();
 
-   			if (!thing)
+	   		if (!thing)
 			{
 				thing = new CheckBox();
-				thing.selected = theSetting.Value;
 				thing.explicitWidth = thing.minWidth;
 				thing.addEventListener("click", dispatchTheEvent);
 				addChild(thing);
 			}
+			
 		}
 
 		override protected function measure():void
@@ -52,8 +51,9 @@ package com.flashbsm.views.settings.types
 
 		public function dispatchTheEvent(event:Event):void
 		{
+			event.stopPropagation()
 			flag = "changing";
-			dispatchEvent( new settingsEvent(settingsEvent.SETTINGSCHANGE, thing.selected, "button", theSetting, this));
+			dispatchEvent( new settingsEvent(settingsEvent.SETTINGSCHANGE, thing.selected, "pluginStatus", theSetting, this));
 		}
 
 		[Bindable]
@@ -65,7 +65,7 @@ package com.flashbsm.views.settings.types
 		{
 			isChecked = inChecked;
 			thing.selected = isChecked;
-		}	
+		}		
 
 		override public function set isEnabled(inEnabled:Boolean):void
 		{

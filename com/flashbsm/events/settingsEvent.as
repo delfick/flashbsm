@@ -37,6 +37,12 @@ package com.flashbsm.events
 		    theSettingObject.newValue = inValue;
 		}
 		
+		public function set Enabled(inEnabled:Boolean):void
+		{
+			theSetting.Enabled = inEnabled
+			theSettingObject.newValue = inEnabled;
+		}
+		
 		public function get Path ():Array
 		{
 		    return theSetting.Path;
@@ -52,6 +58,11 @@ package com.flashbsm.events
 		    return theSetting.SettingNumber;
 		}
 		
+		public function get PluginNumber ():Number
+		{
+			//this is only to be used when "theSetting" is actually a plugin object
+			return theSetting.PluginNumber;
+		}
 		
 		
 

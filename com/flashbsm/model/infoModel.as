@@ -193,6 +193,7 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	private var emptyGroup:Object = new Object;
 	private var theThumb:showAllBox;
 	private var theSelectionFlag:Boolean;
+	private var thePluginNumber:Number;
 	[Bindable]
 	public var theGroups:ArrayCollection = new ArrayCollection;
 
@@ -204,6 +205,7 @@ class plugin extends EventDispatcher implements IEventDispatcher
 		theEnabled = inPlugin.Enabled;
 		Features = inPlugin.Features;
 		theRanking = inPlugin.Ranking;
+		thePluginNumber = inPlugin.PluginNumber;
 		isSelected = false;
 		theIndex = inIndex;
 		for each (var pathPart:String in inPath)
@@ -270,7 +272,13 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	}
 	public function set Enabled(inEnabled:Boolean):void
 	{
-		theEnabled = inEnabled;
+		if (theEnabled != inEnabled)
+		{
+	    	theEnabled = inEnabled;
+	    	var tempObject:Object = new Object();
+	    	var theEvent:gotDataEvent = new gotDataEvent(tempObject, theEnabled);
+	    	dispatchEvent(theEvent);
+	    }
 	}
 
 	[Bindable]
@@ -340,6 +348,17 @@ class plugin extends EventDispatcher implements IEventDispatcher
 	{
 	    theSelectionFlag = inSelectionFlag;
 	}		
+	
+	[Bindable]
+	public function get PluginNumber ():*
+	{
+	    return thePluginNumber;
+	}
+	
+	public function set PluginNumber (inPluginNumber:*):void
+	{
+	    thePluginNumber = inPluginNumber;
+	}	
 	
 	public function get Index ():Number
 	{
@@ -667,7 +686,9 @@ class setting extends EventDispatcher implements IEventDispatcher
 		if (theValue != inEvent.Result)
 		{
 	    	theValue = inEvent.Result;
-	    	dispatchEvent(new Event("gotNewValue"));
+	    	var tempObject:Object = new Object();
+	    	var theEvent:gotDataEvent = new gotDataEvent(tempObject, theValue);
+	    	dispatchEvent(theEvent);
 	    }
 	}
 }

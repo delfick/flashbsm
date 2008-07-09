@@ -18,21 +18,7 @@
 	paddingRight : 10;
 }
 
-.settingsArea
-{
-	borderStyle:none;
-	backgroundColor: #FFFFFF;
-}
-
-.groupNormal
-{
-	borderStyle:solid;
-	backgroundColor: #d3dfe5;
-	borderColor: #4f5a5f;
-	borderThickness: 1;
-}
-
-.groupOver
+.boxOver
 {
 	borderStyle:solid;
 	backgroundColor: #99e19c;
@@ -40,7 +26,7 @@
 	borderThickness: 1;
 }
 
-.groupDown
+.boxDown
 {
 	borderStyle:solid;
 	backgroundColor: #99c8e1;
@@ -48,7 +34,13 @@
 	borderThickness: 1;
 }
 
-.tabNormal
+.settingsArea
+{
+	borderStyle:none;
+	backgroundColor: #FFFFFF;
+}
+
+.tab
 {
 	borderStyle:none;
 	backgroundColor: #e0e0e0;
@@ -160,6 +152,13 @@
 	paddingRight : 0;
 }
 
+.boxText
+{
+	fontSize : 9;
+	fontFamily : "Verdana";
+	VerticalAlign : "middle";
+	HorizontalAlign : "center";
+}
 .groupSortHeader
 {
 fontSize : 13;

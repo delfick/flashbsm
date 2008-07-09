@@ -18,6 +18,7 @@
 			
 			private function viewChange( event:changeViewEvent ):void
 			{
+				trace("asdf");
 				if ( event.newView == fbsmModel.NORMAL )
 				{
 					selectedChild = normal;

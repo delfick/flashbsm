@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="100" height="60">
+	width="100%" height="100%">
 
 
 	<mx:Script>
@@ -17,9 +17,6 @@
 			
 			[Bindable]
 			public var boxOverStyle:String = 'boxOver';
-			
-			[Bindable]
-			public var havePaddedText:Boolean = false;
 			
 			[Bindable]
 			public var info:Object;
@@ -44,7 +41,7 @@
 	    mouseOut="{info.Selected==false?  theBox.styleName = boxStyle     : theBox.styleName = boxDownStyle}"
 	    
 	    horizontalAlign="center" verticalAlign="middle">
-		<mx:Label text="{havePaddedText ? '  ' + info.Name + '  ' : info.Name}" />
+		<mx:Label text="{info.Name}" />
 	</mx:VBox>
 	
 

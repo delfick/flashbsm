@@ -25,27 +25,34 @@ package com.flashbsm.views.settings
 		[Bindable]
 		public var theSetting:Object;
 		
-		public function settingsBase(inSetting:Object):void
+		public function settingsBase():void
 		{
 			super();
-			this.addEventListener("flagChange", flagChange);
-			this.addEventListener("flagChange", applyEffect);
-			theSetting = inSetting;
-			theSetting.addEventListener("gotNewValue", function(inEvent:Event):void{ renewValue() });
 		}
 
+		public function setUpEventListeners():void
+		{
+			this.addEventListener("flagChange", flagChange);
+			this.addEventListener("flagChange", applyEffect);	
+			theSetting.addEventListener("gotData", function(inEvent:gotDataEvent):void{ newValue = inEvent.Result; });
+		}
 
 		public function set isEnabled(inEnabled:Boolean):void
 		{
 			//implemented by children
 		}
 		
-		public function renewValue():void
+		public function get newValue():Boolean
 		{
-			trace("he");
 			//implemented by children
+			return true;
 		}
-
+		
+		public function set newValue(inChecked:Boolean):void
+		{
+			//implemented by children
+		}	
+		
 		override protected function createChildren():void
 		{
 			super.createChildren();
@@ -63,7 +70,6 @@ package com.flashbsm.views.settings
 				theText.setTextFormat(theTextFormat);
        			addChild(theText);
     		}
-    		theLabel = theSetting.ShortDesc;
 		}
 		
 		public function set flag(inFlag:String):void
