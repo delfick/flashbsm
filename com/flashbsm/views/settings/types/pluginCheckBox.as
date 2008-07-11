@@ -18,7 +18,7 @@ package com.flashbsm.views.settings.types
 		{
 			super();
 			//In this case, "theSetting" is actually a plugin object, but oh well.....
-		}		
+		}			
 
 		override protected function createChildren():void
 		{
@@ -53,7 +53,7 @@ package com.flashbsm.views.settings.types
 		{
 			event.stopPropagation()
 			flag = "changing";
-			dispatchEvent( new settingsEvent(settingsEvent.SETTINGSCHANGE, thing.selected, "pluginStatus", theSetting, this));
+			dispatchEvent( new pluginChangeEvent(pluginChangeEvent.PLUGINCHANGE, thing.selected, theSetting, this));
 		}
 
 		[Bindable]
@@ -70,6 +70,12 @@ package com.flashbsm.views.settings.types
 		override public function set isEnabled(inEnabled:Boolean):void
 		{
 			thing.enabled = inEnabled;
+		}
+		
+		override public function set isVisible (inVisible:Boolean):void
+		{
+			super.isVisible = inVisible;
+			thing.visible = inVisible;
 		}
 	}
 }

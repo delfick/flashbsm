@@ -3,13 +3,13 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:settings="com.flashbsm.views.settings.types.*"
 	xmlns:parts="com.flashbsm.views.parts.*"
-	width="100%"
-	height="100%">
+	minWidth="60"
+	height="100%"
+	thePadding="0">
 	
 	<parts:insideBox>
 	
-		<mx:Label text="{info.Name}" />
-		
+		<mx:Label text="{'  ' + info.Name + '  '}"/>
 	</parts:insideBox>
 	
 

@@ -1,51 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="100" height="60">
-
-
-	<mx:Script>
-		<![CDATA[
-			import com.flashbsm.model.fbsmModel;
-			import flash.events.Event;
-			
-			[Bindable]
-			public var boxDownStyle:String = 'boxDown';
-			
-			[Bindable]
-			public var boxStyle:String = 'box';
-			
-			[Bindable]
-			public var boxOverStyle:String = 'boxOver';
-			
-			[Bindable]
-			public var havePaddedText:Boolean = false;
-			
-			[Bindable]
-			public var info:Object;
-			
-			private function itemClick (event:Event):void
-			{
-			    dispatchEvent(new Event("itemClick"));
-			}
-			
-		]]>
-
-	</mx:Script>
+<parts:pluginBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:settings="com.flashbsm.views.settings.types.*"
+	xmlns:parts="com.flashbsm.views.parts.*"
+	width="90"
+	height="80"
+	thePadding="2"
+	initialize="initApp2()">
 	
 	<mx:Metadata>
-	    [Event(name="itemClick", type="flash.events.Event")] 
+		[Event("pluginStatusChanged")]
 	</mx:Metadata>
 	
-	<mx:VBox id="theBox" width="100%" height="100%" click="{itemClick(event)}"
+	<mx:Script>
+		<![CDATA[
+			import flash.events.Event;
+			private function initApp2 ():void
+			{
+				this.addEventListener("mouseOver", showCheckBox);
+				this.addEventListener("mouseOut", hideCheckBox);
+				pcb.addEventListener("theSettingChanged", handleChangedStatus);
+				
+			}
+			
+			private function handleChangedStatus (inEvent:Event):void
+			{
+				dispatchEvent(new Event("pluginStatusChanged"));
+			}
+			
+			
+			private function showCheckBox(inEvent:Event):void
+			{
+				pcb.isVisible = true;	
+			}
+			
+			private function hideCheckBox(inEvent:Event):void
+			{
+				pcb.isVisible = false;
+			}
+			
+			private function checkBoxReady(inEvent:Event):void
+			{
+				pcb.newValue = info.Enabled;
+				pcb.isVisible = false;
+			}
+			
+			
+			
+		]]>
+		
+	</mx:Script>
 	
-	    styleName="{info.Selected==false? boxStyle : boxDownStyle}"
-	    mouseOver="{info.Selected==false? theBox.styleName = boxOverStyle : theBox.styleName = boxDownStyle}"
-	    mouseOut="{info.Selected==false?  theBox.styleName = boxStyle     : theBox.styleName = boxDownStyle}"
-	    
-	    horizontalAlign="center" verticalAlign="middle">
-		<mx:Label text="{havePaddedText ? '  ' + info.Name + '  ' : info.Name}" />
-	</mx:VBox>
+	<parts:insideBox>
+	
+		<mx:VBox width="100%" height="100%"
+		paddingTop="0" paddingLeft="0" paddingRight="0" paddingBottom="0">
+	
+			<mx:Text width="100%" height="100%" text="{info.ShortDesc}" styleName="boxText"  selectable="false"/>
+			<settings:pluginCheckBox id="pcb" theLabel=" " theSetting="{info}" 
+				creationComplete="{pcb.setUpEventListeners();checkBoxReady(event);}"/>
+		</mx:VBox>
+	</parts:insideBox>
 	
 
-</mx:VBox>
+</parts:pluginBox>

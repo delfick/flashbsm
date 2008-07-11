@@ -18,12 +18,16 @@ package com.flashbsm.views.settings
 		private var theGlow:Glow = new Glow();
 		private var theFlag:String = "normal";
 		private var flagTimer:Timer = new Timer(500, 1);
+		private var changed:Boolean = false;
 		
 		[Bindable]
 		public var theLabel:String;
 		
 		[Bindable]
 		public var theSetting:Object;
+		
+		private var _isVisible:Boolean = true;	
+		
 		
 		public function settingsBase():void
 		{
@@ -97,6 +101,7 @@ package com.flashbsm.views.settings
 					//trace("changing to green colour");
 					flagTimer.start();
 					flagTimer.addEventListener("timerComplete", changeFlagToNormal);
+					changed = true;
 					break;
 				case "error" :
 					//trace("changing to red colour");
@@ -109,6 +114,11 @@ package com.flashbsm.views.settings
 		private function changeFlagToNormal(event:TimerEvent):void
 		{
 			flag = "normal";
+			if (changed)
+			{
+				changed = false;
+				dispatchEvent(new Event("theSettingChanged"))
+			}
 		}
 
 		private function changeGlow(target:Object, inFlag:String):void
@@ -164,6 +174,16 @@ package com.flashbsm.views.settings
 		{
         	changeGlow(inEvent.target, inEvent.flag);
         }
+        
+		[Bindable]
+		public function get isVisible ():Boolean
+		{
+			return _isVisible;
+		}
+		public function set isVisible (inVisible:Boolean):void
+		{
+			_isVisible = inVisible;
+		}
 	}
 }
 

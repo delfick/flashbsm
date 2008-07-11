@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parts:box
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:settings="com.flashbsm.views.settings.types.*"
+	xmlns:parts="com.flashbsm.views.parts.*"
+	creationComplete="initApp()">
+
+
+	<mx:Script>
+		<![CDATA[
+		    import com.flashbsm.model.*;
+		    import com.components.*;
+			import flash.events.*;
+			import com.custom.*;
+			import com.flashbsm.events.*;
+			import flash.events.Event;
+			
+			private var changeSettings:communicate = new communicate();
+			
+			public function initApp ():void
+			{
+				this.addEventListener( pluginChangeEvent.PLUGINCHANGE, dealWithEvent );
+			}
+			
+			
+			public function dealWithEvent(inEvent:pluginChangeEvent):void
+			{
+
+				var outObject:Object = new Object;
+				outObject.pluginChangeEvent = inEvent;
+				outObject.oldData = inEvent.oldData;
+
+				var pluginName:String = fbsmModel.getInstance().everything.currentPlugin.Name;
+				var settingName:String = inEvent.Name;
+				
+				changeSettings.outObject = outObject;
+				changeSettings.hasParams = true;
+				
+				changeSettings.theType="pluginStatus";
+				changeSettings.theParams = [inEvent.PluginNumber, inEvent.newData];
+			    changeSettings.getInfo();
+			    changeSettings.addEventListener("gotData", continueDealingWithEvent);
+			}
+			private function continueDealingWithEvent(inEvent:gotDataEvent):void
+			{
+			    var thepluginChangeEvent:pluginChangeEvent = inEvent.outObject.pluginChangeEvent;
+				var newData:* = thepluginChangeEvent.newData;
+				var oldData:* = thepluginChangeEvent.oldData;
+				
+				thepluginChangeEvent.Enabled = newData;
+				if (inEvent.Result)
+				{
+					thepluginChangeEvent.settingFlag = "changed";
+				}
+				else
+				{
+					thepluginChangeEvent.settingFlag = "error";
+					thepluginChangeEvent.Enabled = oldData;
+				}
+				
+			}
+			
+		]]>
+
+	</mx:Script>
+	
+
+</parts:box>

@@ -84,14 +84,14 @@
 
 	<mx:HBox width="100%" id="tabs">
 		<mx:Repeater id="groups" dataProvider="{fbsmModel.getInstance().everything.currentPlugin.theGroups}">
-			<parts:box minWidth="60" height="100%" info="{groups.currentItem}" itemClick="tabClick(event)"
-				boxStyle="tab" boxOverStyle="tabOver" boxDownStyle="tabDown" havePaddedText="true"/>
+			<parts:tab info="{groups.currentItem}" itemClick="tabClick(event)"
+				boxStyle="tab" boxOverStyle="tabOver" boxDownStyle="tabDown"/>
 		</mx:Repeater>
 	</mx:HBox>
 	<mx:HBox styleName="plain"
-	width="100%" height="{Height-tabs.height-6}"  
-	verticalScrollPolicy="on">
-		<parts:theSettings theSubGroups="{fbsmModel.getInstance().everything.currentGroup.theSubGroups}" styleName="settingsArea"/>
+		width="100%" height="{Height-tabs.height-6}"  
+		verticalScrollPolicy="on">
+		<parts:theSettings theSubGroups="{fbsmModel.getInstance().everything.currentGroup.theSubGroups}" styleName="settingsArea" />
 	</mx:HBox>
 	
 </mx:VBox>

@@ -5,36 +5,27 @@ package com.flashbsm.events
 	import mx.collections.ArrayCollection;
  	import flash.display.*;
 
-	public class settingsEvent extends Event
+	public class pluginChangeEvent extends Event
 	{
-		public static const SETTINGSCHANGE:String = "settingsChange";
+		public static const PLUGINCHANGE:String = "pluginChange";
 		
 		private var theNewData:*;
-
-		private var theType:String;
 		
 		private var theSetting:Object;
 		
 		private var theSettingObject:Object;
 
-		public function settingsEvent( inType:String, inNewData:*, inSettingType:String, inSetting:Object, inSettingObject:*)
+		public function pluginChangeEvent( inType:String, inNewData:*, inSetting:Object, inSettingObject:*)
 		{
 			super( inType, true );
 			theSetting = inSetting;
 			theNewData = inNewData;
 			theSettingObject = inSettingObject;
-			settingType = inSettingType;
 		}
 		
 		public function get oldData():*
 		{
-		    return theSetting.Value;
-		}
-		
-		public function set Value(inValue:*):void
-		{
-		    theSetting.Value = inValue;
-		    theSettingObject.newValue = inValue;
+		    return theSetting.Enabled;
 		}
 		
 		public function set Enabled(inEnabled:Boolean):void
@@ -53,35 +44,24 @@ package com.flashbsm.events
 		    return theSetting.PathIndex;
 		}
 		
-		public function get SettingNumber ():Number
+		public function get PluginNumber ():Number
 		{
-		    return theSetting.SettingNumber;
+			return theSetting.PluginNumber;
 		}
-		
 
 		public function get newData():*
 		{
 			return theNewData;
 		}
-
-		public function set settingFlag(inFlag:String):void
-		{
-			target.flag = inFlag;
-		}
-
-		public function get settingType():String
-		{
-			return theType;
-		}
-
-		public function set settingType(inType:String):void
-		{
-			theType = inType;
-		}
 		
 		public function get Name ():String
 		{
 		    return theSetting.Name;
+		}
+		
+		public function set settingFlag(inFlag:String):void
+		{
+			target.flag = inFlag;
 		}
 		
 

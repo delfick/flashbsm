@@ -14,6 +14,10 @@
 -->
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*">
 
+	<mx:Metadata>
+		[Event("itemHasNewStatus")]
+	</mx:Metadata>
+
     <mx:Script>
 
         <![CDATA[
@@ -140,6 +144,7 @@
 			for (i = 0; i < n; i++)
 			{
 				items[i].Thumb = itemRenderer.newInstance();
+				items[i].Thumb.addEventListener("pluginStatusChanged", itemHasNewStatus)
 				items[i].Thumb.info = items[i];
 				items[i].Thumb.addEventListener("itemClick", pluginClick);
 				items[i].Thumb.visible=false;
@@ -148,13 +153,19 @@
 
 
 			}
+			
+        }
+        
+        private function itemHasNewStatus(inEvent:Event):void
+        {
+        	dispatchEvent(new Event("itemHasNewStatus"));
         }
 
         public function layoutTiles():void
 		{
 			if (items.length == 0){return;}
 			if (width == 0) {return;}
-
+			
 		    //should really use border metrics to take the scrollbar into
 			//account, but we're lazy
 			var numCols:int = 0;

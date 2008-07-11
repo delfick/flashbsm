@@ -93,7 +93,7 @@ def changePluginStatus(params):
 	Enabled = params[1]
 	pluginsHolder[pluginNum].Enabled = Enabled
 	context.Write()
-	return (Value == pluginsHolder[pluginNum].Enabled);
+	return (Enabled == pluginsHolder[pluginNum].Enabled);
 	
 def CatSortCompare(v1, v2):
 	if v1 == v2:

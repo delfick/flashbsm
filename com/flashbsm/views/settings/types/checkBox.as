@@ -71,5 +71,13 @@ package com.flashbsm.views.settings.types
 		{
 			thing.enabled = inEnabled;
 		}
+		
+		override public function set isVisible (inVisible:Boolean):void
+		{
+			super.isVisible = inVisible;
+			thing.visible = inVisible;
+		}
+		
+		
 	}
 }

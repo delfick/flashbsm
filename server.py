@@ -27,7 +27,6 @@ def renewValue(params):
 	return settings.renewValue(params)
 	
 def changePluginStatus(params):
-	print "hello"
 	return settings.changePluginStatus(params)
 	
 	
