@@ -17,7 +17,6 @@
 			import flash.events.TimerEvent;
 			import mx.effects.Effect;
 			import mx.effects.Move;
-
 			
 			private function pluginClick(event:Event):void
 			{

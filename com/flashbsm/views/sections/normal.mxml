@@ -10,7 +10,12 @@
 
 	<mx:Script>
 		<![CDATA[
-
+			import com.flashbsm.model.*;
+			public function scrollSideList ():void
+			{
+				sideList.verticalScrollPosition = fbsmModel.getInstance().everything.currentPlugin.Index * 60;
+			}
+			
 		]]>
 
 	</mx:Script>
@@ -19,7 +24,7 @@
 		<parts:categHeaderBtns width="100%" height="60" styleName="box"/>
 		
 		<mx:HBox width="100%" height="100%" >
-			<parts:sideList styleName="box"
+			<parts:sideList 										styleName="box"		id="sideList"	
 			    width="160" height="{descArea.height+settingsArea.height+logArea.height+12}" />
 			
 			<mx:VBox width="100%" height="100%"> 

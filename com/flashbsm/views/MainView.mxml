@@ -23,11 +23,7 @@
 					selectedChild = normal;
 					if (event.oldView == fbsmModel.SHOW_ALL)
 					{
-						/*var selectedCateg:uint = fbsmModel.getInstance().currentPlugin.categIndex;
-						var selectedPlugin:uint = fbsmModel.getInstance().currentPlugin.pluginIndex;
-						var selectedPluginName:String = fbsmModel.getInstance().uiItems.pluginItems.getItemAt(selectedCateg).plugins.getItemAt(selectedPlugin).Name;
-						normal.theTabs = fbsmModel.getInstance().settingsItems.allSettings[selectedPluginName];
-					//	normal.tn.selectedIndex = 0;*/
+						normal.scrollSideList();
 					}
 					
 

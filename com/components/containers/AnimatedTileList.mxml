@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (C) 2003-2006 Adobe Macromedia Software LLC and its licensors.
-// All Rights Reserved.
-// The following is Sample Code and is subject to all restrictions on such code
-// as contained in the End User License Agreement accompanying this product.
-// If you have received this file from a source other than Adobe,
-// then your use, modification, or distribution of it requires
-// the prior written permission of Adobe.
-//
-////////////////////////////////////////////////////////////////////////////////
--->
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*">
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns="*">
 
 	<mx:Metadata>
 		[Event("itemHasNewStatus")]
@@ -31,25 +20,14 @@
 		import mx.events.EffectEvent;
 		import mx.collections.*;
 		import com.flashbsm.model.*;
-		import mx.controls.VRule;
-		import com.flashbsm.views.parts.showAllBox;
-
+		import mx.core.UIComponent
 
  		// The list of items to display
 		private var items:ArrayCollection;
-
-		private static var firstTime:Boolean = true;
-
+		
 		public static const LAYOUT_NORMAL:String = "normal";
 		public static const LAYOUT_GROUPS:String = "groups";
 		public static const LAYOUT_ENABLED:String = "enabledDisabled";
-
-        public function set dataProvider(dataProvider:ArrayCollection):void
-		{
-        	items = dataProvider;
-        	createTiles();
-        	layoutTiles();
-        }
         
         // The total number of items that are in the current filter selection.
         public var filteredCount:Number;
@@ -57,79 +35,15 @@
 		// The class used to display each thumbnail
 		public var itemRenderer:IFactory;
 
-		public var updateDescription:Function;
-
+		//distance between thumbnails (horizontal and vertical)
 		public var padding:int = 4;
+	
+		//holds instance of a thumbnail
+		private var theThumb:UIComponent;
 
-		private var theThumb:showAllBox;
-
+		//flag indicating how to layout the thumbnails
 		public var layoutType:String = LAYOUT_NORMAL;
-
-        public function filter(filterCallback:Function, relayout:Boolean):void
-		{
-		    if (items == null) {return; }//too early
-            filteredCount = 0;
-            var n:int = items.length;
-            var fadeOut:Fade;
-			var theSelectionFlag:Boolean;
-			for (var i:int = 0 ; i < n ; i++)
-			{
-				theThumb = items[i].Thumb;
-				theSelectionFlag = items[i].SelectionFlag;
-                if (filterCallback.call(this, items[i]))
-				{
-                    filteredCount++;
-                    items[i].SelectionFlag = true;
-                    theThumb.alpha = 1;
-                }
-				else
-				{
-                    items[i].SelectionFlag = false;
-                    if (relayout)
-                    {
-                    	fadeOut = new Fade(theThumb);
-	                    fadeOut.alphaTo = 0.1;
-	                    fadeOut.play();
-                    }
-                    else
-                    {
-                    	theThumb.alpha = 0.1;
-                    }
-                }
-            }
-
-            if (relayout)
-			{
-
-            	if (fadeOut)
-				{
-
-            		fadeOut.addEventListener(EffectEvent.EFFECT_END,
-    					function(event:EffectEvent):void
-						{
-    						layoutTiles();
-    					});
-                	}
-            	else
-            	{
-                	layoutTiles();
-             	}
-            }
-		}
-
-		public function sorter(theSort:Sort):void
-		{
-			items.sort = theSort;
-			items.refresh()
-			layoutTiles();
-		}
 		
-		private function pluginClick(inEvent:Event):void
-		{
-			fbsmModel.getInstance().everything.setCurrentPlugin(inEvent.target.info.PathIndex);
-			fbsmModel.getInstance().changeTheView(fbsmModel.NORMAL);
-		}
-
         private function createTiles():void
         {
 			removeAllChildren();
@@ -156,32 +70,28 @@
 			
         }
         
-        private function itemHasNewStatus(inEvent:Event):void
-        {
-        	dispatchEvent(new Event("itemHasNewStatus"));
-        }
-
         public function layoutTiles():void
 		{
 			if (items.length == 0){return;}
 			if (width == 0) {return;}
 			
-		    //should really use border metrics to take the scrollbar into
-			//account, but we're lazy
+			
 			var numCols:int = 0;
 			var numRows:int = 0;
+			var totalCols:int = 0;
 			
-			numCols = (width-40) / (items[0].Thumb.width + padding) - 1;
 			numRows = (height-40) / (items[0].Thumb.height + padding) - 1;
+			numCols = (width-40) / (items[0].Thumb.width + padding) - 1;
+			
 
 			verticalScrollPosition = 0;
 
 			var row:int = 0;
 			var col:int = 0;
-			var disabledCol:Number = numCols;
-			var disabledRow:Number = -1;
-			var enabledCol:Number = 0;
-			var enabledRow:Number = -1;
+			var disabledCol:Number = numCols+1;
+			var disabledRow:Number = 0;
+			var enabledCol:Number = -1;
+			var enabledRow:Number = 0;
 
 
 			var move:Move = null;
@@ -236,24 +146,24 @@
 						case LAYOUT_ENABLED :
 							if (items[i].Enabled)
 							{
-								enabledRow++
-								if (enabledRow > numRows)
+								enabledCol++
+								if (enabledCol > numCols/2)
 								{
-									enabledCol++;
-									enabledRow = 0;
+									enabledRow++;
+									enabledCol = 0;
 								}
 								xTo = 10 + enabledCol * (theThumb.width + padding);
 								yTo = 10 + enabledRow * (theThumb.height + padding);
 							}
 							else
 							{
-								disabledRow++
-								if (disabledRow > numRows)
+								disabledCol --;
+								if (disabledCol < ( numCols % 2 ==0 ? numCols/2+1  :  numCols/2) )
 								{
-									disabledCol--;
-									disabledRow = 0;
+									disabledRow ++;
+									disabledCol = numCols;
 								}
-								xTo = 10 + disabledCol * (theThumb.width + padding);
+								xTo = 10 + 10 + disabledCol * (theThumb.width + padding);
 								yTo = 10 + disabledRow * (theThumb.height + padding);
 							}
 							break;
@@ -341,6 +251,88 @@
 				}
 
             }
+        }
+
+
+
+        public function filter(filterCallback:Function, relayout:Boolean):void
+		{
+		    if (items == null) {return; }
+		    
+            filteredCount = 0;
+            var n:int = items.length;
+            var fadeOut:Fade;
+			var theSelectionFlag:Boolean;
+			for (var i:int = 0 ; i < n ; i++)
+			{
+				theThumb = items[i].Thumb;
+				theSelectionFlag = items[i].SelectionFlag;
+                if (filterCallback.call(this, items[i]))
+				{
+                    filteredCount++;
+                    items[i].SelectionFlag = true;
+                    theThumb.alpha = 1;
+                }
+				else
+				{
+                    items[i].SelectionFlag = false;
+                    if (relayout)
+                    {
+                    	fadeOut = new Fade(theThumb);
+	                    fadeOut.alphaTo = 0.1;
+	                    fadeOut.play();
+                    }
+                    else
+                    {
+                    	theThumb.alpha = 0.1;
+                    }
+                }
+            }
+
+            if (relayout)
+			{
+
+            	if (fadeOut)
+				{
+
+            		fadeOut.addEventListener(EffectEvent.EFFECT_END,
+    					function(event:EffectEvent):void
+						{
+    						layoutTiles();
+    					});
+                	}
+            	else
+            	{
+                	layoutTiles();
+             	}
+            }
+		}
+
+		public function sorter(theSort:Sort):void
+		{
+			items.sort = theSort;
+			items.refresh()
+			layoutTiles();
+		}
+		
+		
+		
+		private function pluginClick(inEvent:Event):void
+		{
+			fbsmModel.getInstance().everything.setCurrentPlugin(inEvent.target.info.PathIndex);
+			fbsmModel.getInstance().changeTheView(fbsmModel.NORMAL);
+		}
+        
+        private function itemHasNewStatus(inEvent:Event):void
+        {
+        	dispatchEvent(new Event("itemHasNewStatus"));
+        }
+        
+        public function set dataProvider(dataProvider:ArrayCollection):void
+		{
+        	items = dataProvider;
+        	createTiles();
+        	layoutTiles();
         }
 
         ]]>

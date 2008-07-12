@@ -41,7 +41,6 @@
 				var group:Object = fbsmModel.getInstance().everything.currentPlugin.getGroup(inEvent.target.info.Index);
 				fbsmModel.getInstance().everything.setCurrentGroup(group.PathIndex, "setCateg");			
 			}
-			
 
 			public function dealWithEvent(inEvent:settingsEvent):void
 			{
