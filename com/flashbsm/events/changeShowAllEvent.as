@@ -24,6 +24,7 @@ package com.flashbsm.events
 		private var theLayoutType:String = AnimatedTileList.LAYOUT_NORMAL;
 		private var theSorter:Sort = new Sort();
 		private var theFilterText:String = "";
+		private var doShowExtras:Boolean = false;
 		
 		private var sortByCateg:SortField = new SortField("CategIndex");
 		private var sortByPlugin:SortField = new SortField("Index");
@@ -35,6 +36,12 @@ package com.flashbsm.events
 			super( CHANGESHOWALL, true );
 			sortByStatus.descending=true;
 		}
+		
+		public function get showExtras ():Boolean
+		{
+			return doShowExtras;
+		}
+		
 			
 			
 			
@@ -52,6 +59,7 @@ package com.flashbsm.events
 		{
 			doChangeLayout = true;
 			theLayoutType = inLayoutType
+			doShowExtras = false;
 			switch (inLayoutType)
 			{
 				case AnimatedTileList.LAYOUT_NORMAL :
@@ -66,14 +74,16 @@ package com.flashbsm.events
 						?
 						changeTheSort(CP_SORT)				
 						:
-						changeTheSort(ENABLED_SORT);	
+						changeTheSort(ENABLED_SORT);
 					break;
 				case AnimatedTileList.LAYOUT_ENABLED :
+					
 					isAlphaSelected 
 						?
 						changeTheSort(ALPHA_SORT)				
 						:
 						changeTheSort(CP_SORT);		
+						doShowExtras = true;
 					break;
 			}
 		}
@@ -147,6 +157,7 @@ package com.flashbsm.events
 					theSorter.fields = [sortByCateg, sortByPlugin];
 					break;
 				case ENABLED_SORT :
+					doShowExtras = true;
 					theSorter.fields = [sortByStatus];
 					break;
 			}

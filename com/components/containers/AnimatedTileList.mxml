@@ -44,6 +44,9 @@
 		//flag indicating how to layout the thumbnails
 		public var layoutType:String = LAYOUT_NORMAL;
 		
+		//flag indicating if extras on thumbs should be visible or not
+		public var showExtras:Boolean = false;
+		
         private function createTiles():void
         {
 			removeAllChildren();
@@ -121,7 +124,7 @@
 					switch (layoutType)
 					{
 						case LAYOUT_NORMAL :
-						
+							showExtras ? items[i].Thumb.showExtras() : items[i].Thumb.hideExtras();
 							if (col > numCols)
 							{
 								row++;
@@ -136,6 +139,7 @@
 							break;
 
 						case LAYOUT_GROUPS :
+							showExtras ? items[i].Thumb.showExtras() : items[i].Thumb.hideExtras();
 							rowArray[items[i].PathIndex[0]]++;
 
 							xTo = 10 + items[i].PathIndex[0] * (theThumb.width+padding);
@@ -144,6 +148,7 @@
 							break;
 
 						case LAYOUT_ENABLED :
+							showExtras ? items[i].Thumb.showExtras() : items[i].Thumb.hideExtras();
 							if (items[i].Enabled)
 							{
 								enabledCol++

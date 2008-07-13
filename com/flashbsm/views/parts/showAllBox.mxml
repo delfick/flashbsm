@@ -39,6 +39,16 @@
 				pcb.isVisible = false;
 			}
 			
+			public function hideExtras():void
+			{
+				hideCheckBox(null);
+			}
+			
+			public function showExtras():void
+			{
+				showCheckBox(null);
+			}
+			
 			private function checkBoxReady(inEvent:Event):void
 			{
 				pcb.newValue = info.Enabled;

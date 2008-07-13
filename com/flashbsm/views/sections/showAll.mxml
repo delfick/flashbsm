@@ -15,7 +15,6 @@
 				if (inEvent.ChangeLayout)
 				{
 					theCanvas.layoutType = inEvent.LayoutType;
-					
 				}
 				if (inEvent.ChangeFilter)
 				{
@@ -25,6 +24,12 @@
 				{
 					theCanvas.sorter(inEvent.Sorter);
 				}
+				theCanvas.layoutType == AnimatedTileList.LAYOUT_ENABLED
+					?
+					theCanvas.showExtras = true
+					:
+					theCanvas.showExtras = inEvent.showExtras;
+					
 				theCanvas.layoutTiles();
 			}
 		]]>

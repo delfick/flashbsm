@@ -50,7 +50,6 @@
 					slAlpha.selected ? type = changeShowAllEvent.CP_SORT : type = changeShowAllEvent.ENABLED_SORT
 					:
 					slAlpha.selected ? type = changeShowAllEvent.ALPHA_SORT: type = changeShowAllEvent.CP_SORT;
-					trace("changing to " + type);
 				changeSort(inEvent, type )
 			}
 			
