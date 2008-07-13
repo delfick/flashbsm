@@ -23,7 +23,7 @@
 			private function changeLayout(event:Event, inLayoutType:String):void
 			{
 				changeShowAll = new changeShowAllEvent();
-				changeShowAll.changeTheLayout(inLayoutType);
+				changeShowAll.changeTheLayout(inLayoutType, slAlpha.selected);
 				dispatchEvent(changeShowAll);
 			}
 
@@ -40,6 +40,18 @@
 				changeShowAll.changeTheFilter(inFilterType);
 				changeShowAll.FilterText = inFilterText;
 				dispatchEvent(changeShowAll);
+			}
+			
+			private function alphaClick(inEvent:Event):void
+			{
+				var type:String;
+				slGroup.selected 
+					?
+					slAlpha.selected ? type = changeShowAllEvent.CP_SORT : type = changeShowAllEvent.ENABLED_SORT
+					:
+					slAlpha.selected ? type = changeShowAllEvent.ALPHA_SORT: type = changeShowAllEvent.CP_SORT;
+					trace("changing to " + type);
+				changeSort(inEvent, type )
 			}
 			
 			
@@ -64,8 +76,8 @@
 				
 		</mx:HBox>		
 		
-		<mx:CheckBox label="Alphabetical" styleName="optionsText" selected="true" id="slAlpha" 
-			click="changeSort(event, slAlpha.selected == true? changeShowAllEvent.CP_SORT : changeShowAllEvent.ALPHA_SORT)"/>
+		<mx:CheckBox label="Alphabetical" styleName="optionsText" selected="false" id="slAlpha" 
+			click="alphaClick(event)"/>
 		
 	</mx:VBox>
 	

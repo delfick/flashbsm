@@ -15,18 +15,17 @@
 				if (inEvent.ChangeLayout)
 				{
 					theCanvas.layoutType = inEvent.LayoutType;
-					theCanvas.layoutTiles();
+					
 				}
-				else if (inEvent.ChangeFilter)
+				if (inEvent.ChangeFilter)
 				{
 					theCanvas.filter(inEvent.FilterCallBack, false);
-					theCanvas.layoutTiles();
 				}
-				else if (inEvent.ChangeSort)
+				if (inEvent.ChangeSort)
 				{
 					theCanvas.sorter(inEvent.Sorter);
-					theCanvas.layoutTiles();
 				}
+				theCanvas.layoutTiles();
 			}
 		]]>
 

@@ -13,7 +13,8 @@ package com.flashbsm.events
 		public static const CHANGESHOWALL:String = "changeShowAll";
 		public static const SEARCH:String = "search";
 		public static const ALPHA_SORT:String = "alphaSort";
-		public static const CP_SORT:String = "sortByCategAndPlugin"
+		public static const CP_SORT:String = "sortByCategAndPlugin";
+		public static const ENABLED_SORT:String = "sortBystatus";
 		
 		private var doChangeLayout:Boolean = false;
 		private var doChangeFilter:Boolean = false;
@@ -27,10 +28,12 @@ package com.flashbsm.events
 		private var sortByCateg:SortField = new SortField("CategIndex");
 		private var sortByPlugin:SortField = new SortField("Index");
 		private var sortByShortDesc:SortField = new SortField("ShortDesc");
+		private var sortByStatus:SortField = new SortField("Enabled");
 
 		public function changeShowAllEvent()
 		{
 			super( CHANGESHOWALL, true );
+			sortByStatus.descending=true;
 		}
 			
 			
@@ -45,10 +48,34 @@ package com.flashbsm.events
 			return doChangeLayout;
 		}
 		
-		public function changeTheLayout (inLayoutType:String):void
+		public function changeTheLayout (inLayoutType:String, isAlphaSelected:Boolean):void
 		{
 			doChangeLayout = true;
 			theLayoutType = inLayoutType
+			switch (inLayoutType)
+			{
+				case AnimatedTileList.LAYOUT_NORMAL :
+					isAlphaSelected 
+						?
+						changeTheSort(ALPHA_SORT)				
+						:
+						changeTheSort(CP_SORT);
+					break;
+				case AnimatedTileList.LAYOUT_GROUPS :
+					isAlphaSelected 
+						?
+						changeTheSort(CP_SORT)				
+						:
+						changeTheSort(ENABLED_SORT);	
+					break;
+				case AnimatedTileList.LAYOUT_ENABLED :
+					isAlphaSelected 
+						?
+						changeTheSort(ALPHA_SORT)				
+						:
+						changeTheSort(CP_SORT);		
+					break;
+			}
 		}
 		
 		public function get LayoutType ():String
@@ -118,6 +145,9 @@ package com.flashbsm.events
 					break;
 				case CP_SORT :
 					theSorter.fields = [sortByCateg, sortByPlugin];
+					break;
+				case ENABLED_SORT :
+					theSorter.fields = [sortByStatus];
 					break;
 			}
 		}
