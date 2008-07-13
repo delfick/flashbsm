@@ -15,10 +15,13 @@
 	<mx:Script>
 		<![CDATA[
 			import flash.events.Event;
+			
+			private var showTheExtras:Boolean = false;
+			
 			private function initApp2 ():void
 			{
-				this.addEventListener("mouseOver", showCheckBox);
-				this.addEventListener("mouseOut", hideCheckBox);
+				this.addEventListener("mouseOver", handleMouseOver);
+				this.addEventListener("mouseOut", handleMouseOut);
 				pcb.addEventListener("theSettingChanged", handleChangedStatus);
 				
 			}
@@ -28,25 +31,44 @@
 				dispatchEvent(new Event("pluginStatusChanged"));
 			}
 			
+			private function handleMouseOver (inEvent:Event):void
+			{
+				if (!showTheExtras)
+				{
+					pcb.isVisible = true;
+				}
+			}
 			
-			private function showCheckBox(inEvent:Event):void
+			private function handleMouseOut (inEvent:Event):void
+			{
+				if (!showTheExtras)
+				{
+					pcb.isVisible = false;
+				}	 
+			}
+			
+			
+			private function showCheckBox():void
 			{
 				pcb.isVisible = true;	
 			}
 			
-			private function hideCheckBox(inEvent:Event):void
+			private function hideCheckBox():void
 			{
+				
 				pcb.isVisible = false;
 			}
 			
 			public function hideExtras():void
 			{
-				hideCheckBox(null);
+				hideCheckBox();
+				showTheExtras = false;
 			}
 			
 			public function showExtras():void
 			{
-				showCheckBox(null);
+				showCheckBox();
+				showTheExtras = true;
 			}
 			
 			private function checkBoxReady(inEvent:Event):void
