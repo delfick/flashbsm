@@ -99,7 +99,7 @@ import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 import com.components.*;
 import com.flashbsm.events.*;
-import com.flashbsm.model.*;
+import com.flashbsm.controller.fbsm;
 import com.flashbsm.views.parts.showAllBox;
 
 class category extends EventDispatcher implements IEventDispatcher
@@ -125,7 +125,7 @@ class category extends EventDispatcher implements IEventDispatcher
 		for (var nextPlugin:String in inCateg.Plugins)
 		{
 			thePlugins.addItem(new plugin(inCateg.Plugins[nextPlugin], pluginCount, thePath, thePathIndex));
-			fbsmModel.getInstance().everything.allPlugins.addItem(getPlugin(pluginCount));
+			fbsm.getInstance().everything.allPlugins.addItem(getPlugin(pluginCount));
 			pluginCount++
 			
 		}

@@ -8,7 +8,7 @@
 
 	<mx:Script>
 		<![CDATA[
-		    import com.flashbsm.model.*;
+		    import com.flashbsm.controller.fbsm;
 		    import com.components.*;
 			import flash.events.*;
 			import com.custom.*;
@@ -30,7 +30,7 @@
 				outObject.pluginChangeEvent = inEvent;
 				outObject.oldData = inEvent.oldData;
 
-				var pluginName:String = fbsmModel.getInstance().everything.currentPlugin.Name;
+				var pluginName:String = fbsm.getInstance().everything.currentPlugin.Name;
 				var settingName:String = inEvent.Name;
 				
 				changeSettings.outObject = outObject;

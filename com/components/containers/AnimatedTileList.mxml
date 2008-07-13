@@ -19,7 +19,7 @@
         import mx.effects.Move;
 		import mx.events.EffectEvent;
 		import mx.collections.*;
-		import com.flashbsm.model.*;
+		import com.flashbsm.controller.fbsm;
 		import mx.core.UIComponent
 
  		// The list of items to display
@@ -99,7 +99,7 @@
 			var n:int = items.length;
 
 			var rowArray:Array = new Array();
-			for (i=0; i< fbsmModel.getInstance().everything.theCategories.length;i++)
+			for (i=0; i< fbsm.getInstance().everything.theCategories.length;i++)
 			{
 				rowArray.push(-1);
 			}
@@ -319,8 +319,8 @@
 		
 		private function pluginClick(inEvent:Event):void
 		{
-			fbsmModel.getInstance().everything.setCurrentPlugin(inEvent.target.info.PathIndex);
-			fbsmModel.getInstance().changeTheView(fbsmModel.NORMAL);
+			fbsm.getInstance().everything.setCurrentPlugin(inEvent.target.info.PathIndex);
+			fbsm.getInstance().changeTheView(fbsm.NORMAL);
 		}
         
         private function itemHasNewStatus(inEvent:Event):void

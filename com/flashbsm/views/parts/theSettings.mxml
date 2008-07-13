@@ -9,7 +9,7 @@
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
-			import com.flashbsm.model.*;
+			import com.flashbsm.controller.fbsm;
 			import com.flashbsm.events.*;
 			import mx.controls.CheckBox;
 			import mx.collections.ArrayCollection;
@@ -91,7 +91,7 @@
 			}
 			public function updateSettings (inEvent:Event):void
 			{
-				fbsmModel.getInstance().everything.updateContext()
+				fbsm.getInstance().everything.updateContext()
 				for each (var subGroup:Object in theSubGroups)
 				{
 					for each (var theSetting:Object in subGroup.theSettings)

@@ -8,31 +8,31 @@
 	<mx:Script>
 		<![CDATA[
 			import com.flashbsm.events.changeViewEvent
-			import com.flashbsm.model.fbsmModel;
+			import com.flashbsm.controller.fbsm;
 			
 			public function initApp ():void
 			{
-				fbsmModel.getInstance().addEventListener(changeViewEvent.CHANGE_OF_VIEW, viewChange);
+				fbsm.getInstance().addEventListener(changeViewEvent.CHANGE_OF_VIEW, viewChange);
 			}
 			
 			
 			private function viewChange( event:changeViewEvent ):void
 			{
-				if ( event.newView == fbsmModel.NORMAL )
+				if ( event.newView == fbsm.NORMAL )
 				{
 					selectedChild = normal;
-					if (event.oldView == fbsmModel.SHOW_ALL)
+					if (event.oldView == fbsm.SHOW_ALL)
 					{
 						normal.scrollSideList();
 					}
 					
 
 				}
-				else if (event.newView == fbsmModel.SHOW_ALL )
+				else if (event.newView == fbsm.SHOW_ALL )
 				{
 					selectedChild = showAll;
 				}
-				else if (event.newView == fbsmModel.INITIAL)
+				else if (event.newView == fbsm.INITIAL)
 				{
 					selectedChild = initial;
 				}

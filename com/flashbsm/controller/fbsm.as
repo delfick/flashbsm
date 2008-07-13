@@ -1,6 +1,4 @@
-
-
-package com.flashbsm.model
+package com.flashbsm.controller
 {
 	import mx.collections.ArrayCollection;
 	import flash.events.Event;
@@ -10,9 +8,9 @@ package com.flashbsm.model
 	import com.flashbsm.events.*;
 	import com.components.*;
 
-	public class fbsmModel
+	public class fbsm
 	{
-		private static var instance:fbsmModel;
+		private static var instance:fbsm;
 		private var allInfo:communicate = new communicate();
 
 		public static const NORMAL:String = "normal";
@@ -33,7 +31,7 @@ package com.flashbsm.model
 		[Bindable]
 		public var isVisible:Boolean = false;
 		
-		public function fbsmModel()
+		public function fbsm()
 		{
             allInfo.theType="getInfo";
 			trace("asking server for information");
@@ -42,7 +40,7 @@ package com.flashbsm.model
 
 			if ( instance != null )
 			{
-				throw( new Error( "there can be only one instance of the fbsmModel" ) );
+				throw( new Error( "there can be only one instance of the fbsm" ) );
 			}
 		}
 
@@ -71,12 +69,12 @@ package com.flashbsm.model
 		}
 		
 
-		public static function getInstance():fbsmModel
+		public static function getInstance():fbsm
 		{
 			if( instance == null )
 			{
 
-				instance = new fbsmModel();
+				instance = new fbsm();
 			}
 
 			return instance;

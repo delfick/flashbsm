@@ -5,12 +5,12 @@
 
 	<mx:Script>
 		<![CDATA[
-			import com.flashbsm.model.fbsmModel;
+			import com.flashbsm.controller.fbsm;
 		]]>
 
 	</mx:Script>
 	
 	<mx:TextArea width="100%" height="100%" id="logger">
-		<mx:text>{fbsmModel.getInstance().logText}</mx:text>
+		<mx:text>{fbsm.getInstance().logText}</mx:text>
 	</mx:TextArea>
 </mx:VBox>

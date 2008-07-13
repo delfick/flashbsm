@@ -7,7 +7,7 @@
 
 	<mx:Script>
 		<![CDATA[
-			import com.flashbsm.model.*;
+			import com.flashbsm.controller.fbsm;
 			import com.flashbsm.events.*;
 			
 			private function settingsChanged(inEvent:changeShowAllEvent):void
@@ -37,7 +37,7 @@
 		<containers:AnimatedTileList width="100%" height="100%" id="theCanvas"
 				 verticalScrollPolicy="on" styleName="box" paddingTop="10"
 				 creationComplete="theCanvas.layoutTiles()"
-				 dataProvider="{fbsmModel.getInstance().everything.allPlugins}"
+				 dataProvider="{fbsm.getInstance().everything.allPlugins}"
 				 itemRenderer="com.flashbsm.views.parts.showAllBox"
 				 itemHasNewStatus="{theCanvas.layoutTiles()}"/>
 		<parts:showAllSettings changeShowAll="{settingsChanged(event)}"/>

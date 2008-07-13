@@ -9,18 +9,18 @@
 		<![CDATA[
 			import flash.events.Event;
 			import mx.core.Application;
-			import com.flashbsm.model.*;
+			import com.flashbsm.controller.fbsm;
 			import com.flashbsm.events.*;
 
 			private function groupClick(event:Event):void
 			{
-				fbsmModel.getInstance().everything.setCurrentCateg(event.target.info.PathIndex);
+				fbsm.getInstance().everything.setCurrentCateg(event.target.info.PathIndex);
 			}
 		]]>
 
 	</mx:Script>
     	
-	<mx:Repeater id="groups" dataProvider="{fbsmModel.getInstance().everything.theCategories}" >
+	<mx:Repeater id="groups" dataProvider="{fbsm.getInstance().everything.theCategories}" >
 		<parts:categBox info="{groups.currentItem}" itemClick="{groupClick(event)}"/>
 	</mx:Repeater>
 </mx:HBox>

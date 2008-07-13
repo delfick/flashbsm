@@ -7,7 +7,7 @@
 
 	<mx:Script>
 		<![CDATA[
-			import com.flashbsm.model.fbsmModel;
+			import com.flashbsm.controller.fbsm;
 		]]>
 
 	</mx:Script>

@@ -9,7 +9,7 @@
         <![CDATA[
 			import mx.events.ItemClickEvent;
 			import mx.core.Application;
-			import com.flashbsm.model.*;
+			import com.flashbsm.controller.fbsm;
 			import mx.managers.PopUpManager;
 			import mx.core.IFlexDisplayObject;
 			import com.flashbsm.views.sections.*;
@@ -18,13 +18,13 @@
 			{
 				if (event.label == "Show All")
 				{
-					if (fbsmModel.currentView == fbsmModel.NORMAL)
+					if (fbsm.currentView == fbsm.NORMAL)
 					{
-						fbsmModel.getInstance().changeTheView(fbsmModel.SHOW_ALL);
+						fbsm.getInstance().changeTheView(fbsm.SHOW_ALL);
 					}
 					else
 					{
-						fbsmModel.getInstance().changeTheView(fbsmModel.NORMAL);
+						fbsm.getInstance().changeTheView(fbsm.NORMAL);
 					}
 				}
 				else if (event.label == "Options")

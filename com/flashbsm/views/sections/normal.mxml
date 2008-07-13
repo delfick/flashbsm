@@ -10,10 +10,10 @@
 
 	<mx:Script>
 		<![CDATA[
-			import com.flashbsm.model.*;
+			import com.flashbsm.controller.fbsm;
 			public function scrollSideList ():void
 			{
-				sideList.verticalScrollPosition = fbsmModel.getInstance().everything.currentPlugin.Index * 60;
+				sideList.verticalScrollPosition = fbsm.getInstance().everything.currentPlugin.Index * 60;
 			}
 			
 		]]>

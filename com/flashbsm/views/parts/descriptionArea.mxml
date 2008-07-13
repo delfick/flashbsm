@@ -6,20 +6,20 @@
 
 	<mx:Script>
 		<![CDATA[
-			import com.flashbsm.model.*;
+			import com.flashbsm.controller.fbsm;
 		]]>
 
 	</mx:Script>
 	
 	
 	
-	<mx:String id="Group">{fbsmModel.getInstance().everything.currentCateg.Name}</mx:String>
-	<mx:String id="Plugin">{fbsmModel.getInstance().everything.currentPlugin.ShortDesc}</mx:String>
-	<mx:String id="LongDesc">{fbsmModel.getInstance().everything.currentPlugin.LongDesc}</mx:String>
+	<mx:String id="Group">{fbsm.getInstance().everything.currentCateg.Name}</mx:String>
+	<mx:String id="Plugin">{fbsm.getInstance().everything.currentPlugin.ShortDesc}</mx:String>
+	<mx:String id="LongDesc">{fbsm.getInstance().everything.currentPlugin.LongDesc}</mx:String>
 	
 	
 	<mx:Spacer width="5"/>
-	<mx:Image id="pluginIcon" source="{fbsmModel.getInstance().everything.currentPlugin.Icon}"/>
+	<mx:Image id="pluginIcon" source="{fbsm.getInstance().everything.currentPlugin.Icon}"/>
 	<mx:Spacer width="5"/>
 	<mx:Text width="100%" text="{Group + ' --> ' + Plugin + ' --> ' + LongDesc}"/>
 	
