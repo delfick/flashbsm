@@ -20,7 +20,10 @@
 		import mx.events.EffectEvent;
 		import mx.collections.*;
 		import com.flashbsm.controller.fbsm;
-		import mx.core.UIComponent
+		import mx.core.UIComponent;
+		import mx.controls.Text;
+		import flash.text.TextLineMetrics;
+
 
  		// The list of items to display
 		private var items:ArrayCollection;
@@ -46,6 +49,9 @@
 		
 		//flag indicating if extras on thumbs should be visible or not
 		public var showExtras:Boolean = false;
+		
+		//array holding labels
+		private var headerLabels:Array = new Array();
 		
         private function createTiles():void
         {
@@ -81,10 +87,24 @@
 			
 			var numCols:int = 0;
 			var numRows:int = 0;
+			var columnWidth:int = 0;
+			var gap:int = 0;
 			var totalCols:int = 0;
 			
 			numRows = (height-40) / (items[0].Thumb.height + padding) - 1;
 			numCols = (width-40) / (items[0].Thumb.width + padding) - 1;
+			
+			//for group sort
+			columnWidth = (width-40) / fbsm.getInstance().everything.theCategories.length
+			if (columnWidth < (items[0].Thumb.width+8))
+			{
+				columnWidth = items[0].Thumb.width+8
+				gap = 4;
+			}
+			else
+			{
+				gap = (columnWidth-items[0].Thumb.width)/2;
+			}
 			
 
 			verticalScrollPosition = 0;
@@ -109,6 +129,20 @@
 
 
 			var theSelectionFlag:Boolean;
+			
+			removeHeaderLabels();
+			
+			switch (layoutType)
+			{
+				case LAYOUT_GROUPS:
+					createHeaderLabels("groups", columnWidth, gap)
+					break;
+				case LAYOUT_ENABLED:
+					var disabledTextX:int = items[0].Thumb.width + 10 + 10 + numCols * (items[0].Thumb.width + padding);
+					var enabledTextX:int = 10;
+					createHeaderLabels("status", disabledTextX, enabledTextX)
+					break;
+			}
 
 			for (var i:int = 0 ; i < n ; i++)
 			{
@@ -141,9 +175,10 @@
 						case LAYOUT_GROUPS :
 							showExtras ? items[i].Thumb.showExtras() : items[i].Thumb.hideExtras();
 							rowArray[items[i].PathIndex[0]]++;
+							
 
-							xTo = 10 + items[i].PathIndex[0] * (theThumb.width+padding);
-							yTo = 10 + rowArray[items[i].PathIndex[0]] * (theThumb.height + padding);
+							xTo = 10 + items[i].PathIndex[0] * (columnWidth) + gap;
+							yTo = 30 + rowArray[items[i].PathIndex[0]] * (theThumb.height + padding);
 
 							break;
 
@@ -158,7 +193,7 @@
 									enabledCol = 0;
 								}
 								xTo = 10 + enabledCol * (theThumb.width + padding);
-								yTo = 10 + enabledRow * (theThumb.height + padding);
+								yTo = 30 + enabledRow * (theThumb.height + padding);
 							}
 							else
 							{
@@ -169,7 +204,7 @@
 									disabledCol = numCols;
 								}
 								xTo = 10 + 10 + disabledCol * (theThumb.width + padding);
-								yTo = 10 + disabledRow * (theThumb.height + padding);
+								yTo = 30 + disabledRow * (theThumb.height + padding);
 							}
 							break;
 					}
@@ -339,6 +374,57 @@
         	createTiles();
         	layoutTiles();
         }
+        
+        private function createHeaderLabels (inType:String, ... inParams):void
+        {
+        	switch (inType)
+        	{
+        		case "groups" :
+        			for each (var categ:Object in fbsm.getInstance().everything.theCategories)
+        			{
+        				var newLabel:Text = new Text();
+        				
+        				newLabel.text = categ.Name;
+        				newLabel.selectable = false;
+        				newLabel.width = inParams[0];
+        				newLabel.x = 10 + categ.Index * (inParams[0]);
+        				newLabel.y = 2;
+        				newLabel.styleName = "sortHeader";
+        				headerLabels.push(newLabel);
+        				addChild(newLabel);
+        			}
+        			break;
+        		case "status" :
+    				var disabledLabel:Text = new Text();
+    				disabledLabel.selectable = false;
+    				disabledLabel.text = "Disabled Plugins";
+    				disabledLabel.y = 2;
+    				disabledLabel.styleName = "sortHeader";
+    				headerLabels.push(disabledLabel);
+    				addChild(disabledLabel);
+    				var metrics:TextLineMetrics = disabledLabel.measureText("Disabled Plugins");
+    				disabledLabel.x = inParams[0] - metrics.width;
+    				
+    				var enabledLabel:Text = new Text();
+    				enabledLabel.selectable = false;
+    				enabledLabel.text = "Enabled Plugins";
+    				enabledLabel.x = inParams[1]
+    				enabledLabel.y = 2;
+    				enabledLabel.styleName = "sortHeader";
+    				headerLabels.push(enabledLabel);
+    				addChild(enabledLabel);
+    				
+        	}
+        }
+        private function removeHeaderLabels ():void
+        {
+        	for each (var label:Text in headerLabels)
+        	{
+        		removeChild(label);
+        	}
+        	headerLabels = new Array();
+        }
+        
 
         ]]>
 

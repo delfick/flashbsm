@@ -159,12 +159,11 @@
 	VerticalAlign : "middle";
 	HorizontalAlign : "center";
 }
-.groupSortHeader
+.sortHeader
 {
-fontSize : 13;
+fontSize : 11;
 borderStyle:none;
 fontFamily : "Verdana";
 fontWeight : "bold";
 textAlign : "center";
-backgroundAlpha : 0.19;
 }
