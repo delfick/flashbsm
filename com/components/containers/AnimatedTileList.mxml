@@ -178,7 +178,7 @@
 							
 
 							xTo = 10 + items[i].PathIndex[0] * (columnWidth) + gap;
-							yTo = 30 + rowArray[items[i].PathIndex[0]] * (theThumb.height + padding);
+							yTo = 40 + rowArray[items[i].PathIndex[0]] * (theThumb.height + padding);
 
 							break;
 

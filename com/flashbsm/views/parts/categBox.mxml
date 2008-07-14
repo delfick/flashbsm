@@ -4,7 +4,51 @@
 	xmlns:settings="com.flashbsm.views.settings.types.*"
 	xmlns:parts="com.flashbsm.views.parts.*"
 	width="100%"
-	height="100%">
+	height="100%"
+	mouseOver="handleMouseOver(event)"
+	mouseOut="handleMouseOut(event)"
+	mouseDown="handleMouseDown(event)">
+	
+	<mx:Script>
+		<![CDATA[
+			import flash.events.Event;
+			import mx.core.Application;
+			import com.flashbsm.controller.fbsm;
+			import com.flashbsm.events.*;
+			import mx.containers.VBox;
+			
+			private var mouseIsOver:Boolean = false;
+
+			private function handleMouseOver(inEvent:Event):void
+			{
+				if (!mouseIsOver)
+				{
+					if (!info.Selected)
+					{
+						mouseIsOver = true;
+						var theMenuEvent:menuEvent = new menuEvent(menuEvent.CREATE_MENU, info.Index);
+						theMenuEvent.x = x - (160-width)/2;
+						theMenuEvent.y = y + height;
+						theMenuEvent.width = 160;
+						theMenuEvent.height = 70 * fbsm.getInstance().everything.getCategory(info.Index).thePlugins.length;
+						dispatchEvent(theMenuEvent);
+					}
+				}
+			}
+			
+			private function handleMouseOut(inEvent:Event):void
+			{
+				mouseIsOver = false;
+				dispatchEvent(new menuEvent(menuEvent.REMOVE_MENU, info.Index));
+			}
+			
+			private function handleMouseDown(inEvent:Event):void
+			{
+				dispatchEvent(new menuEvent(menuEvent.REMOVE_MENU, info.Index));
+			}
+		]]>
+
+	</mx:Script>
 	
 	<parts:insideBox>
 	

@@ -4,27 +4,76 @@
 	xmlns:parts="com.flashbsm.views.parts.*"
 	xmlns:containers="com.components.containers.*"
 	width="100%" height="100%"
-	verticalScrollPolicy="off">
-	<!--creationComplete="initApp()"-->
+	verticalScrollPolicy="off"
+	creationComplete="initApp()">
 
 
 	<mx:Script>
 		<![CDATA[
 			import com.flashbsm.controller.fbsm;
+			import com.flashbsm.events.*;
+			import flash.events.Event;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			private var menuItems:ArrayCollection = new ArrayCollection();
+			
+			private function initApp():void
+			{
+				categHeader.addEventListener(menuEvent.CREATE_MENU, createMenu);
+				categHeader.addEventListener(menuEvent.REMOVE_MENU, removeMenu);
+			}
+			
+			private function createMenu(inEvent:menuEvent):void
+			{
+				menuItems = fbsm.getInstance().everything.getCategory(inEvent.Index).thePlugins;
+				menu.x = inEvent.x;
+				menu.y = inEvent.y;
+				menu.width = inEvent.width;
+				inEvent.height > theSideList.height
+					? menu.height = theSideList.height
+					: menu.height = inEvent.height;
+				menu.visible = true;
+			}
+			
+			private function removeMenu(inEvent:menuEvent):void
+			{
+				menu.visible = false;
+				menu.verticalScrollPosition = 0;
+			}
+			
 			public function scrollSideList ():void
 			{
-				sideList.verticalScrollPosition = fbsm.getInstance().everything.currentPlugin.Index * 60;
+				theSideList.verticalScrollPosition = fbsm.getInstance().everything.currentPlugin.Index * 60;
+			}
+			
+			private function menuRollOver(inEvent:Event):void
+			{
+				menu.visible = true;
+			}
+			
+			private function menuRollOut(inEvent:Event):void
+			{
+				removeMenu(null);
+			}
+			
+			private function pluginClick(event:Event):void
+			{
+				fbsm.getInstance().everything.setCurrentPlugin(event.target.info.PathIndex);
+				removeMenu(null);
+				scrollSideList();
 			}
 			
 		]]>
 
 	</mx:Script>
 	
+	
 	<mx:VBox width="100%" height="100%" >
-		<parts:categHeaderBtns width="100%" height="60" styleName="box"/>
+		<parts:categHeaderBtns 			width="100%" height="60" 	styleName="box"		id="categHeader"/>
 		
 		<mx:HBox width="100%" height="100%" >
-			<parts:sideList 										styleName="box"		id="sideList"	
+			<parts:sideList 										styleName="box"		id="theSideList"	
 			    width="160" height="{descArea.height+settingsArea.height+logArea.height+12}" />
 			
 			<mx:VBox width="100%" height="100%"> 
@@ -35,6 +84,17 @@
 			
 		</mx:HBox>
 		<parts:footerArea width="100%" height="60" styleName="box"/>		
+		
+		<mx:VBox width="160" height="100" includeInLayout="false"/>
+	</mx:VBox>
+	
+	<mx:VBox includeInLayout="false" 	visible="false"				styleName="box"		id="menu"
+		rollOver="menuRollOver(event)" rollOut="menuRollOut(event)"
+		paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10"
+		verticalScrollPolicy="on">
+		<mx:Repeater id="plugins" dataProvider="{menuItems}" >
+			<parts:sideBox info="{plugins.currentItem}" itemClick="{pluginClick(event)}"/>
+		</mx:Repeater>
 	</mx:VBox>
 	
 </mx:VBox>
