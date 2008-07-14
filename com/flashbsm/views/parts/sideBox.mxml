@@ -10,7 +10,7 @@
 	
 		<mx:Text width="100%" height="100%" text="{info.ShortDesc}" styleName="boxText"  selectable="false"/>
 		<settings:pluginCheckBox id="pcb" theLabel=" " theSetting="{info}" 
-			creationComplete="{pcb.setUpEventListeners()}" newValue="{info.Enabled}"/>
+			mouseOver="{pcb.setUpEventListeners()}" newValue="{info.Enabled}"/>
 	</parts:insideBox>
 	
 

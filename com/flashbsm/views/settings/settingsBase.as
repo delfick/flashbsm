@@ -19,6 +19,7 @@ package com.flashbsm.views.settings
 		private var theFlag:String = "normal";
 		private var flagTimer:Timer = new Timer(500, 1);
 		private var changed:Boolean = false;
+		private var isEventListenersSetup:Boolean = false;
 		
 		[Bindable]
 		public var theLabel:String;
@@ -36,9 +37,13 @@ package com.flashbsm.views.settings
 
 		public function setUpEventListeners():void
 		{
-			this.addEventListener("flagChange", flagChange);
-			this.addEventListener("flagChange", applyEffect);	
-			theSetting.addEventListener("gotData", function(inEvent:gotDataEvent):void{ newValue = inEvent.Result; });
+			if (!isEventListenersSetup)
+			{
+				isEventListenersSetup = true;
+				this.addEventListener("flagChange", flagChange);
+				this.addEventListener("flagChange", applyEffect);	
+				theSetting.addEventListener("gotData", function(inEvent:gotDataEvent):void{ newValue = inEvent.Result; });
+			}
 		}
 
 		public function set isEnabled(inEnabled:Boolean):void
