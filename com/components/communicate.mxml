@@ -31,7 +31,7 @@
 				if (doOnStart)
 				{
 					gateway = new NetConnection();
-					gateway.connect( "http://localhost:8000" );
+					gateway.connect( "http://localhost:8001" );
 					var responder:Responder = new Responder( onResult, onFault );
 					if (hasParams)
 					{

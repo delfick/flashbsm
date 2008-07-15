@@ -7,7 +7,8 @@
 	height="100%"
 	mouseOver="handleMouseOver(event)"
 	mouseOut="handleMouseOut(event)"
-	mouseDown="handleMouseDown(event)">
+	mouseDown="handleMouseDown(event)"
+	creationComplete="createMenu(event)">
 	
 	<mx:Script>
 		<![CDATA[
@@ -26,7 +27,7 @@
 					if (!info.Selected)
 					{
 						mouseIsOver = true;
-						var theMenuEvent:menuEvent = new menuEvent(menuEvent.CREATE_MENU, info.Index);
+						var theMenuEvent:menuEvent = new menuEvent(menuEvent.SHOW_MENU, info.Index);
 						theMenuEvent.x = x - (160-width)/2;
 						theMenuEvent.y = y + height;
 						theMenuEvent.width = 160;
@@ -36,15 +37,26 @@
 				}
 			}
 			
+			private function createMenu (inEvent:Event):void
+			{
+				var theMenuEvent:menuEvent = new menuEvent(menuEvent.CREATE_MENU, info.Index);
+				theMenuEvent.x = x - (160-width)/2;
+				theMenuEvent.y = y + height;
+				theMenuEvent.width = 160;
+				theMenuEvent.height = 70 * fbsm.getInstance().everything.getCategory(info.Index).thePlugins.length;
+				dispatchEvent(theMenuEvent);
+			}
+			
+			
 			private function handleMouseOut(inEvent:Event):void
 			{
 				mouseIsOver = false;
-				dispatchEvent(new menuEvent(menuEvent.REMOVE_MENU, info.Index));
+				dispatchEvent(new menuEvent(menuEvent.HIDE_MENU, info.Index));
 			}
 			
 			private function handleMouseDown(inEvent:Event):void
 			{
-				dispatchEvent(new menuEvent(menuEvent.REMOVE_MENU, info.Index));
+				dispatchEvent(new menuEvent(menuEvent.HIDE_MENU, info.Index));
 			}
 		]]>
 

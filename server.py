@@ -46,7 +46,7 @@ if __name__ == '__main__':
 	gw = WSGIGateway(services)
 
 	httpd = simple_server.WSGIServer(
-		('localhost', 8000),
+		('localhost', 8001),
 		simple_server.WSGIRequestHandler,
 	)
 

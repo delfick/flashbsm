@@ -5,7 +5,7 @@
 	xmlns:containers="com.components.containers.*"
 	width="100%" height="100%"
 	verticalScrollPolicy="off"
-	creationComplete="initApp()">
+	initialize="initApp()">
 
 
 	<mx:Script>
@@ -14,32 +14,51 @@
 			import com.flashbsm.events.*;
 			import flash.events.Event;
 			import mx.collections.ArrayCollection;
+			import mx.core.UIComponent;
 			
 			[Bindable]
-			private var menuItems:ArrayCollection = new ArrayCollection();
+			private var menuProperties:ArrayCollection = new ArrayCollection();
+			
+			private var currentlyOver:Number = 0;
 			
 			private function initApp():void
 			{
 				categHeader.addEventListener(menuEvent.CREATE_MENU, createMenu);
-				categHeader.addEventListener(menuEvent.REMOVE_MENU, removeMenu);
+				categHeader.addEventListener(menuEvent.SHOW_MENU, showMenu);
+				categHeader.addEventListener(menuEvent.HIDE_MENU, hideMenu);
 			}
 			
 			private function createMenu(inEvent:menuEvent):void
 			{
-				menuItems = fbsm.getInstance().everything.getCategory(inEvent.Index).thePlugins;
+				var menu:UIComponent = aMenu[inEvent.Index]
 				menu.x = inEvent.x;
 				menu.y = inEvent.y;
 				menu.width = inEvent.width;
 				inEvent.height > theSideList.height
 					? menu.height = theSideList.height
 					: menu.height = inEvent.height;
-				menu.visible = true;
 			}
 			
-			private function removeMenu(inEvent:menuEvent):void
+			private function showMenu (inEvent:menuEvent):void
 			{
-				menu.visible = false;
-				menu.verticalScrollPosition = 0;
+				currentlyOver = inEvent.Index;
+				createMenu(inEvent);
+				aMenu[inEvent.Index].visible = true;
+			}
+			
+			
+			private function hideMenu(inEvent:menuEvent):void
+			{
+				if (inEvent == null)
+				{
+					aMenu[currentlyOver].visible = false;
+					aMenu[currentlyOver].verticalScrollPosition = 0;
+				}
+				else
+				{
+					aMenu[inEvent.Index].visible = false;
+					aMenu[inEvent.Index].verticalScrollPosition = 0;
+				}
 			}
 			
 			public function scrollSideList ():void
@@ -49,18 +68,18 @@
 			
 			private function menuRollOver(inEvent:Event):void
 			{
-				menu.visible = true;
+				aMenu[currentlyOver].visible = true;
 			}
 			
 			private function menuRollOut(inEvent:Event):void
 			{
-				removeMenu(null);
+				hideMenu(null);
 			}
 			
 			private function pluginClick(event:Event):void
 			{
 				fbsm.getInstance().everything.setCurrentPlugin(event.target.info.PathIndex);
-				removeMenu(null);
+				hideMenu(null);
 				scrollSideList();
 			}
 			
@@ -74,27 +93,28 @@
 		
 		<mx:HBox width="100%" height="100%" >
 			<parts:sideList 										styleName="box"		id="theSideList"	
-			    width="160" height="{descArea.height+settingsArea.height+logArea.height+12}" />
+			    width="160" height="{height-(categHeader.height+footer.height+12)}" />
 			
 			<mx:VBox width="100%" height="100%"> 
 				<parts:descriptionArea  width="100%" height="60"    styleName="box"     id="descArea"/>
-				<parts:settingsArea     width="100%" height="100%"  				    id="settingsArea"/>
+				<parts:settingsArea     width="100%" 									id="settingsArea"
+										height="{theSideList.height-(descArea.height+logArea.height+12)}"/>
 				<parts:logText          width="100%" height="60"    styleName="box"     id="logArea"/>
 			</mx:VBox>
 			
 		</mx:HBox>
-		<parts:footerArea width="100%" height="60" styleName="box"/>		
-		
-		<mx:VBox width="160" height="100" includeInLayout="false"/>
+		<parts:footerArea 				width="100%" height="60" 	styleName="box"		id="footer"/>	
 	</mx:VBox>
 	
-	<mx:VBox includeInLayout="false" 	visible="false"				styleName="box"		id="menu"
-		rollOver="menuRollOver(event)" rollOut="menuRollOut(event)"
-		paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10"
-		verticalScrollPolicy="on">
-		<mx:Repeater id="plugins" dataProvider="{menuItems}" >
-			<parts:sideBox info="{plugins.currentItem}" itemClick="{pluginClick(event)}"/>
-		</mx:Repeater>
-	</mx:VBox>
+	<mx:Repeater id="theMenus" dataProvider="{fbsm.getInstance().everything.theCategories}">
+		<mx:VBox includeInLayout="false" 	visible="false"				styleName="box"	id="aMenu"
+			rollOver="menuRollOver(event)" rollOut="menuRollOut(event)"
+			paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10"
+			verticalScrollPolicy="on">
+			<mx:Repeater id="plugins" dataProvider="{theMenus.currentItem.thePlugins}" >
+				<parts:sideBox info="{plugins.currentItem}" itemClick="{pluginClick(event)}"/>
+			</mx:Repeater>
+		</mx:VBox>
+	</mx:Repeater>
 	
 </mx:VBox>

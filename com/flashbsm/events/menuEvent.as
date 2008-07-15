@@ -8,7 +8,8 @@ package com.flashbsm.events
 	public class menuEvent extends Event
 	{
 		public static const CREATE_MENU:String = "createMenu";
-		public static const REMOVE_MENU:String = "removeMenu";
+		public static const SHOW_MENU:String = "showMenu";
+		public static const HIDE_MENU:String = "hideMenu";
 		
 		private var theIndex:Number;
 		private var theX:Number;
