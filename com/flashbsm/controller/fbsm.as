@@ -31,6 +31,9 @@ package com.flashbsm.controller
 		[Bindable]
 		public var isVisible:Boolean = false;
 		
+		[Bindable]
+		public var currentlyOver:Number = 0;
+		
 		public function fbsm()
 		{
             allInfo.theType="getInfo";

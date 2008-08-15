@@ -1,3 +1,4 @@
+package com.components.containers {
 /*
 
 The MIT License
@@ -24,7 +25,7 @@ THE SOFTWARE.
 
 */
 
-package com.components.containers {
+
 
 	import flash.events.*;
 	import mx.effects.AnimateProperty;

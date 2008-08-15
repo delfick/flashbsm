@@ -42,7 +42,6 @@
 			private function showMenu (inEvent:menuEvent):void
 			{
 				currentlyOver = inEvent.Index;
-				createMenu(inEvent);
 				aMenu[inEvent.Index].visible = true;
 			}
 			
