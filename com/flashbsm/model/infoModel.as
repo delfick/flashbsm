@@ -19,8 +19,6 @@ package com.flashbsm.model
 		[Bindable]
 		public var currentPlugin:plugin;
 		
-		
-		
 		[Bindable]
 		public var currentGroup:group;
 		

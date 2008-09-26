@@ -32,6 +32,7 @@
 						theMenuEvent.y = y + height;
 						theMenuEvent.width = 160;
 						theMenuEvent.height = 70 * fbsm.getInstance().everything.getCategory(info.Index).thePlugins.length;
+						createMenu(null)
 						dispatchEvent(theMenuEvent);
 					}
 				}
